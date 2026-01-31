@@ -8,6 +8,24 @@ module.exports = (grunt) ->
   ebook(grunt, {
     dir: {
       page: "target/pages"
+    },
+    pandoc: {
+      pdf: {
+        options: {
+          smart: false,
+          pdfEngine: 'xelatex'
+        }
+      },
+      html: {
+        options: {
+          smart: false
+        }
+      },
+      epub: {
+        options: {
+          smart: false
+        }
+      }
     }
   })
   return

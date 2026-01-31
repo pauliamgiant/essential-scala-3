@@ -6,7 +6,8 @@ A class is a template for creating objects that have similar methods and fields.
 
 Here is a declaration for a simple `Person` class:
 
-```tut:book:silent
+**Scala 2**
+```scala mdoc:silent
 class Person {
   val firstName = "Noel"
   val lastName = "Welsh"
@@ -14,22 +15,31 @@ class Person {
 }
 ```
 
+**Scala 3**
+```scala mdoc:reset:silent
+class Person:
+  val firstName = "Noel"
+  val lastName = "Welsh"
+  def name = firstName + " " + lastName
+```
+
 Like an object declaration, a class declaration binds a name (in this case `Person`) and is not an expression. However, unlike an object name, we cannot use a class name in an expression. A class is not a value, and there is a different *namespace* in which classes live.
 
-```tut:book:fail
+```scala mdoc:fail
 Person
 ```
 
 We can create a new `Person` object using the `new` operator. Objects are values and we access their methods and fields in the usual way:
 
-```tut:book
+**Scala 2**
+```scala mdoc
 val noel = new Person
 noel.firstName
 ```
 
 Notice the type of the object is `Person`. The printed value contains a code in the format `@xxxxxxxx`, which is a unique identifier for that particular object. Each call to `new` creates a distinct object of the same type:
 
-```tut:book
+```scala mdoc
 noel
 val newNoel = new Person
 val anotherNewNoel = new Person
@@ -37,14 +47,14 @@ val anotherNewNoel = new Person
 
 This means we can write a method that takes any `Person` as a parameter:
 
-```tut:book:silent
+```scala mdoc:silent
 object alien {
   def greet(p: Person) =
     "Greetings, " + p.firstName + " " + p.lastName
 }
 ```
 
-```tut:book
+```scala mdoc
 alien.greet(noel)
 alien.greet(newNoel)
 ```
@@ -61,7 +71,8 @@ As it stands our `Person` class is rather useless: we can create as many new obj
 
 The solution is to introduce a *constructor*, which allows us to pass parameters to new objects as we create them:
 
-```tut:book:silent
+**Scala 2**
+```scala mdoc:reset:silent
 class Person(first: String, last: String) {
   val firstName = first
   val lastName = last
@@ -69,7 +80,15 @@ class Person(first: String, last: String) {
 }
 ```
 
-```tut:book
+**Scala 3**
+```scala mdoc:reset:silent
+class Person(first: String, last: String):
+  val firstName = first
+  val lastName = last
+  def name = firstName + " " + lastName
+```
+
+```scala mdoc
 val dave = new Person("Dave", "Gurnell")
 dave.name
 ```
@@ -78,13 +97,20 @@ The constructor parameters `first` and `last` can only be used within the body o
 
 Constructor arguments and fields are often redundant. Fortunately, Scala provides us a useful short-hand way of declaring both in one go. We can prefix constructor parameters with the `val` keyword to have Scala define fields for them automatically:
 
-```tut:book:silent
+**Scala 2**
+```scala mdoc:reset:silent
 class Person(val firstName: String, val lastName: String) {
   def name = firstName + " " + lastName
 }
 ```
 
-```tut:book
+**Scala 3**
+```scala mdoc:reset:silent
+class Person(val firstName: String, val lastName: String):
+  def name = firstName + " " + lastName
+```
+
+```scala mdoc
 new Person("Dave", "Gurnell").firstName
 ```
 
@@ -98,20 +124,31 @@ Scala programmers tend to prefer to write immutability and side-effect-free code
 
 The syntax for declaring a class is
 
+**Scala 2**
 ```scala
 class Name(parameter: type, ...) {
   declarationOrExpression ...
 }
 ```
+**Scala 3**
+```scala
+class Name(val parameter: type, ...):
+  declarationOrExpression ...
+```
 
 or
 
+**Scala 2**
 ```scala
 class Name(val parameter: type, ...) {
   declarationOrExpression ...
 }
 ```
-
+**Scala 3**
+```scala
+class Name(val parameter: type, ...):
+  declarationOrExpression ...
+```
 where
 
 - `Name` is the name of the class;
@@ -126,26 +163,26 @@ All Scala methods and constructors support *keyword parameters* and *default par
 
 When we call a method or constructor, we can *use parameter names as keywords* to specify the parameters in an arbitrary order:
 
-```tut:book
+```scala mdoc
 new Person(lastName = "Last", firstName = "First")
 ```
 
 This comes in doubly useful when used in combination with *default parameter values*, defined like this:
 
-```tut:book:silent
+```scala mdoc:silent
 def greet(firstName: String = "Some", lastName: String = "Body") =
   "Greetings, " + firstName + " " + lastName + "!"
 ```
 
 If a parameter has a default value we can omit it in the method call:
 
-```tut:book
+```scala mdoc
 greet("Busy")
 ```
 
 Combining keywords with default parameter values let us skip earlier parameters and just provide values for later ones:
 
-```tut:book
+```scala mdoc
 greet(lastName = "Dave")
 ```
 
@@ -154,12 +191,12 @@ greet(lastName = "Dave")
 
 *Keyword parameters are robust to changes in the number and order of parameters.* For example, if we add a `title` parameter to the `greet` method, the meaning of keywordless method calls changes but keyworded calls remain the same:
 
-```tut:book:silent
+```scala mdoc:reset:silent
 def greet(title: String = "Citizen", firstName: String = "Some", lastName: String = "Body") =
   "Greetings, " + title + " " + firstName + " " + lastName + "!"
 ```
 
-```tut:book
+```scala mdoc
 greet("Busy") // this is now incorrect
 greet(firstName = "Busy") // this is still correct
 ```
@@ -188,7 +225,7 @@ Some of these types are simply Scala aliases for types that exist in Java: `Int`
 
 There are two special types at the *bottom* of the hierarchy. `Nothing` is the type of `throw` expressions, and `Null` is the type of the value `null`. These special types are subtypes of everything else, which helps us assign types to `throw` and `null` while keeping other types in our code sane. The following code illustrates this:
 
-```tut:book
+```scala mdoc
 def badness = throw new Exception("Error")
 def otherbadness = null
 val bar = if(true) 123 else badness
@@ -205,12 +242,17 @@ The properties of the objects of a class take the form of *fields* and *methods*
 
 The syntax for declaring classes is
 
+**Scala 2**
 ```scala
 class Name(parameter: type, ...) {
   declarationOrExpression ...
 }
 ```
-
+**Scala 3**
+```scala
+class Name(val parameter: type, ...)
+:
+```
 We create objects from a class by calling the constructor using the keyword `new`.
 
 We also learned about *keyword parameters* and *default parameters*.
@@ -241,7 +283,7 @@ Define a class `Cat` and then create an object for each cat in the table above.
 <div class="solution">
 This is a finger exercise to get you used to the syntax of defining classes.
 
-```tut:book:silent
+```scala mdoc:silent
 class Cat(val colour: String, val food: String)
 
 val oswald = new Cat("Black", "Milk")
@@ -257,7 +299,8 @@ val quentin = new Cat("Tabby and white", "Curry")
 Define an object `ChipShop` with a method `willServe`. This method should accept a `Cat` and return `true` if the cat's favourite food is chips, and false otherwise.
 
 <div class="solution">
-```tut:book:silent
+**Scala 2**
+```scala mdoc:silent
 object ChipShop {
   def willServe(cat: Cat): Boolean =
     if(cat.food == "Chips")
@@ -265,6 +308,12 @@ object ChipShop {
     else
       false
 }
+```
+**Scala 3**
+```scala
+object ChipShop:
+  def willServe(cat: Cat): Boolean =
+    if cat.food == "Chips" then true else false
 ```
 </div>
 
@@ -290,7 +339,8 @@ Write two classes, `Director` and `Film`, with fields and methods as follows:
     - a method `isDirectedBy` that accepts a `Director`
       as a parameter and returns a `Boolean`
 
-```tut:book:invisible
+**Scala 2**
+```scala mdoc:invisible
 case class Director(firstName: String, lastName: String, yearOfBirth: Int) {
   def name: String = firstName + " " + lastName
 }
@@ -303,9 +353,20 @@ case class Film(name: String, yearOfRelease: Int, imdbRating: Double, director: 
 }
 ```
 
+**Scala 3**
+```scala mdoc:reset:silent
+case class Director(firstName: String, lastName: String, yearOfBirth: Int):
+  def name: String = firstName + " " + lastName
+case class Film(name: String, yearOfRelease: Int, imdbRating: Double, director: Director):
+  def directorsAge: Int =
+    yearOfRelease - director.yearOfBirth
+  def isDirectedBy(d: Director): Boolean =
+    director == d
+```
+
 Copy-and-paste the following demo data into your code and adjust your constructors so that the code works without modification:
 
-```tut:book:silent
+```scala mdoc:silent
 val eastwood          = new Director("Clint", "Eastwood", 1930)
 val mcTiernan         = new Director("John", "McTiernan", 1951)
 val nolan             = new Director("Christopher", "Nolan", 1970)
@@ -327,7 +388,7 @@ val huntForRedOctober = new Film("The Hunt for Red October", 1990, 7.6, mcTierna
 val thomasCrownAffair = new Film("The Thomas Crown Affair", 1999, 6.8, mcTiernan)
 ```
 
-```tut:book
+```scala mdoc
 eastwood.yearOfBirth
 dieHard.director.name
 invictus.isDirectedBy(nolan)
@@ -336,7 +397,8 @@ invictus.isDirectedBy(nolan)
 Implement a method of `Film` called `copy`. This method should accept the same parameters as the constructor and create a new copy of the film. Give each parameter a default value so you can copy a film changing any subset of its values:
 
 
-```tut:book:invisible
+**Scala 2**
+```scala mdoc:reset:invisible
 case class Director(firstName: String, lastName: String, yearOfBirth: Int) {
   def name: String = firstName + " " + lastName
 
@@ -383,7 +445,41 @@ val huntForRedOctober = new Film("The Hunt for Red October", 1990, 7.6, mcTierna
 val thomasCrownAffair = new Film("The Thomas Crown Affair", 1999, 6.8, mcTiernan)
 ```
 
-```tut:book
+**Scala 3**
+```scala mdoc:reset:silent
+case class Director(firstName: String, lastName: String, yearOfBirth: Int):
+  def name: String = firstName + " " + lastName
+case class Film(name: String, yearOfRelease: Int, imdbRating: Double, director: Director):
+  def directorsAge: Int =
+    yearOfRelease - director.yearOfBirth
+  def isDirectedBy(d: Director): Boolean =
+    director == d
+  def copy(
+    name: String = this.name,
+    yearOfRelease: Int = this.yearOfRelease,
+    imdbRating: Double = this.imdbRating,
+    director: Director = this.director): Film =
+    new Film(name, yearOfRelease, imdbRating, director)
+
+val eastwood          = Director("Clint", "Eastwood", 1930)
+val mcTiernan         = Director("John", "McTiernan", 1951)
+val nolan             = Director("Christopher", "Nolan", 1970)
+val someBody          = Director("Just", "Some Body", 1990)
+val memento           = Film("Memento", 2000, 8.5, nolan)
+val darkKnight        = Film("Dark Knight", 2008, 9.0, nolan)
+val inception         = Film("Inception", 2010, 8.8, nolan)
+val highPlainsDrifter = Film("High Plains Drifter", 1973, 7.7, eastwood)
+val outlawJoseyWales  = Film("The Outlaw Josey Wales", 1976, 7.9, eastwood)
+val unforgiven        = Film("Unforgiven", 1992, 8.3, eastwood)
+val granTorino        = Film("Gran Torino", 2008, 8.2, eastwood)
+val invictus          = Film("Invictus", 2009, 7.4, eastwood)
+val predator          = Film("Predator", 1987, 7.9, mcTiernan)
+val dieHard           = Film("Die Hard", 1988, 8.3, mcTiernan)
+val huntForRedOctober = Film("The Hunt for Red October", 1990, 7.6, mcTiernan)
+val thomasCrownAffair = Film("The Thomas Crown Affair", 1999, 6.8, mcTiernan)
+```
+
+```scala mdoc
 highPlainsDrifter.copy(name = "L'homme des hautes plaines")
 thomasCrownAffair.copy(yearOfRelease = 1968,
   director = new Director("Norman", "Jewison", 1926))
@@ -393,7 +489,7 @@ inception.copy().copy().copy()
 <div class="solution">
 This exercise provides some hands on experience writing Scala classes, fields and methods. The model solution is as follows:
 
-```tut:book:silent
+```scala mdoc:reset:silent
 class Director(
   val firstName: String,
   val lastName: String,
@@ -435,19 +531,27 @@ class Film(
 
 Implement a `Counter` class. The constructor should take an `Int`. The methods `inc` and `dec` should increment and decrement the counter respectively returning a new `Counter`. Here's an example of the usage:
 
-```tut:book:invisible
+**Scala 2**
+```scala mdoc:invisible
 class Counter(val count: Int) {
   def dec = new Counter(count - 1)
   def inc = new Counter(count + 1)
 }
 ```
 
-```tut:book
+**Scala 3**
+```scala mdoc:reset:silent
+class Counter(val count: Int):
+  def dec = Counter(count - 1)
+  def inc = Counter(count + 1)
+```
+
+```scala mdoc
 new Counter(10).inc.dec.inc.inc.count
 ```
 
 <div class="solution">
-```tut:book:silent
+```scala mdoc:reset:silent
 class Counter(val count: Int) {
   def dec = new Counter(count - 1)
   def inc = new Counter(count + 1)
@@ -468,22 +572,30 @@ Augment the `Counter` from the previous exercise to allow the user can optionall
 <div class="solution">
 The simplest solution is this:
 
-```tut:book:silent
+**Scala 2**
+```scala mdoc:reset:silent
 class Counter(val count: Int) {
   def dec(amount: Int = 1) = new Counter(count - amount)
   def inc(amount: Int = 1) = new Counter(count + amount)
 }
 ```
 
+**Scala 3**
+```scala mdoc:reset:silent
+class Counter(val count: Int):
+  def dec(amount: Int = 1) = Counter(count - amount)
+  def inc(amount: Int = 1) = Counter(count + amount)
+```
 However, this adds parentheses to `inc` and `dec`. If we omit the parameter we now have to provide an empty pair of parentheses:
 
-```tut:book:fail
+```scala mdoc:fail
 new Counter(10).inc
 ```
 
 We can work around this using *method overloading* to recreate our original parenthesis-free methods. Note that overloading methods requires us to specify the return types:
 
-```tut:book:silent
+**Scala 2**
+```scala mdoc:reset:silent
 class Counter(val count: Int) {
   def dec: Counter = dec()
   def inc: Counter = inc()
@@ -492,7 +604,16 @@ class Counter(val count: Int) {
 }
 ```
 
-```tut:book
+**Scala 3**
+```scala mdoc:reset:silent
+class Counter(val count: Int):
+  def dec: Counter = dec()
+  def inc: Counter = inc()
+  def dec(amount: Int = 1): Counter = Counter(count - amount)
+  def inc(amount: Int = 1): Counter = Counter(count + amount)
+```
+
+```scala mdoc
 new Counter(10).inc.inc(10).count
 ```
 </div>
@@ -501,22 +622,38 @@ new Counter(10).inc.inc(10).count
 
 Here is a simple class called `Adder`.
 
-```tut:book:silent
+**Scala 2**
+```scala mdoc:silent
 class Adder(amount: Int) {
   def add(in: Int) = in + amount
 }
 ```
 
+**Scala 3**
+```scala mdoc:reset:silent
+class Adder(amount: Int):
+  def add(in: Int): Int = in + amount
+```
+
 Extend `Counter` to add a method called `adjust`. This method should accept an `Adder` and return a new `Counter` with the result of applying the `Adder` to the `count`.
 
 <div class="solution">
-```tut:book:silent
+**Scala 2**
+```scala mdoc:silent
 class Counter(val count: Int) {
   def dec = new Counter(count - 1)
   def inc = new Counter(count + 1)
   def adjust(adder: Adder) =
     new Counter(adder.add(count))
 }
+```
+**Scala 3**
+```scala
+class Counter(val count: Int):
+  def dec = Counter(count - 1)
+  def inc = Counter(count + 1)
+  def adjust(adder: Adder): Counter =
+    Counter(adder.add(count))
 ```
 
 This is an interesting pattern that will become more powerful as we learn more features of Scala. *We are using `Adders` to capture computations* and pass them to `Counter`. Remember from our earlier discussion that *methods are not expressions*---they cannot be stored in fields or passed around as data. However, *`Adders` are both objects and computations*.

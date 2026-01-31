@@ -23,3 +23,9 @@ project/target
 
 book_deploy_rsa
 
+.cursor/
+.vscode/
+.metals/
+
+.bloop/
+.bsp
