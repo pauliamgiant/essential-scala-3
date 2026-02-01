@@ -1,0 +1,4008 @@
+\documentclass[11pt,a5paper,]{book}
+
+% Colors ----------------------------------------
+
+\usepackage[xcolor]{mdframed}
+\definecolor{covercolor}{HTML}{E8515B}
+% \definecolor{primarycolor}{HTML}{428BCA}
+% \definecolor{successcolor}{HTML}{5CB85C}
+\definecolor{warningcolor}{HTML}{F0AD4E}
+\definecolor{dangercolor}{HTML}{D9534F}
+\definecolor{infocolor}{HTML}{5BC0DE}
+
+% Fonts -----------------------------------------
+
+\usepackage{lmodern}
+
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+    \usepackage{xltxtra,xunicode}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
+  \newcommand{\euro}{€}
+    \setmainfont[%
+      Color=primary,
+      Path=node_modules/underscore-ebook-template/lib/fonts/Lato/,
+      BoldItalicFont=Lato-BlackItalic,
+      BoldFont=Lato-Bold,
+      ItalicFont=Lato-Italic]{Lato-Regular}
+
+    \setsansfont[%
+      Color=primary,
+      Path=node_modules/underscore-ebook-template/lib/fonts/Lato/,
+      BoldItalicFont=Lato-BlackItalic,
+      BoldFont=Lato-Bold,
+      ItalicFont=Lato-Italic]{Lato-Regular}
+
+    \setmonofont[Mapping=tex-ansi]{Menlo}
+
+\fi
+
+% -----------------------------------------------
+
+\usepackage{array}
+
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+  \usepackage{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=.75in]{geometry}
+
+% Syntax highlighting ---------------------------
+
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+
+% -----------------------------------------------
+
+\usepackage{fancyvrb}
+\usepackage{longtable,booktabs}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\ifxetex
+  \usepackage[setpagesize=false, % page size defined by xetex
+              unicode=false, % unicode breaks when used with xetex
+              xetex]{hyperref}
+\else
+  \usepackage[unicode=true]{hyperref}
+\fi
+\hypersetup{%
+  breaklinks=true,
+  bookmarks=true,
+  pdfauthor={Noel Welsh and Dave Gurnell},
+  pdftitle={Essential Scala},
+  colorlinks=true,
+  citecolor=blue,
+  urlcolor=blue,
+  linkcolor=magenta,
+  pdfborder={0 0 0}}
+
+\urlstyle{same} % don't use monospace font for urls
+
+% Links as footnotes ----------------------------
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\setcounter{secnumdepth}{5}
+
+% Document metadata -----------------------------
+
+\title{Essential Scala}
+\author{Noel Welsh and Dave Gurnell}
+\date{Version 1.3, April 2017}
+
+% Utilities for the title page ------------------
+
+\usepackage{tikz}
+
+\newenvironment{bottompar}{\par\vspace*{\fill}}{\clearpage}
+
+% Column support (see columns.coffee) -----------
+
+\usepackage{multicol}
+
+% Callout support (see callout.coffee) ----------
+
+\newmdenv[%
+  linecolor=infocolor,linewidth=5pt,
+  topline=false,bottomline=false,rightline=false,
+  innertopmargin=1em,innerbottommargin=1em,
+  splittopskip=1em,splitbottomskip=1em,
+  backgroundcolor=infocolor!30]{InfoCallout}
+\newmdenv[%
+  linecolor=warningcolor,linewidth=5pt,
+  topline=false,bottomline=false,rightline=false,
+  innertopmargin=1em,innerbottommargin=1em,
+  splittopskip=1em,splitbottomskip=1em,
+  backgroundcolor=warningcolor!30]{WarningCallout}
+\newmdenv[%
+  linecolor=dangercolor!60,linewidth=5pt,
+  topline=false,bottomline=false,rightline=false,
+  innertopmargin=1em,innerbottommargin=1em,
+  splittopskip=1em,splitbottomskip=1em,
+  backgroundcolor=dangercolor!25]{DangerCallout}
+
+% \newmdenv[%
+%   topline=false,bottomline=false,leftline=false,rightline=false,
+%   innertopmargin=1em,innerbottommargin=1em,
+%   splittopskip=1em,splitbottomskip=1em,
+%   backgroundcolor=black!10]{Shaded}
+
+% Customise default code blocks -----------------
+
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\},fontsize=\small}
+
+\usepackage{listings}
+
+\definecolor{codebgcolor}{HTML}{F7F7F7}
+\definecolor{commentcolor}{HTML}{8E5A13}
+\definecolor{keywordcolor}{HTML}{234A85}
+\definecolor{literalcolor}{HTML}{0100CB}
+\definecolor{stringcolor}{HTML}{519818}
+
+\makeatletter
+\lst@CCPutMacro\lst@ProcessOther {"2D}{\lst@ttfamily{-{}}{-{}}}
+\@empty\z@\@empty
+\makeatother
+
+\lstset{
+  basicstyle=\tt\footnotesize,
+  frame=single,
+  breaklines=true
+}
+
+\lstdefinestyle{scala}{
+  breakatwhitespace=false,
+  language=scala,
+  frame=none,
+  commentstyle=\tt\color{commentcolor},
+  extendedchars=true,
+  keepspaces=true,
+  keywordstyle=\tt\color{keywordcolor},
+  emphstyle=\tt\color{cyan},
+  rulecolor=\tt\color{black},
+  showspaces=false,
+  showstringspaces=false,
+  showtabs=false,
+  stringstyle=\tt\color{stringcolor},
+  tabsize=2,
+  aboveskip=0em,
+  belowskip=0em,
+}
+
+\surroundwithmdframed[
+  hidealllines=true,
+  backgroundcolor=codebgcolor,
+  innerleftmargin=6pt,
+  innerrightmargin=6pt,
+  innertopmargin=10pt,
+  innerbottommargin=6pt]{lstlisting}
+
+\lstdefinelanguage{scala}{
+  morekeywords={abstract,case,catch,class,def,%
+    do,else,extends,false,final,finally,%
+    for,if,implicit,import,match,mixin,%
+    new,null,object,override,package,%
+    private,protected,requires,return,sealed,%
+    super,this,throw,trait,true,try,%
+    type,val,var,while,with,yield},
+  moreemph={},
+  otherkeywords={=>,<-,<\%,<:,>:,\#,@},
+  sensitive=true,
+  morecomment=[l]{//},
+  morecomment=[n]{/*}{*/},
+  morestring=[b]",
+  morestring=[b]',
+  morestring=[b]"""
+}
+
+% Needed for recent update to Pandoc ------------
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+% ===============================================
+% Document
+% ===============================================
+
+\begin{document}
+\pagecolor{white}
+
+% Title page ------------------------------------
+
+\begin{titlepage}
+\pagecolor{covercolor}
+\color{white}
+
+\begin{tikzpicture}[overlay, remember picture]
+\node[anchor=north west, xshift=-.2cm, yshift=.2cm]
+     at (current page.north west)
+     {\includegraphics{node_modules/underscore-ebook-template/lib/templates/images/hero-left-overlay-white.pdf}};
+\end{tikzpicture}
+
+\begin{tikzpicture}[overlay, remember picture]
+\node[anchor=south east, xshift=.2cm, yshift=-.2cm]
+     at (current page.south east)
+     {\includegraphics{node_modules/underscore-ebook-template/lib/templates/images/hero-right-overlay-white.pdf}};
+\end{tikzpicture}
+
+\begin{center}
+\vspace*{5cm}
+
+{\fontsize{1.5cm}{1em} \textsf{Essential Scala}}
+
+
+\vspace{1.25em}
+
+{\fontsize{1cm}{1em} \textsf{Noel Welsh and Dave Gurnell}}
+
+\vspace{1em}
+
+{\fontsize{.5cm}{1em} \textsf{Version 1.3, April 2017}}
+
+\begin{bottompar}
+\begin{center}
+\includegraphics[width=5cm]{node_modules/underscore-ebook-template/lib/templates/images/brand.pdf}
+
+\vspace{1cm}
+
+Copyright 2014-2017 Noel Welsh and Dave Gurnell.
+\end{center}
+\end{bottompar}
+
+\end{center}
+\end{titlepage}
+
+% % \maketitle
+% 
+\pagecolor{white}
+
+% Abstract --------------------------------------
+
+
+% Include-before hook ---------------------------
+
+\vspace*{\fill}
+
+\begin{center}
+
+{\Large Essential Scala}
+
+Version 1.3, April 2017
+
+Copyright 2014-2017 Noel Welsh and Dave Gurnell.
+
+
+Published by \href{http://underscore.io}{Underscore Consulting LLP}, Brighton, UK.
+
+\end{center}
+
+\vspace{1em}
+
+
+\vspace*{\fill}
+
+% Tables of contents, etc. ----------------------
+
+{
+\hypersetup{linkcolor=black}
+\setcounter{tocdepth}{2}
+\tableofcontents
+}
+
+% Main document body ----------------------------
+
+\hypertarget{foreword}{%
+\chapter*{Foreword}\label{foreword}}
+\addcontentsline{toc}{chapter}{Foreword}
+
+This book is aimed at programmers learning Scala for the first time. We
+assume you have some familiarity with an object-oriented programming
+language such as Java, but little or no experience with functional
+programming.
+
+Our goal is to describe how to use Scala in-the-small. To this end our
+focus is on the core patterns used in idiomatic Scala code, and we
+introduce Scala's features in the context of the patterns they enable.
+We are not aiming for exhaustive coverage of Scala's features, and this
+text is not a reference manual.
+
+Except for a few exercises we don't rely on any external libraries. You
+should be able to complete all the problems inside with only a text
+editor and Scala's REPL, or an IDE such as the
+\href{http://scala-ide.org/}{Scala IDE for Eclipse} or
+\href{http://www.jetbrains.com/idea/}{IntelliJ IDEA}.
+
+Essential Scala was created by \href{http://noelwelsh.com}{Noel Welsh}
+and \href{http://davegurnell.com/}{Dave Gurnell} of
+\href{http://underscore.io}{Underscore}. It was built using
+\href{https://github.com/underscoreio/underscore-ebook-template}{Underscore's
+eBook Template}, plain text, and a deep and profound love of functional
+programming.
+
+\hypertarget{conventions-used-in-this-book}{%
+\section*{Conventions Used in This
+Book}\label{conventions-used-in-this-book}}
+\addcontentsline{toc}{section}{Conventions Used in This Book}
+
+This book contains a lot of technical information and program code. We
+use the following typographical conventions to reduce ambiguity and
+highlight important concepts:
+
+\hypertarget{typographical-conventions}{%
+\subsection*{Typographical
+Conventions}\label{typographical-conventions}}
+\addcontentsline{toc}{subsection}{Typographical Conventions}
+
+New terms and phrases are introduced in \emph{italics}. After their
+initial introduction they are written in normal roman font.
+
+Terms from program code, filenames, and file contents, are written in
+\texttt{monospace\ font}. Note that we do not distinguish between
+singular and plural forms. For example, might write \texttt{String} or
+\texttt{Strings} to refer to the \texttt{java.util.String} class or
+objects of that type.
+
+References to external resources are written as
+{[}hyperlinks{]}{[}link-underscore{]}. References to API documentation
+are written using a combination of hyperlinks and monospace font, for
+example: {[}\texttt{Option}{]}{[}scala.Option{]}.
+
+\hypertarget{source-code}{%
+\subsection*{Source Code}\label{source-code}}
+\addcontentsline{toc}{subsection}{Source Code}
+
+Source code blocks are written as follows. Syntax is highlighted
+appropriately where applicable:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{object}\NormalTok{ MyApp }\KeywordTok{extends}\NormalTok{ App }\OperatorTok{\{}
+  \FunctionTok{println}\OperatorTok{(}\StringTok{"Hello world!"}\OperatorTok{)} \CommentTok{// Print a fine message to the user!}
+\OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+Some lines of program code are too wide to fit on the page. In these
+cases we use a \emph{continuation character} (curly arrow) to indicate
+that longer code should all be written on one line. For example, the
+following code:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{println}\OperatorTok{(}\StringTok{"This code should all be written ↩}
+\NormalTok{  on one line}\OperatorTok{.}\StringTok{")}
+\end{Highlighting}
+\end{Shaded}
+
+should actually be written as follows:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{println}\OperatorTok{(}\StringTok{"This code should all be written on one line."}\OperatorTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{callout-boxes}{%
+\subsection*{Callout Boxes}\label{callout-boxes}}
+\addcontentsline{toc}{subsection}{Callout Boxes}
+
+We use three types of \emph{callout box} to highlight particular
+content:
+
+Tip callouts indicate handy summaries, recipes, or best practices.
+
+Advanced callouts provide additional information on corner cases or
+underlying mechanisms. Feel free to skip these on your first
+read-through---come back to them later for extra information.
+
+Warning callouts indicate common pitfalls and gotchas. Make sure you
+read these to avoid problems, and come back to them if you're having
+trouble getting your code to run.
+
+\hypertarget{thanks}{%
+\section*{Thanks}\label{thanks}}
+\addcontentsline{toc}{section}{Thanks}
+
+Many thanks to Richard Dallway and Jonathan Ferguson, who took on the
+herculean task of proof reading our early drafts and helped develop the
+rendering pipeline that produces the finished book.
+
+Thanks also to Danielle Ashley, who updated all of the code samples to
+use {[}Tut{]}{[}link-tut{]} and increased our code quality 100\%
+overnight!
+
+Thanks also to Amir Aryanpour, Audrey Welsh, Daniel Watford, Jason
+Scott, Joe Halliwell, Jon Pearce, Konstantine Gadyrka, N. Sriram,
+Rebecca Grenier, and Raffael Dzikowski, who sent us corrections and
+suggestions while the book was in early access. Knowing that our work
+was being used made the long haul of writing worthwhile.
+
+\hypertarget{getting-started}{%
+\chapter{Getting Started}\label{getting-started}}
+
+Throughout this book we will be working with short examples of Scala
+code. There are two recommended ways of doing this:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Using the \emph{Scala console} (better for people who like command
+  lines)
+\item
+  Using \emph{Worksheets} feature of \emph{Scala IDE} (better for people
+  who like IDEs)
+\end{enumerate}
+
+We'll walk through the setup for each process here.
+
+\hypertarget{setting-up-the-scala-console}{%
+\section{Setting up the Scala
+Console}\label{setting-up-the-scala-console}}
+
+Follow the instructions on \url{http://scala-lang.org} to set Scala up
+on your computer. Once Scala is installed, you should be able to run an
+interactive console by typing \texttt{scala} at your command line
+prompt. Here's an example from OS X:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{dave@Jade}\NormalTok{ \textasciitilde{}}\OperatorTok{\textgreater{}}\NormalTok{ scala}
+\ExtensionTok{Welcome}\NormalTok{ to Scala version 2.11.4 }\ErrorTok{(}\ExtensionTok{Java}\NormalTok{ HotSpot}\ErrorTok{(}\ExtensionTok{TM}\KeywordTok{)} \ExtensionTok{64{-}Bit}\NormalTok{ Server VM, Java 1.7.0\_45}\KeywordTok{)}\BuiltInTok{.}
+\ExtensionTok{Type}\NormalTok{ in expressions to have them evaluated.}
+\ExtensionTok{Type}\NormalTok{ :help for more information.}
+
+\ExtensionTok{scala}\OperatorTok{\textgreater{}}
+\end{Highlighting}
+\end{Shaded}
+
+You can enter individual expressions at the \texttt{scala\textgreater{}}
+prompt and press \emph{Enter} to compile and execute them:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\StringTok{"Hello world!"}
+\CommentTok{// res0: String = "Hello world!"}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{entering-single-line-expressions}{%
+\subsection{Entering Single-Line
+Expressions}\label{entering-single-line-expressions}}
+
+Let's try entering a simple expression:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DecValTok{1} \OperatorTok{+} \DecValTok{2} \OperatorTok{+} \DecValTok{3}
+\CommentTok{// res1: Int = 6}
+\end{Highlighting}
+\end{Shaded}
+
+When we press Enter, the console responds with three things:
+
+\begin{itemize}
+\tightlist
+\item
+  an \emph{identifier} \texttt{res1};
+\item
+  a \emph{type} \texttt{Int};
+\item
+  a \emph{value} \texttt{6}.
+\end{itemize}
+
+As we will see in the next chapter, every expression in Scala has a
+\emph{type} and a \emph{value}. The type is determined at compile time
+and the value is determined by executing the expression. Both of these
+are reported here.
+
+The identifier \texttt{res1} is a convenience provided by the console to
+allow us to refer to the result of the expression in future expressions.
+For example, we can multiply our result by two as follows:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{res1 }\OperatorTok{*} \DecValTok{2}
+\CommentTok{// res2: Int = 12}
+\end{Highlighting}
+\end{Shaded}
+
+If we enter an expression that doesn't yield a useful value, the console
+won't print anything in response:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{println}\OperatorTok{(}\StringTok{"Hello world!"}\OperatorTok{)}
+\CommentTok{// Hello world!}
+\end{Highlighting}
+\end{Shaded}
+
+Here, the output \texttt{"Hello\ world!"} is from our \texttt{println}
+statement---the expression we entered doesn't actually return a value.
+The console doesn't provide output similar to the output we saw above.
+
+\hypertarget{entering-multi-line-expressions}{%
+\subsection{Entering Multi-Line
+Expressions}\label{entering-multi-line-expressions}}
+
+We can split long expressions across multiple lines quite simply. If we
+press enter before the end of an expression, the console will print a
+\texttt{\textbar{}} character to indicate that we can continue on the
+next line:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ControlFlowTok{for}\OperatorTok{(}\NormalTok{i }\OperatorTok{\textless{}{-}} \DecValTok{1}\NormalTok{ to }\DecValTok{3}\OperatorTok{)} \OperatorTok{\{}
+  \FunctionTok{println}\OperatorTok{(}\NormalTok{i}\OperatorTok{)}
+\OperatorTok{\}}
+\CommentTok{// 1}
+\CommentTok{// 2}
+\CommentTok{// 3}
+\end{Highlighting}
+\end{Shaded}
+
+Sometimes we want to enter multiple expressions at once. In these cases
+we can use the \texttt{:paste} command. We simply type \texttt{:paste},
+press Enter, and write (or copy-and-paste) our code. When we're done we
+press \texttt{Ctrl+D} to compile and execute the code as normal. The
+console prints output for every expression in one big block at the end
+of the input:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{scala}\OperatorTok{\textgreater{}} \OperatorTok{:}\NormalTok{paste}
+\CommentTok{// Entering paste mode (ctrl{-}D to finish)}
+
+\KeywordTok{val}\NormalTok{ x }\OperatorTok{=} \DecValTok{1}
+\KeywordTok{val}\NormalTok{ y }\OperatorTok{=} \DecValTok{2}
+\NormalTok{x }\OperatorTok{+}\NormalTok{ y}
+
+\CommentTok{// Exiting paste mode, now interpreting.}
+
+\NormalTok{x}\OperatorTok{:} \BuiltInTok{Int} \OperatorTok{=} \DecValTok{1}
+\NormalTok{y}\OperatorTok{:} \BuiltInTok{Int} \OperatorTok{=} \DecValTok{2}
+\NormalTok{res6}\OperatorTok{:} \BuiltInTok{Int} \OperatorTok{=} \DecValTok{3}
+\end{Highlighting}
+\end{Shaded}
+
+If we have Scala code in a file, we can use \texttt{:paste} to paste the
+contents of the file into the console. This is much more convenient than
+re-entering expressions in the console. For example, with a file named
+\texttt{example.scala} containing \texttt{1\ +\ 2\ +\ 3} we can use
+\texttt{:paste} like so:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{scala}\OperatorTok{\textgreater{}} \OperatorTok{:}\NormalTok{paste example}\OperatorTok{.}\NormalTok{scala}
+\NormalTok{Pasting file example}\OperatorTok{.}\NormalTok{scala}\OperatorTok{...}
+\NormalTok{res0}\OperatorTok{:} \BuiltInTok{Int} \OperatorTok{=} \DecValTok{6}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{printing-the-type-of-an-expression}{%
+\subsection{Printing the Type of an
+Expression}\label{printing-the-type-of-an-expression}}
+
+One final tip for using the console. Occasionally we want to know the
+\emph{type} of an expression without actually running it. To do this we
+can use the \texttt{:type} command:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{scala}\OperatorTok{\textgreater{}} \OperatorTok{:}\KeywordTok{type} \FunctionTok{println}\OperatorTok{(}\StringTok{"Hello world!"}\OperatorTok{)}
+\BuiltInTok{Unit}
+\end{Highlighting}
+\end{Shaded}
+
+Notice that the console doesn't execute our \texttt{println} statement
+in this expression. It simply compiles it and prints out its type, which
+in this case is something called \texttt{Unit}.
+
+\texttt{Unit} is Scala's equivalent of \texttt{void} from Java and C.
+Read Chapter 1 to find out more.
+
+\hypertarget{setting-up-scala-ide}{%
+\section{Setting up Scala IDE}\label{setting-up-scala-ide}}
+
+\emph{Scala IDE} is a plugin that adds Scala language support to
+\href{http://eclipse.org}{Eclipse}. A complete version of Scala IDE with
+Eclipse is also available as a standalone bundle from
+\href{}{http://scala-ide.org}. This is the easiest way to install the
+software so we recommend you install the standalone bundle for this
+course.
+
+Go to \url{http://scala-ide.org} now, click the \textbf{Get the Bundle}
+button, and follow the on-screen instructions to download Scala IDE for
+your operating system:
+
+\includegraphics{src/pages/getting-started/scala-ide-website.png}\\
+
+Once you have downloaded and uncompressed the bundle you should find an
+application called \textbf{Eclipse}. Launch this. You will be asked to
+choose a folder for your \emph{workspace}:
+
+\includegraphics{src/pages/getting-started/scala-ide-workspace-chooser.png}\\
+
+Accept the default location and you will see an empty main Eclipse
+window:
+
+\includegraphics{src/pages/getting-started/scala-ide-empty-workspace.png}\\
+
+\hypertarget{creating-your-first-application}{%
+\subsection{Creating your First
+Application}\label{creating-your-first-application}}
+
+Your \emph{Eclipse workspace} is two things: a folder containing files
+and settings, and a main window where you will be doing most of your
+Scala programming. In your workspace you can find \emph{projects} for
+each Scala application you work on.
+
+Let's create a project for the book exercises now. Select the
+\textbf{File menu} and choose \textbf{New \textgreater{} Scala Project}:
+
+\includegraphics{src/pages/getting-started/scala-ide-new-project.png}\\
+
+Enter a \textbf{Project name} of \texttt{essential-scala} and click
+\textbf{Finish}. The tree view on the left of your workspace should now
+contain an empty project:
+
+\includegraphics{src/pages/getting-started/scala-ide-empty-project.png}\\
+
+A project is no good without code to run! Let's create our first simple
+Scala application - the obligatory \emph{Hello World} app. Select the
+\textbf{File Menu} and choose \textbf{New \textgreater{} Scala Object}:
+
+\includegraphics{src/pages/getting-started/scala-ide-new-object.png}\\
+
+\textbf{Name} your object \texttt{HelloWorld} and click \textbf{Finish}.
+A new file called \texttt{HelloWorld.scala} should appear in the tree
+view on the left of the main window. Eclipse should open the new file in
+the main editor ready for you to start coding:
+
+\includegraphics{src/pages/getting-started/scala-ide-single-file.png}\\
+
+The content of the file should read as follows:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{object}\NormalTok{ HelloWorld }\OperatorTok{\{}
+
+\OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+Replace this text with the following minimalist application:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{object}\NormalTok{ HelloWorld }\OperatorTok{\{}
+  \KeywordTok{def} \FunctionTok{main}\OperatorTok{(}\NormalTok{args}\OperatorTok{:} \ExtensionTok{Array}\OperatorTok{[}\ExtensionTok{String}\OperatorTok{]):} \BuiltInTok{Unit} \OperatorTok{=} \OperatorTok{\{}
+    \FunctionTok{println}\OperatorTok{(}\StringTok{"Hello world!"}\OperatorTok{)}
+  \OperatorTok{\}}
+\OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+Select the \textbf{Run Menu} and choose \textbf{Run}. This should
+execute the code in your application, resulting in the words
+\texttt{Hello\ world!} appearing in the \emph{Console} pane at the
+bottom of the window. Congratulations - you just ran your first Scala
+application!
+
+\includegraphics{src/pages/getting-started/scala-ide-hello-world.png}\\
+
+Developers with Java experience will notice the resemblance of the code
+above to the Java hello world app:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{public} \KeywordTok{class}\NormalTok{ HelloWorld }\OperatorTok{\{}
+  \KeywordTok{public} \DataTypeTok{static} \DataTypeTok{void} \FunctionTok{main}\OperatorTok{(}\BuiltInTok{String}\OperatorTok{[]}\NormalTok{ args}\OperatorTok{)} \OperatorTok{\{}
+    \BuiltInTok{System}\OperatorTok{.}\FunctionTok{out}\OperatorTok{.}\FunctionTok{println}\OperatorTok{(}\StringTok{"Hello world!"}\OperatorTok{);}
+  \OperatorTok{\}}
+\OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+The resemblance is, of course, no coincidence. These two applications
+compile to more or less the same bytecode and have exactly the same
+semantics. We will learn much more about the similarities and
+differences between Scala and Java as the course continues.
+
+\hypertarget{creating-your-first-worksheet}{%
+\subsection{Creating your First
+Worksheet}\label{creating-your-first-worksheet}}
+
+Compiling and running code whenever you make a change is a time
+consuming process that isn't particularly suitable to a learning
+environment.
+
+Fortunately, Scala IDE allows us to create special files called
+\emph{Scala Worksheets} that are specifically designed for training and
+experimentation. Every time you save a Worksheet, Eclipse automatically
+compiles and runs your code and displays the output on the right-hand
+side of your editor. This provides instant feedback, which is exactly
+what we need when investigating new concepts!
+
+Create your first Scala Worksheet by selecting the \textbf{File Menu}
+and choosing \textbf{New \textgreater{} Scala Worksheet}:
+
+\includegraphics{src/pages/getting-started/scala-ide-new-worksheet.png}\\
+
+Enter a \textbf{Worksheet name} of \texttt{FirstSteps} and click
+\textbf{Finish}. A new file called \texttt{FirstSteps.sc} should appear
+in the tree view on the left of the main window, and should open it in
+the main editor in the middle:
+
+\includegraphics{src/pages/getting-started/scala-ide-empty-worksheet.png}\\
+
+Note that the object on the left contains a single line of Scala code:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{println}\OperatorTok{(}\StringTok{"Welcome to the Scala worksheet"}\OperatorTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+for which Eclipse is displaying the corresponding output on the right:
+
+\begin{verbatim}
+Welcome to the Scala worksheet
+\end{verbatim}
+
+Any expression you add to the left of the editor is evaluated and
+printed on the right. To demonstrate this, change the text in the editor
+to the following:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{object}\NormalTok{ FirstSteps }\OperatorTok{\{}
+  \FunctionTok{println}\OperatorTok{(}\StringTok{"Welcome to the Scala worksheet"}\OperatorTok{)}
+
+  \DecValTok{1} \OperatorTok{+} \DecValTok{1}
+
+  \ControlFlowTok{if}\OperatorTok{(}\DecValTok{20} \OperatorTok{\textgreater{}} \DecValTok{10}\OperatorTok{)} \StringTok{"left"} \ControlFlowTok{else} \StringTok{"right"}
+
+  \FunctionTok{println}\OperatorTok{(}\StringTok{"The ultimate answer is "} \OperatorTok{+} \DecValTok{42}\OperatorTok{)}
+\OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+Save your work by selecting the \textbf{File Menu} and choosing
+\textbf{Save} (or better still by pressing \textbf{Ctrl+S}). Eclipse
+should automatically evaluate each line of code and print the results on
+the right of the editor:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{object}\NormalTok{ FirstSteps }\OperatorTok{\{}
+  \FunctionTok{println}\OperatorTok{(}\StringTok{"Welcome to the Scala worksheet"}\OperatorTok{)}   \CommentTok{//\textgreater{} Welcome to the Scala worksheet}
+
+  \DecValTok{1} \OperatorTok{+} \DecValTok{1}                                       \CommentTok{//\textgreater{} res0: Int(2) = 2}
+
+  \ControlFlowTok{if}\OperatorTok{(}\DecValTok{20} \OperatorTok{\textgreater{}} \DecValTok{10}\OperatorTok{)} \StringTok{"left"} \ControlFlowTok{else} \StringTok{"right"}             \CommentTok{//\textgreater{} res1: String = left}
+
+  \FunctionTok{println}\OperatorTok{(}\StringTok{"The ultimate answer is "} \OperatorTok{+} \DecValTok{42}\OperatorTok{)}     \CommentTok{//\textgreater{} The ultimate answer is 42}
+\OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{src/pages/getting-started/scala-ide-completed-worksheet.png}\\
+
+We'll dive into what all of the text on the right means as we proceed
+with the course ahead. For now you're all set to start honing your Scala
+skills!
+
+\hypertarget{expressions-types-and-values}{%
+\chapter{Expressions, Types, and
+Values}\label{expressions-types-and-values}}
+
+In this chapter we look at the fundamental building blocks of Scala
+programs: \emph{expressions}, \emph{types}, and \emph{values}.
+Understanding these concepts is necessary to build a mental model of how
+Scala programs work.
+
+\hypertarget{your-first-program}{%
+\section{Your First Program}\label{your-first-program}}
+
+In the Scala console or worksheet enter \texttt{"Hello\ world!"} and
+press return (in the console) or save the worksheet. You should see an
+interaction similar to this:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\StringTok{"Hello world!"}
+\CommentTok{// res0: String = "Hello world!"}
+\end{Highlighting}
+\end{Shaded}
+
+There is a lot to say about this program. It consists of a single
+expression, and in particular a \emph{literal expression} or literal for
+short.
+
+Scala runs, or \emph{evaluates}, our program. When we evaluate a program
+in the Scala console or worksheet we are told two pieces of information:
+the \emph{type} of the program, and the \emph{value} it evaluates to. In
+this case the type is \texttt{String} and the value is
+\texttt{"Hello\ world!"}.
+
+Although the output value ``Hello world!'' looks the same as the program
+that created it, there is a difference between the two. The literal
+expression is the program text we entered, while what the console prints
+is the result of evaluating that program. (Literals are so-named because
+they literally look like what they evaluate to.)
+
+Let's look at a slightly more complex program
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\StringTok{"Hello world!"}\OperatorTok{.}\NormalTok{toUpperCase}
+\CommentTok{// res1: String = "HELLO WORLD!"}
+\end{Highlighting}
+\end{Shaded}
+
+This program extends our first example by adding a \emph{method call}.
+Evaluation in Scala proceeds left to right. First the literal
+\texttt{"Hello\ world!"} is evaluated, as in the first example. Then the
+method \texttt{toUpperCase} is called on the result. This method
+transforms a string value to its upper case equivalent and returns this
+new string. This is the final value we see printed by the console.
+
+Once again the type of this program is \texttt{String}, but in this case
+it evaluates to \texttt{"HELLO\ WORLD!"}
+
+\hypertarget{compile-time-and-run-time}{%
+\subsection{Compile-time and Run-time}\label{compile-time-and-run-time}}
+
+There are two distinct stages that a Scala program goes through: first
+it is \emph{compiled}, and if it compiles successfully it can then be
+\emph{run} or evaluated. We refer to the first stage as
+\emph{compile-time} and the latter as \emph{run-time}.
+
+When using the Scala console our programs are evaluated as soon as they
+compile, which gives the appearance that there is only one stage. It is
+important to understand that compile- and run-time really are distinct,
+as it is this distinction that allows us to properly understand the
+difference between types and values.
+
+Compilation is a process of checking that a program makes sense. There
+are two ways in which a program must ``make sense'':
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  It must be \emph{syntactically correct}, meaning the parts of the
+  program must be arranged according to the grammar of the language. An
+  example English sentence that is not syntactically correct is ``on cat
+  mat sat the''. An example syntactically incorrect Scala program is
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{toUpperCase}\OperatorTok{.}\StringTok{"Hello world!"}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  It must \emph{type check}, meaning it must obey certain constraints on
+  what a sensible program is. An example English sentence that is
+  syntactically correct but fails to make sense is ``the mat sat on the
+  cat''. A simple program that would fail to type check is trying to
+  convert a number to uppercase.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FloatTok{2.}\NormalTok{toUpperCase}
+\CommentTok{// error:}
+\CommentTok{// value toUpperCase is not a member of Int}
+\CommentTok{// 2.toUpperCase}
+\CommentTok{// \^{}\^{}\^{}\^{}\^{}\^{}\^{}\^{}\^{}\^{}\^{}\^{}\^{}}
+\end{Highlighting}
+\end{Shaded}
+
+The concept of upper and lowercase doesn't make sense for numbers, and
+the type system will catch this error.
+
+If a program passes the checks at compile-time it may then be run. This
+is the process of the computer performing the instructions in the
+program.
+
+Even though a program successfully compiles it can still fail at
+run-time. Dividing an integer by zero causes a run-time error in Scala.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DecValTok{2} \OperatorTok{/} \DecValTok{0}
+\CommentTok{// java.lang.ArithmeticException: / by zero}
+\CommentTok{//  at repl.MdocSession$MdocApp.$init$$$anonfun$1(index.md:28)}
+\end{Highlighting}
+\end{Shaded}
+
+The type of integers, \texttt{Int}, allows division so the program type
+checks. At run-time the program fails because there is no \texttt{Int}
+that can represent the result of the division.
+
+\hypertarget{expressions-types-and-values-1}{%
+\subsection{Expressions, Types, and
+Values}\label{expressions-types-and-values-1}}
+
+So what exactly are expressions, types, and values?
+
+Expressions are part of a program's text---what we type into a file, or
+the console or worksheet. They are the main components of a Scala
+program. We will see other components, namely \emph{definitions} and
+\emph{statements}, in due course. Expressions exist at compile-time.
+
+The defining characteristic of an expression is that it evaluates to a
+value. A value is information stored in the computer's memory. It exists
+at run-time. For example, the expression \texttt{2} evaluates to a
+particular sequence of bits in a particular location in the computer's
+memory.
+
+We compute with values. They are entities that our programs can pass
+around and manipulate. For example, to compute the minimum of two
+numbers we might write a program like
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FloatTok{2.}\FunctionTok{min}\OperatorTok{(}\DecValTok{3}\OperatorTok{)}
+\CommentTok{// res3: Int = 2}
+\end{Highlighting}
+\end{Shaded}
+
+Here we have two values, \texttt{2} and \texttt{3}, and we combine them
+into a larger program that evaluates to \texttt{2}.
+
+In Scala all values are \emph{objects}, which has a particular meaning
+we will see shortly.
+
+Now let's turn to types. Types are restrictions on our programs that
+limit how we can manipulate objects. We have already seen two types,
+\texttt{String} and \texttt{Int}, and seen that we can perform different
+operations depending on the type.
+
+At this stage, the most important point about types is that
+\emph{expressions have types but values do not}. We cannot inspect an
+arbitrary piece of the computer's memory and divine how to interpret it
+without knowing the program that created it. For example, in Scala the
+\texttt{Int} and \texttt{Float} types are both represented by 32-bits of
+memory. There are no tags or other indications that a given 32-bits
+should be interpreted as an \texttt{Int} or a \texttt{Float}.
+
+We can show that types exist at compile-time by asking the Scala console
+to tell us the type of an expression that causes a run-time error.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{:}\KeywordTok{type} \DecValTok{2} \OperatorTok{/} \DecValTok{0}
+\CommentTok{// Int}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DecValTok{2} \OperatorTok{/} \DecValTok{0}
+\CommentTok{// java.lang.ArithmeticException: / by zero}
+\CommentTok{//  at repl.MdocSession$MdocApp.$init$$$anonfun$2(index.md:44)}
+\end{Highlighting}
+\end{Shaded}
+
+We see that the expression \texttt{2\ /\ 0} has type \texttt{Int} even
+though this expression fails when we evaluate it.
+
+Types, which exist at compile-time, restrict us to writing programs that
+give a consistent interpretation to values. We cannot claim that a
+particular 32-bits is at one point an \texttt{Int} and another a
+\texttt{Float}. When a program type checks, Scala guarantees that all
+values are used consistently and thus it does not need to record type
+information in a value's representation. This process of removing type
+information is called \emph{type erasure}\footnote{This is not entirely
+  true. The Java Virtual Machine, the program that runs Scala code,
+  distinguishes between two kinds of objects. Primitive types don't
+  store any type information along with the value they represent. Object
+  types do store type information. However this type information is not
+  complete and there are occasions where it is lost. Blurring the
+  distinction between compile- and run-time is thus dangerous. If we
+  never rely on type information being around at run-time (and the
+  patterns we will show you do not) we will never run into these issues.}.
+
+Types necessarily do not contain all possible information about the
+values that conform to the type. If they did, type checking would be
+equivalent to running the program. We have already seen that the type
+system will not prevent us from dividing an \texttt{Int} by zero, which
+causes a run-time error.
+
+An key part of designing Scala code is deciding which error cases we
+wish to rule out using the type system. We will see that we can express
+many useful constraints in the type system, improving the reliability of
+our programs. We could implement a division operator that used the type
+system to express the possibility of error, if we decided this was
+important enough in our program. Using the type system well is one of
+the main themes of this book.
+
+\hypertarget{take-home-points}{%
+\subsection{Take Home Points}\label{take-home-points}}
+
+We must build a mental model of Scala programs if we are to use Scala.
+Three fundamental components of this model are \emph{expressions},
+\emph{types}, and \emph{values}.
+
+Expressions are the parts of a program that evaluate to a value. They
+are the major part of a Scala program.
+
+Expressions have types, which express some restrictions on programs.
+During \emph{compile-time} the types of our programs are checked. If
+they are inconsistent then compilation fails and we cannot evaluate, or
+run, our program.
+
+Values exist in the computer's memory, and are what a running program
+manipulates. All values in Scala are \emph{objects}, the meaning of
+which we will discuss soon.
+
+\hypertarget{exercises}{%
+\subsection{Exercises}\label{exercises}}
+
+\hypertarget{type-and-value}{%
+\subsubsection{Type and Value}\label{type-and-value}}
+
+Using the Scala console or worksheet, determine the type and value of
+the following expressions:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DecValTok{1} \OperatorTok{+} \DecValTok{2}
+\end{Highlighting}
+\end{Shaded}
+
+Type is \texttt{Int} and value is \texttt{3}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\StringTok{"3"}\OperatorTok{.}\NormalTok{toInt}
+\end{Highlighting}
+\end{Shaded}
+
+Type is \texttt{Int} and value is \texttt{3}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\StringTok{"foo"}\OperatorTok{.}\NormalTok{toInt}
+\end{Highlighting}
+\end{Shaded}
+
+Type is \texttt{Int}, but this one doesn't evaluate to a value---it
+raises an exception instead, and a raised exception is not a value. How
+can we tell this? We can't continue computing with the result of the
+expression. For example, we can't print it. Compare
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{println}\OperatorTok{(}\StringTok{"foo"}\OperatorTok{)}
+\CommentTok{// foo}
+\end{Highlighting}
+\end{Shaded}
+
+and
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{println}\OperatorTok{(}\StringTok{"foo"}\OperatorTok{.}\NormalTok{toInt}\OperatorTok{)}
+\CommentTok{// java.lang.NumberFormatException: For input string: "foo"}
+\CommentTok{//  at java.base/java.lang.NumberFormatException.forInputString(NumberFormatException.java:67)}
+\CommentTok{//  at java.base/java.lang.Integer.parseInt(Integer.java:661)}
+\CommentTok{//  at java.base/java.lang.Integer.parseInt(Integer.java:777)}
+\CommentTok{//  at scala.collection.StringOps$.toInt$extension(StringOps.scala:910)}
+\CommentTok{//  at repl.MdocSession$MdocApp.$init$$$anonfun$3(index.md:80)}
+\end{Highlighting}
+\end{Shaded}
+
+In the latter no printing occurs indicating the \texttt{println} is
+never evaluated.
+
+\hypertarget{interacting-with-objects}{%
+\section{Interacting with Objects}\label{interacting-with-objects}}
+
+In the previous section we saw the fundamental components of Scala
+programs: expressions, types, and values. We learned that \emph{all
+values are objects}. In this section we will learn more about objects
+and how we can interact with them.
+
+\hypertarget{objects}{%
+\subsection{Objects}\label{objects}}
+
+An object is a grouping of data and operations on that data. For
+example, \texttt{2} is an object. The data is the integer 2, and the
+operations on that data are familiar operations like \texttt{+},
+\texttt{-}, and so on.
+
+We have some special terminology for the data and operations of an
+object. The operations are known as \emph{methods}. The data is stored
+in \emph{fields}.
+
+\hypertarget{method-calls}{%
+\subsection{Method Calls}\label{method-calls}}
+
+We interact with objects by \emph{calling} methods\footnote{There is
+  another way of interacting with objects, called pattern matching. We
+  will introduce pattern matching later.}. We have already seen some
+examples of calling methods. For example, we have seen we can get the
+uppercase version of a \texttt{String} by calling its
+\texttt{toUpperCase} method.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\StringTok{"hello"}\OperatorTok{.}\NormalTok{toUpperCase}
+\CommentTok{// res0: String = "HELLO"}
+\end{Highlighting}
+\end{Shaded}
+
+Some methods accept \emph{parameters} or \emph{arguments}, which control
+how the method works. The \texttt{take} method, for example, takes
+characters from a \texttt{String}. We must pass a parameter to
+\texttt{take} to specify how many characters we want.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\StringTok{"abcdef"}\OperatorTok{.}\FunctionTok{take}\OperatorTok{(}\DecValTok{3}\OperatorTok{)}
+\CommentTok{// res1: String = "abc"}
+\StringTok{"abcdef"}\OperatorTok{.}\FunctionTok{take}\OperatorTok{(}\DecValTok{2}\OperatorTok{)}
+\CommentTok{// res2: String = "ab"}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{method-call-syntax}{%
+\subsubsection*{Method Call Syntax}\label{method-call-syntax}}
+\addcontentsline{toc}{subsubsection}{Method Call Syntax}
+
+The syntax for a method call is
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{anExpression}\OperatorTok{.}\FunctionTok{methodName}\OperatorTok{(}\NormalTok{param1}\OperatorTok{,} \OperatorTok{...)}
+\end{Highlighting}
+\end{Shaded}
+
+or
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{anExpression}\OperatorTok{.}\NormalTok{methodName}
+\end{Highlighting}
+\end{Shaded}
+
+where
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{anExpression} is any expression (which evaluates to an object)
+\item
+  \texttt{methodName} is the name of the method
+\item
+  the optional \texttt{param1,\ ...} is one or more expressions
+  evaluating to the parameters to the method.
+\end{itemize}
+
+A method call is an expression, and thus evaluates to an object. This
+means we can chain method calls together to make more complex programs:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\StringTok{"hello"}\OperatorTok{.}\NormalTok{toUpperCase}\OperatorTok{.}\NormalTok{toLowerCase}
+\CommentTok{// res3: String = "hello"}
+\end{Highlighting}
+\end{Shaded}
+
+In what order are the various expressions in a method call evaluated?
+Method parameters are evaluated left-to-right, before the method is
+called. So in the expression
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\StringTok{"Hello world!"}\OperatorTok{.}\FunctionTok{take}\OperatorTok{(}\DecValTok{2} \OperatorTok{+} \DecValTok{3}\OperatorTok{)}
+\CommentTok{// res4: String = "Hello"}
+\end{Highlighting}
+\end{Shaded}
+
+the expression \texttt{"Hello\ world!"} is evaluated first, then
+\texttt{2\ +\ 3} (which requires evaluating \texttt{2} and then
+\texttt{3} first), then finally \texttt{"Hello\ world!".take(5)}.
+
+\hypertarget{operators}{%
+\subsection{Operators}\label{operators}}
+
+Because every value in Scala is an object we can also call methods on
+primitive types such as \texttt{Int} and \texttt{Boolean}. This is in
+contrast to Java where \texttt{int} and \texttt{boolean} are not
+objects:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FloatTok{123.}\NormalTok{toShort }\CommentTok{// this is how we define a \textasciigrave{}Short\textasciigrave{} in Scala}
+\CommentTok{// res5: Short = 123}
+\FloatTok{123.}\NormalTok{toByte }\CommentTok{// this is how we define a \textasciigrave{}Byte\textasciigrave{}}
+\CommentTok{// res6: Byte = 123}
+\end{Highlighting}
+\end{Shaded}
+
+But if an \texttt{Int} is an object, what are the basic mathematical
+operators such as \texttt{+} and \texttt{-}? Are they also methods?
+Yes---Scala methods can have symbolic names as well as alphanumeric
+ones!
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DecValTok{43} \OperatorTok{{-}} \DecValTok{3} \OperatorTok{+} \DecValTok{2}
+\CommentTok{// res7: Int = 42}
+\FloatTok{43.}\OperatorTok{{-}(}\DecValTok{3}\OperatorTok{).+(}\DecValTok{2}\OperatorTok{)}
+\CommentTok{// res8: Int = 42}
+\end{Highlighting}
+\end{Shaded}
+
+(Note that in Scala 2.10 and earlier you would have to write
+\texttt{(43).-(3).+(2)} to prevent \texttt{43.} being interpreted as a
+\texttt{Double}.)
+
+\hypertarget{infix-operator-notation}{%
+\subsubsection*{Infix Operator Notation}\label{infix-operator-notation}}
+\addcontentsline{toc}{subsubsection}{Infix Operator Notation}
+
+Any Scala expression written \texttt{a.b(c)} can also be written
+\texttt{a\ b\ c}.
+
+Note that \texttt{a\ b\ c\ d\ e} is equivalent to \texttt{a.b(c).d(e)},
+not \texttt{a.b(c,\ d,\ e)}.
+
+We can use \emph{infix operator notation} with any method that takes one
+parameter, regardless of whether it has a symbolic or alphanumeric name:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\StringTok{"the quick brown fox"}\NormalTok{ split }\StringTok{" "}
+\CommentTok{// res: Array[String] = Array(the, quick, brown, fox)}
+\end{Highlighting}
+\end{Shaded}
+
+Infix notation is one of several syntactic shorthands that allow us to
+write simple operator expressions instead of verbose method calls. There
+are also notations for \emph{prefix}, \emph{postfix},
+\emph{right-associative}, and \emph{assignment-style operators}, but
+there are much less common than infix notation.
+
+A question poses itself---what precedence rules should we associate with
+infix operators? Scala uses a set of {[}precedence
+rules{]}{[}link-precedence-rules{]} derived from the identifiers we use
+as method names that follow our intuitive understanding from mathematics
+and logic:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DecValTok{2} \OperatorTok{*} \DecValTok{3} \OperatorTok{+} \DecValTok{4} \OperatorTok{*} \DecValTok{5}
+\OperatorTok{(}\DecValTok{2} \OperatorTok{*} \DecValTok{3}\OperatorTok{)} \OperatorTok{+} \OperatorTok{(}\DecValTok{4} \OperatorTok{*} \DecValTok{5}\OperatorTok{)}
+\CommentTok{// res10: Int = 26}
+\DecValTok{2} \OperatorTok{*} \OperatorTok{(}\DecValTok{3} \OperatorTok{+} \DecValTok{4}\OperatorTok{)} \OperatorTok{*} \DecValTok{5}
+\CommentTok{// res11: Int = 70}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{take-home-points-1}{%
+\subsection{Take home points}\label{take-home-points-1}}
+
+All Scala values are objects. We \emph{interact with objects by calling
+methods} on them. If you come from a Java background note we can call
+methods on \texttt{Int} or any other primitive value.
+
+The syntax for a method call is
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{anExpression}\OperatorTok{.}\FunctionTok{methodName}\OperatorTok{(}\NormalTok{parameter}\OperatorTok{,} \OperatorTok{...)}
+\end{Highlighting}
+\end{Shaded}
+
+or
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{anExpression methodName parameter}
+\end{Highlighting}
+\end{Shaded}
+
+\emph{Scala has very few operators - almost everything is a method
+call.} We use syntactic conventions like infix operator notation to keep
+our code simple and readable, but we can always fall back to standard
+method notation where it makes sense.
+
+As we will see, Scala's focus on programming with expressions allows us
+to write much shorter code than we can in Java. It also allows us to
+reason about code in a very intuitive way using values and types.
+
+\hypertarget{exercises-1}{%
+\subsection{Exercises}\label{exercises-1}}
+
+\hypertarget{operator-style}{%
+\subsubsection{Operator Style}\label{operator-style}}
+
+Rewrite in operator-style
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\StringTok{"foo"}\OperatorTok{.}\FunctionTok{take}\OperatorTok{(}\DecValTok{1}\OperatorTok{)}
+\CommentTok{// res12: String = "f"}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\StringTok{"foo"}\NormalTok{ take }\DecValTok{1}
+\CommentTok{// res13: String = "f"}
+\end{Highlighting}
+\end{Shaded}
+
+Rewrite in method call style
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DecValTok{1} \OperatorTok{+} \DecValTok{2} \OperatorTok{+} \DecValTok{3}
+\CommentTok{// res14: Int = 6}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FloatTok{1.}\OperatorTok{+(}\DecValTok{2}\OperatorTok{).+(}\DecValTok{3}\OperatorTok{)}
+\CommentTok{// res15: Int = 6}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{substitution}{%
+\subsubsection{Substitution}\label{substitution}}
+
+What is the difference between the following expressions? What are the
+similarities?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DecValTok{1} \OperatorTok{+} \DecValTok{2} \OperatorTok{+} \DecValTok{3}
+
+\DecValTok{6}
+\end{Highlighting}
+\end{Shaded}
+
+The expressions have the same result type and return value. However,
+they arrive at their results in different ways. The first computes its
+result through a series of additions, while the later is simply a
+literal.
+
+As neither expression has any side-effects, they are interchangeable
+from a user's point of view. Anywhere you can write
+\texttt{1\ +\ 2\ +\ 3} you can also write \texttt{6}, and vice versa,
+without changing the meaning of any program. This is known as
+\emph{substitution} and you may remember the principle from simplifying
+algebraic formulae at school.
+
+As programmers we must develop a mental model of how our code operates.
+The \emph{substitution model of evaluation} is a particuarly simple
+model that says anywhere we see an expression we may substitute its
+result. In the absence of side-effects, the substitution model always
+works\footnote{What exactly is a side-effect? One workable definition is
+  anything that causes substitution to yield an incorrect result. Does
+  substitution \emph{always} work, in the absence of side-effects? To
+  truly have a correct model of Scala we must define the order in which
+  we apply substitutions. There are a number of possible orders. (For
+  example, we perform substitution left-to-right, or right-to-left? Do
+  we substitute as soon as possible or delay until we need a value?)
+  Most of the time order of substitution doesn't matter, but there are
+  cases where it does. Scala always applies substitution from
+  left-to-right and at the earliest possible time.}. If we know the
+types and values of each component of an expression, we know the type
+and value of the expression as a whole. In functional programming we aim
+to avoid side-effects for this reason: it makes our programs easier to
+understand.
+
+\hypertarget{literal-objects}{%
+\section{Literal Objects}\label{literal-objects}}
+
+We have already covered some of Scala's basic types. In this section
+we're going to round out that knowledge by covering all of Scala's
+\emph{literal expressions}. A literal expression represents a fixed
+value that stands ``for itself''. Here's an example:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DecValTok{42}
+\CommentTok{// res0: Int = 42}
+\end{Highlighting}
+\end{Shaded}
+
+This interaction at the REPL shows us that the literal \texttt{42}
+evaluates to the \texttt{Int} \texttt{42}.
+
+Don't confuse a literal with the value it evaluates to! The literal
+expression is the representation in the program text before the program
+is run, and the value is the representation in the computer's memory
+after the program has run.
+
+If you have prior programming experience, particularly Java experience,
+the literals in Scala should be familiar to you.
+
+\hypertarget{numbers}{%
+\subsection{Numbers}\label{numbers}}
+
+Numbers share the same types available in Java: \texttt{Int} for 32-bit
+integers, \texttt{Double} for 64-bit floating point, \texttt{Float} for
+32-bit floating point, and \texttt{Long} for 64-bit integers.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DecValTok{42}
+\CommentTok{// res1: Int = 42}
+\FloatTok{42.0}
+\CommentTok{// res2: Double = 42.0}
+\FloatTok{42.0f}
+\CommentTok{// res3: Float = 42.0F}
+\NormalTok{42L}
+\CommentTok{// res4: Long = 42L}
+\end{Highlighting}
+\end{Shaded}
+
+Scala also has 16-bit \texttt{Short} integers and 8-bit \texttt{Byte}s,
+but there is no literal syntax for creating them. Instead, we create
+them using methods called \texttt{toShort} and \texttt{toByte}.
+
+\hypertarget{booleans}{%
+\subsection{Booleans}\label{booleans}}
+
+Booleans are exactly the same as Java: \texttt{true} or \texttt{false}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{true}
+\CommentTok{// res5: Boolean = true}
+\KeywordTok{false}
+\CommentTok{// res6: Boolean = false}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{characters}{%
+\subsection{Characters}\label{characters}}
+
+\texttt{Chars} are 16-bit Unicode values written as a single character
+enclosed in single quotes.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CharTok{\textquotesingle{}a\textquotesingle{}}
+\CommentTok{// res7: Char = \textquotesingle{}a\textquotesingle{}}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{scala-vs-javas-type-hierarchy}{%
+\subsubsection*{Scala vs Java's Type
+Hierarchy}\label{scala-vs-javas-type-hierarchy}}
+\addcontentsline{toc}{subsubsection}{Scala vs Java's Type Hierarchy}
+
+Although they are written with initial capitals, Scala's \texttt{Int},
+\texttt{Double}, \texttt{Float}, \texttt{Long}, \texttt{Short},
+\texttt{Byte}, \texttt{Boolen} and \texttt{Char} refer to exactly the
+same things as \texttt{int}, \texttt{double}, \texttt{float},
+\texttt{long}, \texttt{short}, \texttt{byte}, \texttt{boolean}, and
+\texttt{char} in Java.
+
+In Scala all of these types act like objects with methods and fields.
+However, once your code is compiled, a Scala \texttt{Int} is exactly the
+same as a Java \texttt{int}. This makes interoperability between the two
+languages a breeze.
+
+\hypertarget{strings}{%
+\subsection{Strings}\label{strings}}
+
+Strings are exactly Java's strings, and are written the same way.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\StringTok{"this is a string"}
+\CommentTok{// res8: String = "this is a string"}
+\StringTok{"the}\CharTok{\textbackslash{}n}\StringTok{usual}\CharTok{\textbackslash{}t}\StringTok{escape characters apply"}
+\CommentTok{// res9: String = """the}
+\CommentTok{// usual    escape characters apply"""}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{null}{%
+\subsection{Null}\label{null}}
+
+Null is the same as Java, though not used nearly as often. Scala's
+\texttt{null} also has its own type: \texttt{Null}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{null}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{using-nulls-in-scala}{%
+\subsubsection*{Using Nulls in Scala}\label{using-nulls-in-scala}}
+\addcontentsline{toc}{subsubsection}{Using Nulls in Scala}
+
+Although \texttt{null}s are common in Java code, they are considered
+very bad practice in Scala.
+
+The main use of \texttt{null} in Java is to implement \emph{optional}
+values that have some or no value at different points of a program's
+execution. However, \texttt{null} values cannot be checked by the
+compiler, leading to possible runtime errors in the form of
+\texttt{NullPointerExceptions}.
+
+Later we will see that Scala has the means to define optional values
+that \emph{are} checked by the compiler. This removes the necessity of
+using \texttt{null}, making our programs much safer.
+
+\hypertarget{unit}{%
+\subsection{Unit}\label{unit}}
+
+Unit, written \texttt{()}, is the Scala equivalent of Java's
+\texttt{void}. Unit is the result of expressions that evaluate to no
+interesting value, such as printing to standard output using
+\texttt{println}. The console doesn't print unit but we can ask for the
+type of an expression to see that unit is in fact the result of some
+expressions.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{:}\KeywordTok{type} \OperatorTok{()}
+\CommentTok{// Unit}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{println}\OperatorTok{(}\StringTok{"something"}\OperatorTok{)}
+\CommentTok{// something}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{:}\KeywordTok{type} \FunctionTok{println}\OperatorTok{(}\StringTok{"something"}\OperatorTok{)}
+\CommentTok{// Unit}
+\end{Highlighting}
+\end{Shaded}
+
+Unit is an important concept in Scala. Many of Scala's syntactic
+constructs are \emph{expressions} that have types and values. We need a
+placeholder for expressions that don't yield a useful value, and unit
+provides just that.
+
+\hypertarget{take-home-points-2}{%
+\subsection{Take home points}\label{take-home-points-2}}
+
+In this section we have seen \emph{literal} expressions, which evaluate
+to basic data types. These basics types are mostly identical to Java,
+except for \texttt{Unit} which has no equivalent.
+
+We note that every literal expression has a \emph{type}, and evaluates
+to a \emph{value}---something which is also true for more complex Scala
+expressions.
+
+In the next section we will learn how to define our own object literals.
+
+\hypertarget{exercises-2}{%
+\subsection{Exercises}\label{exercises-2}}
+
+\hypertarget{literally-just-literals}{%
+\subsubsection{Literally Just Literals}\label{literally-just-literals}}
+
+What are the values and types of the following Scala literals?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DecValTok{42}
+
+\KeywordTok{true}
+
+\NormalTok{123L}
+
+\FloatTok{42.0}
+\end{Highlighting}
+\end{Shaded}
+
+\texttt{42} is an \texttt{Int}. \texttt{true} is a \texttt{Boolean}.
+\texttt{123L} is a \texttt{Long}. \texttt{42.0} is a \texttt{Double}.
+
+This exercise just gives you some experience using the Scala console or
+Worksheet.
+
+\hypertarget{quotes-and-misquotes}{%
+\subsubsection{Quotes and Misquotes}\label{quotes-and-misquotes}}
+
+What is the difference between the following literals? What is the type
+and value of each?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CharTok{\textquotesingle{}a\textquotesingle{}}
+
+\StringTok{"a"}
+\end{Highlighting}
+\end{Shaded}
+
+The first is a literal \texttt{Char} and the second is a literal
+\texttt{String}.
+
+\hypertarget{an-aside-on-side-effects}{%
+\subsubsection{An Aside on
+Side-Effects}\label{an-aside-on-side-effects}}
+
+What is the difference between the following expressions? What is the
+type and value of each?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\StringTok{"Hello world!"}
+
+\FunctionTok{println}\OperatorTok{(}\StringTok{"Hello world!"}\OperatorTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+The literal expression \texttt{"Hello\ world!"} evaluates to a
+\texttt{String} value. The expression \texttt{println("Hello\ world!")}
+evaluates to \texttt{Unit} and, as a side-effect, prints
+\texttt{"Hello\ world!"} on the console.
+
+This an important distinction between a program that evaluates to a
+value and a program that prints a value as a side-effect. The former can
+be used in a larger expression but the latter cannot.
+
+\hypertarget{learning-by-mistakes}{%
+\subsubsection{Learning By Mistakes}\label{learning-by-mistakes}}
+
+What is the type and value of the following literal? Try writing it on
+the REPL or in a Scala worksheet and see what happens!
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ErrorTok{\textquotesingle{}}\NormalTok{Hello world}\OperatorTok{!}\ErrorTok{\textquotesingle{}}
+\end{Highlighting}
+\end{Shaded}
+
+You should see an error message. Take the time to read and get used to
+the error messages in your development environment---you'll see plenty
+more of them soon!
+
+\hypertarget{object-literals}{%
+\section{Object Literals}\label{object-literals}}
+
+So far we've seen how to create objects of built-in types like
+\texttt{Int} and \texttt{String} and combine them into expressions. In
+this section we will see how to create objects of our own design using
+\emph{object literals}.
+
+When we write an object literal we use a \emph{declaration}, which is a
+different kind of program to an expression. A declaration does not
+evaluate to a value. Instead it associates a name with a value. This
+name can then be used to refer to the value in other code.
+
+We can declare an empty object as follows:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{object}\NormalTok{ Test }\OperatorTok{\{\}}
+\end{Highlighting}
+\end{Shaded}
+
+This is not an expression---it does not evaluate to a value. Rather, it
+binds a name (\texttt{Test}) to a value (an empty object).
+
+Once we have bound the name \texttt{Test} we can use it in expressions,
+where it evaluates to the object we have declared. The simplest
+expression is just the name on its own, which evaluates to the value
+itself:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Test}
+\CommentTok{// res0: Test = repl.MdocSession$MdocApp$Test$@7a56f3d1}
+\end{Highlighting}
+\end{Shaded}
+
+This expression is equivalent to writing a literal like \texttt{123} or
+\texttt{"abc"}. Note that the type of the object is reported as
+\texttt{Test.type}. This is not like any type we've seen before---it's a
+new type, created just for our object, called a \emph{singleton type}.
+We cannot create other values of this type.
+
+Empty objects are not so useful. Within the body (between the braces) of
+an object declaration we can put expressions. It is more common,
+however, to put declarations such as declaring methods, fields, or even
+more objects.
+
+\hypertarget{object-declaration-syntax}{%
+\subsubsection*{Object Declaration
+Syntax}\label{object-declaration-syntax}}
+\addcontentsline{toc}{subsubsection}{Object Declaration Syntax}
+
+The syntax for declaring an object is
+
+\textbf{Scala 2}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{object}\NormalTok{ name }\OperatorTok{\{}
+\NormalTok{  declarationOrExpression }\OperatorTok{...}
+\OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Scala 3}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{object}\NormalTok{ name}\OperatorTok{:}
+\NormalTok{  declarationOrExpression }\OperatorTok{...}
+\end{Highlighting}
+\end{Shaded}
+
+where
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{name} is the name of the object; and
+\item
+  the optional \texttt{declarationOrExpression}s are declarations or
+  expressions.
+\end{itemize}
+
+Let's see how to declare methods and fields.
+
+\hypertarget{methods}{%
+\subsection{Methods}\label{methods}}
+
+We interact with objects via methods so let's create an object with a
+method.
+
+\textbf{Scala 2}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{object}\NormalTok{ Test2 }\OperatorTok{\{}
+  \KeywordTok{def}\NormalTok{ name}\OperatorTok{:} \ExtensionTok{String} \OperatorTok{=} \StringTok{"Probably the best object ever"}
+\OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Scala 3}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{object}\NormalTok{ Test2}\OperatorTok{:}
+  \KeywordTok{def}\NormalTok{ name}\OperatorTok{:} \ExtensionTok{String} \OperatorTok{=} \StringTok{"Probably the best object ever"}
+\end{Highlighting}
+\end{Shaded}
+
+Here we've create a method called \texttt{name}. We can call it in the
+usual way.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Test2}\OperatorTok{.}\NormalTok{name}
+\CommentTok{// res2: String = "Probably the best object ever"}
+\end{Highlighting}
+\end{Shaded}
+
+Here's an object with a more complex method:
+
+\textbf{Scala 2}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{object}\NormalTok{ Test3 }\OperatorTok{\{}
+  \KeywordTok{def} \FunctionTok{hello}\OperatorTok{(}\NormalTok{name}\OperatorTok{:} \ExtensionTok{String}\OperatorTok{)} \OperatorTok{=}
+    \StringTok{"Hello "} \OperatorTok{+}\NormalTok{ name}
+\OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Scala 3}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{object}\NormalTok{ Test3}\OperatorTok{:}
+  \KeywordTok{def} \FunctionTok{hello}\OperatorTok{(}\NormalTok{name}\OperatorTok{:} \ExtensionTok{String}\OperatorTok{)} \OperatorTok{=}
+    \StringTok{"Hello "} \OperatorTok{+}\NormalTok{ name}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Test3}\OperatorTok{.}\FunctionTok{hello}\OperatorTok{(}\StringTok{"Noel"}\OperatorTok{)}
+\CommentTok{// res4: String = "Hello Noel"}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{method-declaration-syntax}{%
+\subsubsection*{Method Declaration
+Syntax}\label{method-declaration-syntax}}
+\addcontentsline{toc}{subsubsection}{Method Declaration Syntax}
+
+The syntax for declaring a method is
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def} \FunctionTok{name}\OperatorTok{(}\NormalTok{parameter}\OperatorTok{:} \KeywordTok{type}\OperatorTok{,} \OperatorTok{...):}\NormalTok{ resultType }\OperatorTok{=}
+\NormalTok{  bodyExpression}
+\end{Highlighting}
+\end{Shaded}
+
+or
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def}\NormalTok{ name}\OperatorTok{:}\NormalTok{ resultType }\OperatorTok{=}
+\NormalTok{  bodyExpression}
+\end{Highlighting}
+\end{Shaded}
+
+where
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{name} is the name of the method;
+\item
+  the optional \texttt{parameter}s are the names given to parameters to
+  the method;
+\item
+  the \texttt{type}s are the types of the method parameters;
+\item
+  the optional \texttt{resultType} is the type of the result of the
+  method;
+\item
+  the \texttt{bodyExpression} is an expression that calling the method
+  evaluates to.
+\end{itemize}
+
+Method parameters are optional, but if a method has parameters their
+type must be given. Although the result type is optional it is good
+practice to define it as it serves as (machine checked!) documentation.
+
+The term \emph{argument} may be used interchangeably with
+\emph{parameter}.
+
+\hypertarget{return-is-implicit}{%
+\subsubsection*{Return is Implicit}\label{return-is-implicit}}
+\addcontentsline{toc}{subsubsection}{Return is Implicit}
+
+The return value of the method is determined by evaluating the
+body---there is no need to write \texttt{return} like you would in Java.
+
+\hypertarget{fields}{%
+\subsection{Fields}\label{fields}}
+
+An object can also contain other objects, called \emph{fields}. We
+introduce these using the keywords \texttt{val} or \texttt{var}, which
+look similar to \texttt{def}:
+
+\textbf{Scala 2}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{object}\NormalTok{ Test4 }\OperatorTok{\{}
+  \KeywordTok{val}\NormalTok{ name }\OperatorTok{=} \StringTok{"Noel"}
+  \KeywordTok{def} \FunctionTok{hello}\OperatorTok{(}\NormalTok{other}\OperatorTok{:} \ExtensionTok{String}\OperatorTok{):} \ExtensionTok{String} \OperatorTok{=}
+\NormalTok{    name }\OperatorTok{+} \StringTok{" says hi to "} \OperatorTok{+}\NormalTok{ other}
+\OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Scala 3}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{object}\NormalTok{ Test4}\OperatorTok{:}
+  \KeywordTok{val}\NormalTok{ name }\OperatorTok{=} \StringTok{"Noel"}
+  \KeywordTok{def} \FunctionTok{hello}\OperatorTok{(}\NormalTok{other}\OperatorTok{:} \ExtensionTok{String}\OperatorTok{):} \ExtensionTok{String} \OperatorTok{=}
+\NormalTok{    name }\OperatorTok{+} \StringTok{" says hi to "} \OperatorTok{+}\NormalTok{ other}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Test4}\OperatorTok{.}\FunctionTok{hello}\OperatorTok{(}\StringTok{"Dave"}\OperatorTok{)}
+\CommentTok{// res6: String = "Noel says hi to Dave"}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{field-declaration-syntax}{%
+\subsubsection*{Field Declaration
+Syntax}\label{field-declaration-syntax}}
+\addcontentsline{toc}{subsubsection}{Field Declaration Syntax}
+
+The syntax for declaring a field is
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{val}\NormalTok{ name}\OperatorTok{:} \KeywordTok{type} \OperatorTok{=}\NormalTok{ valueExpression}
+\end{Highlighting}
+\end{Shaded}
+
+or
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{var}\NormalTok{ name}\OperatorTok{:} \KeywordTok{type} \OperatorTok{=}\NormalTok{ valueExpression}
+\end{Highlighting}
+\end{Shaded}
+
+where
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{name} is the name of the field;
+\item
+  the optional \texttt{type} declaration gives the type of the field;
+\item
+  the \texttt{valueExpression} evaluates to the object that is bound to
+  the \texttt{name}.
+\end{itemize}
+
+Using \texttt{val} defines an \emph{immutable} field, meaning we cannot
+change the value bound to the name. A \texttt{var} field is
+\emph{mutable}, allowing us to change the bound value.
+
+\emph{Always prefer \texttt{val} to \texttt{var}.} Scala programmers
+prefer to use immutable fields wherever possible, as this maintains
+substitution. While you will no doubt create the occasional mutable
+field in your application code, we will stay away from \texttt{var} for
+most of this course and you should do the same in your Scala
+programming.
+
+\hypertarget{methods-versus-fields}{%
+\subsection{Methods versus fields}\label{methods-versus-fields}}
+
+You might wonder why we need fields when we can have methods of no
+arguments that seem to work the same. The difference is subtle---a field
+gives a name to a value, whereas a method gives a name to a computation
+that produces a value.
+
+Here's an object that shows the difference:
+
+\textbf{Scala 2}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{object}\NormalTok{ Test7 }\OperatorTok{\{}
+   \KeywordTok{val}\NormalTok{ simpleField }\OperatorTok{=} \OperatorTok{\{}
+     \FunctionTok{println}\OperatorTok{(}\StringTok{"Evaluating simpleField"}\OperatorTok{)}
+     \DecValTok{42}
+   \OperatorTok{\}}
+   \KeywordTok{def}\NormalTok{ noParameterMethod }\OperatorTok{=} \OperatorTok{\{}
+     \FunctionTok{println}\OperatorTok{(}\StringTok{"Evaluating noParameterMethod"}\OperatorTok{)}
+     \DecValTok{42}
+   \OperatorTok{\}}
+\OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Scala 3}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{object}\NormalTok{ Test7}\OperatorTok{:}
+   \KeywordTok{val}\NormalTok{ simpleField }\OperatorTok{=} 
+     \FunctionTok{println}\OperatorTok{(}\StringTok{"Evaluating simpleField"}\OperatorTok{)}
+     \DecValTok{42}
+   
+   \KeywordTok{def}\NormalTok{ noParameterMethod }\OperatorTok{=} 
+     \FunctionTok{println}\OperatorTok{(}\StringTok{"Evaluating noParameterMethod"}\OperatorTok{)}
+     \DecValTok{42}
+   
+\end{Highlighting}
+\end{Shaded}
+
+Here we have used a \texttt{println} expression to print something to
+the console, and a block expression (expressions surrounded by
+\texttt{\{} and \texttt{\}}) to group expressions. We'll see more about
+block expressions in the next section.
+
+Notice how the console says we've defined an object, but it hasn't run
+either of our \texttt{println} statements? This is due to a quirk of
+Scala and Java called \emph{lazy loading}.
+
+Objects and classes (which we'll see later) aren't loaded until they are
+referenced by other code. This is what prevents Scala loading the entire
+standard library into memory to run a simple \texttt{"Hello\ world!"}
+app.
+
+Let's force Scala to evaluate our object body by referencing
+\texttt{Test7} in an expression:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Test7}
+\CommentTok{// Evaluating simpleField}
+\CommentTok{// res8: Test7 = repl.MdocSession$MdocApp7$Test7$@2026eed2}
+\end{Highlighting}
+\end{Shaded}
+
+When the object is first loaded, Scala runs through its definitions and
+calculates the values of each of its fields. This results in the code
+printing \texttt{"Evaluating\ simpleField"} as a side-effect.
+
+\emph{The body expression of a field is run only once} after which the
+final value is stored in the object. The expression is never evaluated
+again---notice the lack of \texttt{println} output below.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Test7}\OperatorTok{.}\NormalTok{simpleField}
+\CommentTok{// res9: Int = 42}
+\NormalTok{Test7}\OperatorTok{.}\NormalTok{simpleField}
+\CommentTok{// res10: Int = 42}
+\end{Highlighting}
+\end{Shaded}
+
+The body of a method, on the other hand, is evaluated every time we call
+the method---notice the repeated println output below.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Test7}\OperatorTok{.}\NormalTok{noParameterMethod}
+\CommentTok{// Evaluating noParameterMethod}
+\CommentTok{// res11: Int = 42}
+\NormalTok{Test7}\OperatorTok{.}\NormalTok{noParameterMethod}
+\CommentTok{// Evaluating noParameterMethod}
+\CommentTok{// res12: Int = 42}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{take-home-points-3}{%
+\subsection{Take home points}\label{take-home-points-3}}
+
+In this section we have created our own objects, given them methods and
+fields, and referenced them in expressions.
+
+We have seen the syntax for declaring objects
+
+\textbf{Scala 2}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{object}\NormalTok{ name }\OperatorTok{\{}
+\NormalTok{  declarationOrExpression }\OperatorTok{...}
+\OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Scala 3}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{object}\NormalTok{ name}\OperatorTok{:}
+\NormalTok{  declarationOrExpression }\OperatorTok{...}
+\end{Highlighting}
+\end{Shaded}
+
+for declaring methods
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def} \FunctionTok{name}\OperatorTok{(}\NormalTok{parameter}\OperatorTok{:} \KeywordTok{type}\OperatorTok{,} \OperatorTok{...):}\NormalTok{ resultType }\OperatorTok{=}\NormalTok{ bodyExpression}
+\end{Highlighting}
+\end{Shaded}
+
+and for declaring fields
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{val}\NormalTok{ name }\OperatorTok{=}\NormalTok{ valueExpression}
+\KeywordTok{var}\NormalTok{ name }\OperatorTok{=}\NormalTok{ valueExpression}
+\end{Highlighting}
+\end{Shaded}
+
+All of these are \emph{declarations}, binding names to values.
+Declarations are different to expressions. They do not evaluate to a
+value and do not have a type.
+
+We have also seen the difference between methods and fields---fields
+refer to values stored within an object, whereas methods refer to
+computations that produce values.
+
+\hypertarget{exercises-3}{%
+\subsection{Exercises}\label{exercises-3}}
+
+\hypertarget{cat-o-matique}{%
+\subsubsection{Cat-o-matique}\label{cat-o-matique}}
+
+The table below shows the names, colour, and favourite foods of three
+cats. Define an object for each cat. (For experienced programmers: we
+haven't covered classes yet.)
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.1667}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.1111}}@{}}
+\toprule()
+\begin{minipage}[b]{\linewidth}\raggedright
+Name
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Colour
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Food
+\end{minipage} \\
+\midrule()
+\endhead
+Oswald & Black & Milk \\
+Henderson & Ginger & Chips \\
+Quentin & Tabby and white & Curry \\
+\bottomrule()
+\end{longtable}
+
+This is just a finger exercise to get you used to the syntax of defining
+objects. You should have a solution similar to the code below.
+
+\textbf{Scala 2}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{object}\NormalTok{ Oswald }\OperatorTok{\{}
+  \KeywordTok{val}\NormalTok{ colour}\OperatorTok{:} \ExtensionTok{String} \OperatorTok{=} \StringTok{"Black"}
+  \KeywordTok{val}\NormalTok{ food}\OperatorTok{:} \ExtensionTok{String} \OperatorTok{=} \StringTok{"Milk"}
+\OperatorTok{\}}
+
+\KeywordTok{object}\NormalTok{ Henderson }\OperatorTok{\{}
+  \KeywordTok{val}\NormalTok{ colour}\OperatorTok{:} \ExtensionTok{String} \OperatorTok{=} \StringTok{"Ginger"}
+  \KeywordTok{val}\NormalTok{ food}\OperatorTok{:} \ExtensionTok{String} \OperatorTok{=} \StringTok{"Chips"}
+\OperatorTok{\}}
+
+\KeywordTok{object}\NormalTok{ Quentin }\OperatorTok{\{}
+  \KeywordTok{val}\NormalTok{ colour}\OperatorTok{:} \ExtensionTok{String} \OperatorTok{=} \StringTok{"Tabby and white"}
+  \KeywordTok{val}\NormalTok{ food}\OperatorTok{:} \ExtensionTok{String} \OperatorTok{=} \StringTok{"Curry"}
+\OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Scala 3}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{object}\NormalTok{ Oswald}\OperatorTok{:}
+  \KeywordTok{val}\NormalTok{ colour}\OperatorTok{:} \ExtensionTok{String} \OperatorTok{=} \StringTok{"Black"}
+  \KeywordTok{val}\NormalTok{ food}\OperatorTok{:} \ExtensionTok{String} \OperatorTok{=} \StringTok{"Milk"}
+
+\KeywordTok{object}\NormalTok{ Henderson}\OperatorTok{:}
+  \KeywordTok{val}\NormalTok{ colour}\OperatorTok{:} \ExtensionTok{String} \OperatorTok{=} \StringTok{"Ginger"}
+  \KeywordTok{val}\NormalTok{ food}\OperatorTok{:} \ExtensionTok{String} \OperatorTok{=} \StringTok{"Chips"}
+
+\KeywordTok{object}\NormalTok{ Quentin}\OperatorTok{:}
+  \KeywordTok{val}\NormalTok{ colour}\OperatorTok{:} \ExtensionTok{String} \OperatorTok{=} \StringTok{"Tabby and white"}
+  \KeywordTok{val}\NormalTok{ food}\OperatorTok{:} \ExtensionTok{String} \OperatorTok{=} \StringTok{"Curry"}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Oswald}\OperatorTok{.}\NormalTok{colour}
+\CommentTok{// res14: String = "Black"}
+\NormalTok{Henderson}\OperatorTok{.}\NormalTok{food}
+\CommentTok{// res15: String = "Chips"}
+\NormalTok{Quentin}\OperatorTok{.}\NormalTok{food}
+\CommentTok{// res16: String = "Curry"}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{square-dance}{%
+\subsubsection{Square Dance!}\label{square-dance}}
+
+Define an object called \texttt{calc} with a method \texttt{square} that
+accepts a \texttt{Double} as an argument and\ldots{} you guessed
+it\ldots{} squares its input. Add a method called \texttt{cube} that
+cubes its input \emph{calling \texttt{square}} as part of its result
+calculation.
+
+Here is the solution. \texttt{cube(x)} calls \texttt{square(x)} and
+multiplies its value by \texttt{x} one more time. The return type of
+each method is inferred by the compiler as \texttt{Double}.
+
+\textbf{Scala 2}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{object}\NormalTok{ calc }\OperatorTok{\{}
+  \KeywordTok{def} \FunctionTok{square}\OperatorTok{(}\NormalTok{x}\OperatorTok{:} \ExtensionTok{Double}\OperatorTok{)} \OperatorTok{=}\NormalTok{ x }\OperatorTok{*}\NormalTok{ x}
+  \KeywordTok{def} \FunctionTok{cube}\OperatorTok{(}\NormalTok{x}\OperatorTok{:} \ExtensionTok{Double}\OperatorTok{)} \OperatorTok{=}\NormalTok{ x }\OperatorTok{*} \FunctionTok{square}\OperatorTok{(}\NormalTok{x}\OperatorTok{)}
+\OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Scala 3}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{object}\NormalTok{ calc}\OperatorTok{:}
+  \KeywordTok{def} \FunctionTok{square}\OperatorTok{(}\NormalTok{x}\OperatorTok{:} \ExtensionTok{Double}\OperatorTok{)} \OperatorTok{=}\NormalTok{ x }\OperatorTok{*}\NormalTok{ x}
+  \KeywordTok{def} \FunctionTok{cube}\OperatorTok{(}\NormalTok{x}\OperatorTok{:} \ExtensionTok{Double}\OperatorTok{)} \OperatorTok{=}\NormalTok{ x }\OperatorTok{*} \FunctionTok{square}\OperatorTok{(}\NormalTok{x}\OperatorTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{precise-square-dance}{%
+\subsubsection{Precise Square Dance!}\label{precise-square-dance}}
+
+Copy and paste \texttt{calc} from the previous exercise to create a
+\texttt{calc2} that is generalized to work with \texttt{Ints} as well as
+\texttt{Doubles}. If you have Java experience, this should be fairly
+straightforward. If not, read the solution below.
+
+Like Java, Scala can't generalize particularly well across \texttt{Ints}
+and \texttt{Doubles}. However, it will allow us to \emph{``overload''}
+the \texttt{square} and \texttt{cube} methods by defining them for each
+type of parameter.
+
+\textbf{Scala 2}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{object}\NormalTok{ calc2 }\OperatorTok{\{}
+  \KeywordTok{def} \FunctionTok{square}\OperatorTok{(}\NormalTok{value}\OperatorTok{:} \ExtensionTok{Double}\OperatorTok{)} \OperatorTok{=}\NormalTok{ value }\OperatorTok{*}\NormalTok{ value}
+  \KeywordTok{def} \FunctionTok{cube}\OperatorTok{(}\NormalTok{value}\OperatorTok{:} \ExtensionTok{Double}\OperatorTok{)} \OperatorTok{=}\NormalTok{ value }\OperatorTok{*} \FunctionTok{square}\OperatorTok{(}\NormalTok{value}\OperatorTok{)}
+
+  \KeywordTok{def} \FunctionTok{square}\OperatorTok{(}\NormalTok{value}\OperatorTok{:} \BuiltInTok{Int}\OperatorTok{)} \OperatorTok{=}\NormalTok{ value }\OperatorTok{*}\NormalTok{ value}
+  \KeywordTok{def} \FunctionTok{cube}\OperatorTok{(}\NormalTok{value}\OperatorTok{:} \BuiltInTok{Int}\OperatorTok{)} \OperatorTok{=}\NormalTok{ value }\OperatorTok{*} \FunctionTok{square}\OperatorTok{(}\NormalTok{value}\OperatorTok{)}
+\OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Scala 3}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{object}\NormalTok{ calc2Scala3}\OperatorTok{:}
+  \KeywordTok{def} \FunctionTok{square}\OperatorTok{(}\NormalTok{x}\OperatorTok{:} \ExtensionTok{Double}\OperatorTok{)} \OperatorTok{=}\NormalTok{ x }\OperatorTok{*}\NormalTok{ x}
+  \KeywordTok{def} \FunctionTok{cube}\OperatorTok{(}\NormalTok{x}\OperatorTok{:} \ExtensionTok{Double}\OperatorTok{)} \OperatorTok{=}\NormalTok{ x }\OperatorTok{*} \FunctionTok{square}\OperatorTok{(}\NormalTok{x}\OperatorTok{)}
+
+  \KeywordTok{def} \FunctionTok{square}\OperatorTok{(}\NormalTok{x}\OperatorTok{:} \BuiltInTok{Int}\OperatorTok{)} \OperatorTok{=}\NormalTok{ x }\OperatorTok{*}\NormalTok{ x}
+  \KeywordTok{def} \FunctionTok{cube}\OperatorTok{(}\NormalTok{x}\OperatorTok{:} \BuiltInTok{Int}\OperatorTok{)} \OperatorTok{=}\NormalTok{ x }\OperatorTok{*} \FunctionTok{square}\OperatorTok{(}\NormalTok{x}\OperatorTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+``Overloaded'' methods are ones we have defined several times for
+different argument types. Whenever we call an overloaded method type,
+Scala automatically determines which variant we need by looking at the
+type of the argument.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{calc2}\OperatorTok{.}\FunctionTok{square}\OperatorTok{(}\FloatTok{1.0}\OperatorTok{)} \CommentTok{// calls the \textasciigrave{}Double\textasciigrave{} version of \textasciigrave{}square\textasciigrave{}}
+\CommentTok{// res18: Double = 1.0}
+\NormalTok{calc2}\OperatorTok{.}\FunctionTok{square}\OperatorTok{(}\DecValTok{1}\OperatorTok{)}   \CommentTok{// calls the \textasciigrave{}Int\textasciigrave{} version \textasciigrave{}square\textasciigrave{}}
+\CommentTok{// res19: Int = 1}
+\end{Highlighting}
+\end{Shaded}
+
+The Scala compiler is able to insert automatic conversions between
+numeric types wherever you have a lower precision and require a higher
+precision. For example, if you write \texttt{calc.square(2)}, the
+compiler determines that the only version of \texttt{calc.square} takes
+a \texttt{Double} and automatically infers that you really mean
+\texttt{calc.square(2.toDouble)}.
+
+Conversions in the opposite direction, from high precision to low
+precision, are not handled automatically because they can lead to
+rounding errors. For example, the code below will not compile because
+\texttt{x} is an \texttt{Int} and its body expression is a
+\texttt{Double} (try it and see)!
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{val}\NormalTok{ x}\OperatorTok{:} \BuiltInTok{Int} \OperatorTok{=}\NormalTok{ calc}\OperatorTok{.}\FunctionTok{square}\OperatorTok{(}\DecValTok{2}\OperatorTok{)} \CommentTok{// compile error}
+\CommentTok{// error:}
+\CommentTok{// Found:    Double}
+\CommentTok{// Required: Int}
+\CommentTok{// val someField = calculator.square(2)}
+\CommentTok{//                            \^{}\^{}\^{}\^{}\^{}\^{}}
+\end{Highlighting}
+\end{Shaded}
+
+You can manually use the \texttt{toInt} method of \texttt{Double} to
+work around this:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{val}\NormalTok{ x}\OperatorTok{:} \BuiltInTok{Int} \OperatorTok{=}\NormalTok{ calc}\OperatorTok{.}\FunctionTok{square}\OperatorTok{(}\DecValTok{2}\OperatorTok{).}\NormalTok{toInt }\CommentTok{// toInt rounds down}
+\CommentTok{// x: Int = 4}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{the-dangers-of-string-concatenation}{%
+\subsubsection*{The Dangers of String
+Concatenation}\label{the-dangers-of-string-concatenation}}
+\addcontentsline{toc}{subsubsection}{The Dangers of String
+Concatenation}
+
+To maintain similar behaviour to Java, Scala also automatically converts
+any object to a \texttt{String} where required. This is to make it easy
+to write things like \texttt{println("a"\ +\ 1)}, which Scala
+automatically rewrites as \texttt{println("a"\ +\ 1.toString)}.
+
+The fact that string concatenation and numeric addition share the same
+\texttt{+} method can sometimes cause unexpected bugs, so watch out!
+
+\hypertarget{order-of-evaluation}{%
+\subsubsection{Order of evaluation}\label{order-of-evaluation}}
+
+When entered on the console, what does the following program output, and
+what is the type and value of the final expression? Think carefully
+about the types, dependencies, and evaluation behaviour of each field
+and method.
+
+\textbf{Scala 2}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{object}\NormalTok{ argh }\OperatorTok{\{}
+  \KeywordTok{def}\NormalTok{ a }\OperatorTok{=} \OperatorTok{\{}
+    \FunctionTok{println}\OperatorTok{(}\StringTok{"a"}\OperatorTok{)}
+    \DecValTok{1}
+  \OperatorTok{\}}
+
+  \KeywordTok{val}\NormalTok{ b }\OperatorTok{=} \OperatorTok{\{}
+    \FunctionTok{println}\OperatorTok{(}\StringTok{"b"}\OperatorTok{)}
+\NormalTok{    a }\OperatorTok{+} \DecValTok{2}
+  \OperatorTok{\}}
+
+  \KeywordTok{def}\NormalTok{ c }\OperatorTok{=} \OperatorTok{\{}
+    \FunctionTok{println}\OperatorTok{(}\StringTok{"c"}\OperatorTok{)}
+\NormalTok{    a}
+\NormalTok{    b }\OperatorTok{+} \StringTok{"c"}
+  \OperatorTok{\}}
+\OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Scala 3}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{object}\NormalTok{ argh}\OperatorTok{:}
+  \KeywordTok{def}\NormalTok{ a }\OperatorTok{=} 
+    \FunctionTok{println}\OperatorTok{(}\StringTok{"a"}\OperatorTok{)}
+    \DecValTok{1}
+  \KeywordTok{val}\NormalTok{ b }\OperatorTok{=} 
+    \FunctionTok{println}\OperatorTok{(}\StringTok{"b"}\OperatorTok{)}
+\NormalTok{    a }\OperatorTok{+} \DecValTok{2}
+  \KeywordTok{def}\NormalTok{ c }\OperatorTok{=} 
+    \FunctionTok{println}\OperatorTok{(}\StringTok{"c"}\OperatorTok{)}
+\NormalTok{    a}
+\NormalTok{    b }\OperatorTok{+} \StringTok{"c"}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{argh}\OperatorTok{.}\NormalTok{c }\OperatorTok{+}\NormalTok{ argh}\OperatorTok{.}\NormalTok{b }\OperatorTok{+}\NormalTok{ argh}\OperatorTok{.}\NormalTok{a}
+\end{Highlighting}
+\end{Shaded}
+
+Here is the solution:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{argh}\OperatorTok{.}\NormalTok{c }\OperatorTok{+}\NormalTok{ argh}\OperatorTok{.}\NormalTok{b }\OperatorTok{+}\NormalTok{ argh}\OperatorTok{.}\NormalTok{a}
+\CommentTok{// b}
+\CommentTok{// a}
+\CommentTok{// c}
+\CommentTok{// a}
+\CommentTok{// a}
+\CommentTok{// res22: String = "3c31"}
+\end{Highlighting}
+\end{Shaded}
+
+The full sequence of evaluation is as follows:
+
+\begin{verbatim}
+- We calculate the main sum at the end of the program, which...
+  - Loads `argh`, which...
+    - Calculates all the fields in `argh`, which...
+      - Calculates `b`, which...
+        - Prints `"b"`
+        - Evaluates `a + 2`, which...
+          - Calls `a`, which...
+            - Prints `"a"`
+            - Returns `1`
+          - Returns `1 + 2`
+        - Stores the value `3` in `b`
+  - Calls `argh.c`, which...
+    - Prints `"c"`
+    - Evaluates `a`
+      - Prints `"a"`
+      - Returns `1` - Which we discard
+    - Evaluates `b + "c"`, which...
+      - Retrieves the value `3` from `b`
+        - Retrieves the value `"c"`
+        - Evaluates the `+`, determining that it actually refers to string
+          concatenation and converting `3` to `"3"`
+        - Returns the `String` `"3c"`
+  - Calls `argh.b`, which...
+    - Retrieves the value `3` from `b`
+  - Evaluates the first `+`, determining that it actually refers to string
+    concatentation, and yielding `"3c3"`
+  - Calls `argh.a`, which...
+    - Prints `"a"`
+    - Returns `1`
+  - Evaluates the first `+`, determining that it actually refers to string
+    concatentation, and yielding `"3c31"`
+\end{verbatim}
+
+Whew! That's a lot for such a simple piece of code.
+
+\hypertarget{greetings-human}{%
+\subsubsection{Greetings, human}\label{greetings-human}}
+
+Define an object called \texttt{person} that contains fields called
+\texttt{firstName} and \texttt{lastName}. Define a second object called
+\texttt{alien} containing a method called \texttt{greet} that takes your
+person as a parameter and returns a greeting using their
+\texttt{firstName}.
+
+What is the type of the \texttt{greet} method? Can we use this method to
+greet other objects?
+
+\textbf{Scala 2}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{object}\NormalTok{ person }\OperatorTok{\{}
+  \KeywordTok{val}\NormalTok{ firstName }\OperatorTok{=} \StringTok{"Roman"}
+  \KeywordTok{val}\NormalTok{ lastName }\OperatorTok{=} \StringTok{"Swan"}
+\OperatorTok{\}}
+
+\KeywordTok{object}\NormalTok{ alien }\OperatorTok{\{}
+  \KeywordTok{def} \FunctionTok{greet}\OperatorTok{(}\NormalTok{p}\OperatorTok{:}\NormalTok{ person}\OperatorTok{.}\KeywordTok{type}\OperatorTok{)} \OperatorTok{=}
+    \StringTok{"Greetings, "} \OperatorTok{+}\NormalTok{ p}\OperatorTok{.}\NormalTok{firstName }\OperatorTok{+} \StringTok{" "} \OperatorTok{+}\NormalTok{ p}\OperatorTok{.}\NormalTok{lastName}
+\OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Scala 3}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{object}\NormalTok{ person}\OperatorTok{:}
+  \KeywordTok{val}\NormalTok{ firstName }\OperatorTok{=} \StringTok{"Roman"}
+  \KeywordTok{val}\NormalTok{ lastName }\OperatorTok{=} \StringTok{"Swan"}
+
+\KeywordTok{object}\NormalTok{ alien}\OperatorTok{:}
+  \KeywordTok{def} \FunctionTok{greet}\OperatorTok{(}\NormalTok{p}\OperatorTok{:}\NormalTok{ person}\OperatorTok{.}\KeywordTok{type}\OperatorTok{)} \OperatorTok{=}
+    \StringTok{"Greetings, "} \OperatorTok{+}\NormalTok{ p}\OperatorTok{.}\NormalTok{firstName }\OperatorTok{+} \StringTok{" "} \OperatorTok{+}\NormalTok{ p}\OperatorTok{.}\NormalTok{lastName}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{alien}\OperatorTok{.}\FunctionTok{greet}\OperatorTok{(}\NormalTok{person}\OperatorTok{)}
+\CommentTok{// res24: String = "Greetings, Roman Swan"}
+\end{Highlighting}
+\end{Shaded}
+
+Notice the type on the \texttt{p} parameter of \texttt{greet}:
+\texttt{person.type}. This is one of the \emph{singleton types} we were
+referring to earlier. In this case it is specific to the object
+\texttt{person}, which prevents us using \texttt{greet} on any other
+object. This is very different from a type such as \texttt{Int} that is
+shared by all Scala integers.
+
+This imposes a significant limitation on our ability to write programs
+in Scala. We can only write methods that work with built-in types or
+single objects of our own creation. In order to build useful programs we
+need the ability to \emph{define our own types} and create multiple
+values of each. We can do this using \texttt{classes}, which we will
+cover in the next section.
+
+\hypertarget{the-value-of-methods}{%
+\subsubsection{The Value of Methods}\label{the-value-of-methods}}
+
+Are methods values? Are they expressions? Why might this be the case?
+
+First let's deal with the equivalence between methods and expressions.
+As we know, expressions are program fragments that produce values. A
+simple test of whether something is an expression is to see if we can
+assign it to a field.
+
+\textbf{Scala 2}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{object}\NormalTok{ calculator }\OperatorTok{\{}
+  \KeywordTok{def} \FunctionTok{square}\OperatorTok{(}\NormalTok{x}\OperatorTok{:} \BuiltInTok{Int}\OperatorTok{)} \OperatorTok{=}\NormalTok{ x }\OperatorTok{*}\NormalTok{ x}
+\OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Scala 3}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{object}\NormalTok{ calculator}\OperatorTok{:}
+  \KeywordTok{def} \FunctionTok{square}\OperatorTok{(}\NormalTok{x}\OperatorTok{:} \BuiltInTok{Int}\OperatorTok{)} \OperatorTok{=}\NormalTok{ x }\OperatorTok{*}\NormalTok{ x}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{val}\NormalTok{ someField }\OperatorTok{=}\NormalTok{ calculator}\OperatorTok{.}\NormalTok{square}
+\end{Highlighting}
+\end{Shaded}
+
+Although we don't understand this error message fully yet (we shall
+learn about ``partially applied functions'' later), it does show us that
+\texttt{square} \emph{is not an expression}. However, a \emph{call} to
+\texttt{square} \emph{does} yield a value:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{val}\NormalTok{ someField }\OperatorTok{=}\NormalTok{ calculator}\OperatorTok{.}\FunctionTok{square}\OperatorTok{(}\DecValTok{2}\OperatorTok{)}
+\CommentTok{// someField: Int = 4}
+\end{Highlighting}
+\end{Shaded}
+
+A method with no arguments looks like it behaves differently. However,
+this is a trick of the syntax.
+
+\textbf{Scala 2}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{object}\NormalTok{ clock }\OperatorTok{\{}
+  \KeywordTok{def}\NormalTok{ time }\OperatorTok{=} \ExtensionTok{System}\OperatorTok{.}\NormalTok{currentTimeMillis}
+\OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Scala 3}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{object}\NormalTok{ clock}\OperatorTok{:}
+  \KeywordTok{def}\NormalTok{ time }\OperatorTok{=} \ExtensionTok{System}\OperatorTok{.}\NormalTok{currentTimeMillis}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{val}\NormalTok{ now }\OperatorTok{=}\NormalTok{ clock}\OperatorTok{.}\NormalTok{time}
+\CommentTok{// now: Long = 1769870257563L}
+\end{Highlighting}
+\end{Shaded}
+
+Although it looks like \texttt{now} is being assigned
+\texttt{clock.time} as a value, it is actually being assigned the
+\emph{value returned by calling \texttt{clock.time}}. We can demonstrate
+this by calling the method again:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{val}\NormalTok{ aBitLaterThanNow }\OperatorTok{=}\NormalTok{ clock}\OperatorTok{.}\NormalTok{time}
+\CommentTok{// aBitLaterThanNow: Long = 1769870257563L}
+\end{Highlighting}
+\end{Shaded}
+
+As we saw above, references to fields and calls to argumentless methods
+look identical in Scala. This is by design, to allow us to swap the
+implementation of a field for a method (and vice versa) without
+affecting other code. It is a programming language feature called the
+\emph{{[}uniform access principle{]}{[}link-uap{]}}.
+
+So, in summary, \emph{calls to methods are expressions} but
+\emph{methods themselves are not expressions}. In addition to methods,
+Scala also has a concept called \emph{functions}, which are objects that
+can be invoked like methods. As we know objects are values, so functions
+are also values and can be treated as data. As you may have guessed,
+functions are a critical part of \emph{functional programming}, which is
+one of Scala's major strengths. We will learn about functions and
+functional programming in a bit.
+
+\hypertarget{writing-methods}{%
+\section{Writing Methods}\label{writing-methods}}
+
+In the previous section we saw the syntax of methods. One of our main
+goals in this course is to go beyond syntax and give you systematic
+methods for constructing Scala programs. This is our first section
+dealing with such matters. In this section we're going to look at a
+systematic method for constructing methods. As you gain experience with
+Scala you can drop some of the steps of this method, but we
+\emph{strongly} suggest you follow this method during the course.
+
+To make the advice concrete we'll use this exercise from the previous
+section as an example:
+
+\emph{Define an object called \texttt{calc} with a method
+\texttt{square} that accepts a \texttt{Double} as an argument
+and\ldots{} you guessed it\ldots{} squares its input. Add a method
+called \texttt{cube} that cubes its input, calling \texttt{square} as
+part of its result calculation.}
+
+\hypertarget{identify-the-input-and-output}{%
+\subsection{Identify the Input and
+Output}\label{identify-the-input-and-output}}
+
+Your first step is to identify the types of the input parameters, if
+any, and the result of the method.
+
+In many cases the exercises will tell you the types and you can just
+read them straight from the description. In the example above the input
+type is given as \texttt{Double}. The result type we can infer is also
+\texttt{Double}.
+
+\hypertarget{prepare-test-cases}{%
+\subsection{Prepare Test Cases}\label{prepare-test-cases}}
+
+Types alone don't tell all the story. There are many \texttt{Double} to
+\texttt{Double} functions, but few that implement squaring. Thus we
+should prepare some test cases that illustrate the expected behaviour of
+the method.
+
+We're not going to use a testing library in this course, as we're trying
+to avoid external dependencies. We can implement a poor-man's testing
+library using the \texttt{assert} function that Scala provides. For our
+\texttt{square} example we might have test cases like
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{assert}\OperatorTok{(}\FunctionTok{square}\OperatorTok{(}\FloatTok{2.0}\OperatorTok{)} \OperatorTok{==} \FloatTok{4.0}\OperatorTok{)}
+\FunctionTok{assert}\OperatorTok{(}\FunctionTok{square}\OperatorTok{(}\FloatTok{3.0}\OperatorTok{)} \OperatorTok{==} \FloatTok{9.0}\OperatorTok{)}
+\FunctionTok{assert}\OperatorTok{(}\FunctionTok{square}\OperatorTok{({-}}\FloatTok{2.0}\OperatorTok{)} \OperatorTok{==} \FloatTok{4.0}\OperatorTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{write-the-declaration}{%
+\subsection{Write the Declaration}\label{write-the-declaration}}
+
+With types and test cases ready we can now write the method declaration.
+We haven't developed the body yet so use \texttt{???}, another nifty
+Scala feature, in its place.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def} \FunctionTok{square}\OperatorTok{(}\NormalTok{in}\OperatorTok{:} \ExtensionTok{Double}\OperatorTok{):} \ExtensionTok{Double} \OperatorTok{=}
+  \OperatorTok{???}
+\end{Highlighting}
+\end{Shaded}
+
+This step should be mechanical given the information gathered in the
+previous steps.
+
+\hypertarget{run-the-code}{%
+\subsection{Run the Code}\label{run-the-code}}
+
+Run the code and check it compiles (and thus we haven't made any typos)
+and also that our tests fail (and thus are testing something). You may
+need to place the tests after the method declaration.
+
+\hypertarget{write-the-body}{%
+\subsection{Write the Body}\label{write-the-body}}
+
+We're now ready to write the body of our method. We will develop a
+number of techniques for this throughout the course. For now, we're
+going to look at two techniques.
+
+\hypertarget{consider-the-result-type}{%
+\subsubsection{Consider the Result
+Type}\label{consider-the-result-type}}
+
+The first technique is to look at the result type, in this case
+\texttt{Double}. How can we create \texttt{Double} values? We could
+write a literal, but that obviously won't be correct in this case. The
+other way we know to create a \texttt{Double} is to call a method on
+some object, which brings us to the next technique.
+
+\hypertarget{consider-the-input-type}{%
+\subsubsection{Consider the Input Type}\label{consider-the-input-type}}
+
+Our next technique is to look at the type of input parameters to the
+method. In this case we have a \texttt{Double}. We have established we
+need to create a \texttt{Double}, so what methods can we call to create
+a \texttt{Double} from our input? There are many such methods, and here
+we have to use our domain knowledge to select \texttt{*} as the correct
+method to call.
+
+We can now write our complete method as
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def} \FunctionTok{square}\OperatorTok{(}\NormalTok{in}\OperatorTok{:} \ExtensionTok{Double}\OperatorTok{):} \ExtensionTok{Double} \OperatorTok{=}
+\NormalTok{  in }\OperatorTok{*}\NormalTok{ in}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{run-the-code-again}{%
+\subsection{Run the Code, Again}\label{run-the-code-again}}
+
+Finally we should run the code again and check that the tests all pass
+in this case.
+
+This is very simple example but practicing the process now will serve
+you well for the more complicated examples we will encounter later.
+
+\hypertarget{process-for-writing-methods}{%
+\subsubsection*{Process for Writing
+Methods}\label{process-for-writing-methods}}
+\addcontentsline{toc}{subsubsection}{Process for Writing Methods}
+
+We have a six-step process for writing methods in a systematic way.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Identify the type of the inputs and output of the method.
+\item
+  Write some test cases for the expected output of the method given
+  example input. We can use the \texttt{assert} function to write down
+  these cases.
+\item
+  Write the method declaration using \texttt{???} for the body like so:
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def} \FunctionTok{name}\OperatorTok{(}\NormalTok{parameter}\OperatorTok{:} \KeywordTok{type}\OperatorTok{,} \OperatorTok{...):}\NormalTok{ resultType }\OperatorTok{=}
+ \OperatorTok{???}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{3}
+\tightlist
+\item
+  Run the code to check the test cases do in fact fail.
+\item
+  Write the body of the method. We currently have two techniques to
+  apply here:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    consider the result type and how we can create an instance of it;
+    and
+  \item
+    consider the input type and methods we can call to transform it to
+    the result type.
+  \end{itemize}
+\item
+  Run the code again and check the test cases pass.
+\end{enumerate}
+
+\hypertarget{compound-expressions}{%
+\section{Compound Expressions}\label{compound-expressions}}
+
+We have almost finished our basic introduction to Scala. In this section
+we are going to look at two special kinds of expressions,
+\emph{conditionals} and \emph{blocks}, we will need in more complicated
+programs.
+
+\hypertarget{conditionals}{%
+\subsection{Conditionals}\label{conditionals}}
+
+A conditional allows us to choose an expression to evaluate based on
+some condition. For example, we can choose a string based on which of
+two numbers is the smallest.
+
+\textbf{Scala 2}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ControlFlowTok{if}\OperatorTok{(}\DecValTok{1} \OperatorTok{\textless{}} \DecValTok{2}\OperatorTok{)} \StringTok{"Yes"} \ControlFlowTok{else} \StringTok{"No"}
+\CommentTok{// res0: String = "Yes"}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Scala 3}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ControlFlowTok{if} \DecValTok{1} \OperatorTok{\textless{}} \DecValTok{2}\NormalTok{ then }\StringTok{"Yes"} \ControlFlowTok{else} \StringTok{"No"}
+\CommentTok{// res1: String = "Yes"}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{conditionals-are-expressions}{%
+\subsubsection*{Conditionals are
+Expressions}\label{conditionals-are-expressions}}
+\addcontentsline{toc}{subsubsection}{Conditionals are Expressions}
+
+Scala's \texttt{if} statement has the same syntax as Java's. One
+important difference is that \emph{Scala's conditional is an
+expression}---it has a type and returns a value.
+
+The expression that is not selected does not get evaluated. This is
+apparent if we use an expression with a side-effect.
+
+\textbf{Scala 2}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ControlFlowTok{if}\OperatorTok{(}\DecValTok{1} \OperatorTok{\textless{}} \DecValTok{2}\OperatorTok{)} \FunctionTok{println}\OperatorTok{(}\StringTok{"Yes"}\OperatorTok{)} \ControlFlowTok{else} \FunctionTok{println}\OperatorTok{(}\StringTok{"No"}\OperatorTok{)}
+\CommentTok{// Yes}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Scala 3}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ControlFlowTok{if} \DecValTok{1} \OperatorTok{\textless{}} \DecValTok{2}\NormalTok{ then }\FunctionTok{println}\OperatorTok{(}\StringTok{"Yes"}\OperatorTok{)} \ControlFlowTok{else} \FunctionTok{println}\OperatorTok{(}\StringTok{"No"}\OperatorTok{)}
+\CommentTok{// Yes}
+\end{Highlighting}
+\end{Shaded}
+
+We can tell the expression \texttt{println("No")} is not evaluated
+because \texttt{No} is not output to the console.
+
+\hypertarget{conditional-expression-syntax}{%
+\subsubsection*{Conditional Expression
+Syntax}\label{conditional-expression-syntax}}
+\addcontentsline{toc}{subsubsection}{Conditional Expression Syntax}
+
+The syntax for a conditional expression is
+
+\textbf{Scala 2}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ControlFlowTok{if}\OperatorTok{(}\NormalTok{condition}\OperatorTok{)}
+\NormalTok{  trueExpression}
+\ControlFlowTok{else}
+\NormalTok{  falseExpression}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Scala 3}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ControlFlowTok{if}\NormalTok{ condition }
+\NormalTok{then trueExpression }
+\ControlFlowTok{else}\NormalTok{ falseExpression}
+\end{Highlighting}
+\end{Shaded}
+
+where
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{condition} is an expression with \texttt{Boolean} type;
+\item
+  \texttt{trueExpression} is the expression evaluated if
+  \texttt{condition} evaluates to \texttt{true}; and
+\item
+  \texttt{falseExpression} is the expression evaluated if
+  \texttt{condition} evaluates to \texttt{false}.
+\end{itemize}
+
+\hypertarget{blocks}{%
+\subsection{Blocks}\label{blocks}}
+
+Blocks are expressions that allow us to sequence computations together.
+They are written as a pair of braces containing sub-expressions
+separated by semicolons or newlines.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{\{} \DecValTok{1}\OperatorTok{;} \DecValTok{2}\OperatorTok{;} \DecValTok{3} \OperatorTok{\}}
+\CommentTok{// res4: Int = 3}
+\end{Highlighting}
+\end{Shaded}
+
+As you can see, executing this code causes the console to raise a number
+of warnings and return the \texttt{Int} value \texttt{3}.
+
+A block is a sequence of expressions or declarations surrounded by
+braces. A block is also an expression: it executes each of its
+sub-expressions in order and returns the value of the last expression.
+
+Why execute \texttt{1} and \texttt{2} if we're going to throw their
+values away? This is a good question, and is the reason the Scala
+compiler raised those warnings above.
+
+One reason to use a block is to use code that produces side-effects
+before calculating a final value:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{\{}
+  \FunctionTok{println}\OperatorTok{(}\StringTok{"This is a side{-}effect"}\OperatorTok{)}
+  \FunctionTok{println}\OperatorTok{(}\StringTok{"This is a side{-}effect as well"}\OperatorTok{)}
+  \DecValTok{3}
+\OperatorTok{\}}
+\CommentTok{// This is a side{-}effect}
+\CommentTok{// This is a side{-}effect as well}
+\CommentTok{// res5: Int = 3}
+\end{Highlighting}
+\end{Shaded}
+
+We can also use a block when we want to name intermediate results, such
+as
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def}\NormalTok{ name}\OperatorTok{:} \ExtensionTok{String} \OperatorTok{=} \OperatorTok{\{}
+  \KeywordTok{val}\NormalTok{ title }\OperatorTok{=} \StringTok{"Professor"}
+  \KeywordTok{val}\NormalTok{ name }\OperatorTok{=} \StringTok{"Funkenstein"}
+\NormalTok{  title }\OperatorTok{+} \StringTok{" "} \OperatorTok{+}\NormalTok{ name}
+\OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{name}
+\CommentTok{// res6: String = "Professor Funkenstein"}
+\end{Highlighting}
+\end{Shaded}
+
+Scala 3 Blocks can also be used in Scala 3 by using significant
+indentation to define the block.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def}\NormalTok{ scala3Name}\OperatorTok{:} \ExtensionTok{String} \OperatorTok{=} 
+  \KeywordTok{val}\NormalTok{ title }\OperatorTok{=} \StringTok{"Professor"}
+  \KeywordTok{val}\NormalTok{ name }\OperatorTok{=} \StringTok{"Funkenstein"}
+\NormalTok{  title }\OperatorTok{+} \StringTok{" "} \OperatorTok{+}\NormalTok{ name}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{scala3Name}
+\CommentTok{// res7: String = "Professor Funkenstein"}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{block-expression-syntax}{%
+\subsubsection*{Block Expression Syntax}\label{block-expression-syntax}}
+\addcontentsline{toc}{subsubsection}{Block Expression Syntax}
+
+The syntax of a block expression is
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{\{}
+\NormalTok{   declarationOrExpression }\OperatorTok{...}
+\NormalTok{   expression}
+\OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+where
+
+\begin{itemize}
+\tightlist
+\item
+  the optional \texttt{declarationOrExpression}s are declarations or
+  expression; and
+\item
+  \texttt{expression} is an expression determining the type and value of
+  the block expression.
+\end{itemize}
+
+\hypertarget{take-home-points-4}{%
+\subsection{Take home points}\label{take-home-points-4}}
+
+Conditional expressions allow us to choose an expression to evaluate
+based on a \texttt{Boolean} condition. The syntax is
+
+\textbf{Scala 2}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ControlFlowTok{if}\OperatorTok{(}\NormalTok{condition}\OperatorTok{)}
+\NormalTok{  trueExpression}
+\ControlFlowTok{else}
+\NormalTok{  falseExpression}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Scala 3}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ControlFlowTok{if}\NormalTok{ condition then trueExpression }\ControlFlowTok{else}\NormalTok{ falseExpression}
+\end{Highlighting}
+\end{Shaded}
+
+A conditional, being an expression, has a type and evaluates to an
+object.
+
+A block allows us to sequence expressions and declarations. It is
+commonly used when we want to sequence expressions with side-effects, or
+name intermediate results in a computation. The syntax is
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{\{}
+\NormalTok{   declarationOrExpression }\OperatorTok{...}
+\NormalTok{   expression}
+\OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+The type and value of a block is that of the last expression in the
+block.
+
+\hypertarget{exercises-4}{%
+\subsection{Exercises}\label{exercises-4}}
+
+\hypertarget{a-classic-rivalry}{%
+\subsubsection{A Classic Rivalry}\label{a-classic-rivalry}}
+
+What is the type and value of the following conditional?
+
+\textbf{Scala 2}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ControlFlowTok{if}\OperatorTok{(}\DecValTok{1} \OperatorTok{\textgreater{}} \DecValTok{2}\OperatorTok{)} \StringTok{"alien"} \ControlFlowTok{else} \StringTok{"predator"}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Scala 3}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ControlFlowTok{if} \DecValTok{1} \OperatorTok{\textgreater{}} \DecValTok{2}\NormalTok{ then }\StringTok{"alien"} \ControlFlowTok{else} \StringTok{"predator"}
+\end{Highlighting}
+\end{Shaded}
+
+It's a \texttt{String} with value \texttt{"predator"}. Predators are
+clearly best:
+
+\textbf{Scala 2}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ControlFlowTok{if}\OperatorTok{(}\DecValTok{1} \OperatorTok{\textgreater{}} \DecValTok{2}\OperatorTok{)} \StringTok{"alien"} \ControlFlowTok{else} \StringTok{"predator"}
+\CommentTok{// res10: String = "predator"}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Scala 3}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ControlFlowTok{if} \DecValTok{1} \OperatorTok{\textgreater{}} \DecValTok{2}\NormalTok{ then }\StringTok{"alien"} \ControlFlowTok{else} \StringTok{"predator"}
+\end{Highlighting}
+\end{Shaded}
+
+The type is determined by the upper bound of the types in the
+\emph{then} and \emph{else} expressions. In this case both expressions
+are \texttt{Strings} so the result is also a \texttt{String}.
+
+The value is determined at runtime. \texttt{2} is greater than
+\texttt{1} so the conditional evaluates to the value of the \emph{else}
+expression.
+
+\hypertarget{a-less-well-known-rivalry}{%
+\subsubsection{A Less Well Known
+Rivalry}\label{a-less-well-known-rivalry}}
+
+What about this conditional?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ControlFlowTok{if}\OperatorTok{(}\DecValTok{1} \OperatorTok{\textgreater{}} \DecValTok{2}\OperatorTok{)} \StringTok{"alien"} \ControlFlowTok{else} \DecValTok{2001}
+\end{Highlighting}
+\end{Shaded}
+
+It's a value of type \texttt{Any} with value \texttt{2001}:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ControlFlowTok{if}\OperatorTok{(}\DecValTok{1} \OperatorTok{\textgreater{}} \DecValTok{2}\OperatorTok{)} \StringTok{"alien"} \ControlFlowTok{else} \DecValTok{2001}
+\CommentTok{// res13: String | Int = 2001}
+\end{Highlighting}
+\end{Shaded}
+
+This is similar to the previous exercise---the difference is the type of
+the result. We saw earlier that the type is the \emph{upper bound} of
+the positive and negative arms of the expression. \texttt{"alien"} and
+\texttt{2001} are completely different types - their closest common
+ancestor is \texttt{Any}, which is the grand supertype of all Scala
+types.
+
+This is an important observation: types are determined at compile time,
+before the program is run. The compiler doesn't know which of \texttt{1}
+and \texttt{2} is greater before running the program, so it can only
+make a best guess at the type of the result of the conditional.
+\texttt{Any} is as close as it can get in this program, whereas in the
+previous exercise it can get all the way down to \texttt{String}.
+
+We'll learn more about \texttt{Any} in the following sections. Java
+programmers shouldn't confuse it with \texttt{Object} because it
+subsumes value types like \texttt{Int} and \texttt{Boolean} as well.
+
+\hypertarget{an-if-without-an-else}{%
+\subsubsection{An if Without an else}\label{an-if-without-an-else}}
+
+What about this conditional?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ControlFlowTok{if}\OperatorTok{(}\KeywordTok{false}\OperatorTok{)} \StringTok{"hello"}
+\end{Highlighting}
+\end{Shaded}
+
+The result type and value are \texttt{Any} and \texttt{()} respectively:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ControlFlowTok{if}\OperatorTok{(}\KeywordTok{false}\OperatorTok{)} \StringTok{"hello"}
+\end{Highlighting}
+\end{Shaded}
+
+All code being equal, conditionals without \texttt{else} expressions
+only evaluate to a value half of the time. Scala works around this by
+returning the \texttt{Unit} value if the \texttt{else} branch should be
+evaluated. We would usually only use these expressions for their
+side-effects.
+
+\hypertarget{conclusion}{%
+\section{Conclusion}\label{conclusion}}
+
+We have had a very brief introduction to the fundamentals of Scala:
+
+\begin{itemize}
+\tightlist
+\item
+  expressions, which evaluate to values; and
+\item
+  declarations, which gives names to values.
+\end{itemize}
+
+We've seen how we can write literals for many objects, and use method
+calls and compound expressions to create new objects from existing ones.
+
+We have also declared our own objects, and constructed methods and
+fields.
+
+Next we're going to see how a new kind of declaration, a class, provides
+a template for creating objects. Classes allow us to reuse code and
+unify similar objects with a common type.
+
+\hypertarget{objects-and-classes}{%
+\chapter{Objects and Classes}\label{objects-and-classes}}
+
+In the previous chapter we saw how to create objects and interact with
+them via method calls. In this section we're going to see how we can
+abstract over objects using \emph{classes}. Classes are a template for
+constructing objects. Given a class we can make many objects that have
+the same type and share common properties.
+
+\hypertarget{classes}{%
+\section{Classes}\label{classes}}
+
+A class is a template for creating objects that have similar methods and
+fields. In Scala a class also defines a type, and objects created from a
+class all share the same type. This allows us to overcome the problem we
+had in the \emph{Greetings, Human} exercise in the last chapter.
+
+\hypertarget{defining-a-class}{%
+\subsection{Defining a Class}\label{defining-a-class}}
+
+Here is a declaration for a simple \texttt{Person} class:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{class}\NormalTok{ Person }\OperatorTok{\{}
+  \KeywordTok{val}\NormalTok{ firstName }\OperatorTok{=} \StringTok{"Noel"}
+  \KeywordTok{val}\NormalTok{ lastName }\OperatorTok{=} \StringTok{"Welsh"}
+  \KeywordTok{def}\NormalTok{ name }\OperatorTok{=}\NormalTok{ firstName }\OperatorTok{+} \StringTok{" "} \OperatorTok{+}\NormalTok{ lastName}
+\OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+Like an object declaration, a class declaration binds a name (in this
+case \texttt{Person}) and is not an expression. However, unlike an
+object name, we cannot use a class name in an expression. A class is not
+a value, and there is a different \emph{namespace} in which classes
+live.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Person}
+\CommentTok{// error:}
+\CommentTok{// constructor proxy object Person cannot be used as a value}
+\CommentTok{// case class Film(name: String, yearOfRelease: Int, imdbRating: Double, director: Director) \{}
+\CommentTok{//                              \^{}}
+\end{Highlighting}
+\end{Shaded}
+
+We can create a new \texttt{Person} object using the \texttt{new}
+operator. Objects are values and we access their methods and fields in
+the usual way:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{val}\NormalTok{ noel }\OperatorTok{=} \KeywordTok{new}\NormalTok{ Person}
+\CommentTok{// noel: Person = repl.MdocSession$MdocApp$Person@5b3b7c20}
+\NormalTok{noel}\OperatorTok{.}\NormalTok{firstName}
+\CommentTok{// res1: String = "Noel"}
+\end{Highlighting}
+\end{Shaded}
+
+Notice the type of the object is \texttt{Person}. The printed value
+contains a code in the format \texttt{@xxxxxxxx}, which is a unique
+identifier for that particular object. Each call to \texttt{new} creates
+a distinct object of the same type:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{noel}
+\CommentTok{// res2: Person = repl.MdocSession$MdocApp$Person@5b3b7c20}
+\KeywordTok{val}\NormalTok{ newNoel }\OperatorTok{=} \KeywordTok{new}\NormalTok{ Person}
+\CommentTok{// newNoel: Person = repl.MdocSession$MdocApp$Person@4b0001d4}
+\KeywordTok{val}\NormalTok{ anotherNewNoel }\OperatorTok{=} \KeywordTok{new}\NormalTok{ Person}
+\CommentTok{// anotherNewNoel: Person = repl.MdocSession$MdocApp$Person@75b84f28}
+\end{Highlighting}
+\end{Shaded}
+
+This means we can write a method that takes any \texttt{Person} as a
+parameter:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{object}\NormalTok{ alien }\OperatorTok{\{}
+  \KeywordTok{def} \FunctionTok{greet}\OperatorTok{(}\NormalTok{p}\OperatorTok{:}\NormalTok{ Person}\OperatorTok{)} \OperatorTok{=}
+    \StringTok{"Greetings, "} \OperatorTok{+}\NormalTok{ p}\OperatorTok{.}\NormalTok{firstName }\OperatorTok{+} \StringTok{" "} \OperatorTok{+}\NormalTok{ p}\OperatorTok{.}\NormalTok{lastName}
+\OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{alien}\OperatorTok{.}\FunctionTok{greet}\OperatorTok{(}\NormalTok{noel}\OperatorTok{)}
+\CommentTok{// res3: String = "Greetings, Noel Welsh"}
+\NormalTok{alien}\OperatorTok{.}\FunctionTok{greet}\OperatorTok{(}\NormalTok{newNoel}\OperatorTok{)}
+\CommentTok{// res4: String = "Greetings, Noel Welsh"}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{java-tip}{%
+\subsubsection*{Java Tip}\label{java-tip}}
+\addcontentsline{toc}{subsubsection}{Java Tip}
+
+Scala classes are all subclasses of \texttt{java.lang.Object} and are,
+for the most part, usable from Java as well as Scala. The default
+printing behaviour of \texttt{Person} comes from the \texttt{toString}
+method defined in \texttt{java.lang.Object}.
+
+\hypertarget{constructors}{%
+\subsection{Constructors}\label{constructors}}
+
+As it stands our \texttt{Person} class is rather useless: we can create
+as many new objects as we want but they all have the same
+\texttt{firstName} and \texttt{lastName}. What if we want to give each
+person a different name?
+
+The solution is to introduce a \emph{constructor}, which allows us to
+pass parameters to new objects as we create them:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{class} \FunctionTok{Person}\OperatorTok{(}\NormalTok{first}\OperatorTok{:} \ExtensionTok{String}\OperatorTok{,}\NormalTok{ last}\OperatorTok{:} \ExtensionTok{String}\OperatorTok{)} \OperatorTok{\{}
+  \KeywordTok{val}\NormalTok{ firstName }\OperatorTok{=}\NormalTok{ first}
+  \KeywordTok{val}\NormalTok{ lastName }\OperatorTok{=}\NormalTok{ last}
+  \KeywordTok{def}\NormalTok{ name }\OperatorTok{=}\NormalTok{ firstName }\OperatorTok{+} \StringTok{" "} \OperatorTok{+}\NormalTok{ lastName}
+\OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{val}\NormalTok{ dave }\OperatorTok{=} \KeywordTok{new} \FunctionTok{Person}\OperatorTok{(}\StringTok{"Dave"}\OperatorTok{,} \StringTok{"Gurnell"}\OperatorTok{)}
+\CommentTok{// dave: Person = repl.MdocSession$MdocApp5$Person@42fddd63}
+\NormalTok{dave}\OperatorTok{.}\NormalTok{name}
+\CommentTok{// res6: String = "Dave Gurnell"}
+\end{Highlighting}
+\end{Shaded}
+
+The constructor parameters \texttt{first} and \texttt{last} can only be
+used within the body of the class. We must declare a field or method
+using \texttt{val} or \texttt{def} to access data from outside the
+object.
+
+Constructor arguments and fields are often redundant. Fortunately, Scala
+provides us a useful short-hand way of declaring both in one go. We can
+prefix constructor parameters with the \texttt{val} keyword to have
+Scala define fields for them automatically:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{class} \FunctionTok{Person}\OperatorTok{(}\KeywordTok{val}\NormalTok{ firstName}\OperatorTok{:} \ExtensionTok{String}\OperatorTok{,} \KeywordTok{val}\NormalTok{ lastName}\OperatorTok{:} \ExtensionTok{String}\OperatorTok{)} \OperatorTok{\{}
+  \KeywordTok{def}\NormalTok{ name }\OperatorTok{=}\NormalTok{ firstName }\OperatorTok{+} \StringTok{" "} \OperatorTok{+}\NormalTok{ lastName}
+\OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{new} \FunctionTok{Person}\OperatorTok{(}\StringTok{"Dave"}\OperatorTok{,} \StringTok{"Gurnell"}\OperatorTok{).}\NormalTok{firstName}
+\CommentTok{// res8: String = "Dave"}
+\end{Highlighting}
+\end{Shaded}
+
+\texttt{val} fields are \emph{immutable}---they are initialized once
+after which we cannot change their values. Scala also provides the
+\texttt{var} keyword for defining \emph{mutable} fields.
+
+Scala programmers tend to prefer to write immutability and
+side-effect-free code so we can reason about it using the substitution
+model. In this course we will concentrate almost exclusively on
+immutable \texttt{val} fields.
+
+\hypertarget{class-declaration-syntax}{%
+\subsubsection*{Class Declaration
+Syntax}\label{class-declaration-syntax}}
+\addcontentsline{toc}{subsubsection}{Class Declaration Syntax}
+
+The syntax for declaring a class is
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{class} \ExtensionTok{Name}\OperatorTok{(}\NormalTok{parameter}\OperatorTok{:} \KeywordTok{type}\OperatorTok{,} \OperatorTok{...)} \OperatorTok{\{}
+\NormalTok{  declarationOrExpression }\OperatorTok{...}
+\OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+or
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{class} \ExtensionTok{Name}\OperatorTok{(}\KeywordTok{val}\NormalTok{ parameter}\OperatorTok{:} \KeywordTok{type}\OperatorTok{,} \OperatorTok{...)} \OperatorTok{\{}
+\NormalTok{  declarationOrExpression }\OperatorTok{...}
+\OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+where
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{Name} is the name of the class;
+\item
+  the optional \texttt{parameter}s are the names given to constructor
+  parameters;
+\item
+  the \texttt{type}s are the types of the constructor parameters;
+\item
+  the optional \texttt{declarationOrExpression}s are declarations or
+  expressions.
+\end{itemize}
+
+\hypertarget{default-and-keyword-parameters}{%
+\subsection{Default and Keyword
+Parameters}\label{default-and-keyword-parameters}}
+
+All Scala methods and constructors support \emph{keyword parameters} and
+\emph{default parameter values}.
+
+When we call a method or constructor, we can \emph{use parameter names
+as keywords} to specify the parameters in an arbitrary order:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{new} \FunctionTok{Person}\OperatorTok{(}\NormalTok{lastName }\OperatorTok{=} \StringTok{"Last"}\OperatorTok{,}\NormalTok{ firstName }\OperatorTok{=} \StringTok{"First"}\OperatorTok{)}
+\CommentTok{// res9: Person = repl.MdocSession$MdocApp7$Person@5cda70b6}
+\end{Highlighting}
+\end{Shaded}
+
+This comes in doubly useful when used in combination with \emph{default
+parameter values}, defined like this:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def} \FunctionTok{greet}\OperatorTok{(}\NormalTok{firstName}\OperatorTok{:} \ExtensionTok{String} \OperatorTok{=} \StringTok{"Some"}\OperatorTok{,}\NormalTok{ lastName}\OperatorTok{:} \ExtensionTok{String} \OperatorTok{=} \StringTok{"Body"}\OperatorTok{)} \OperatorTok{=}
+  \StringTok{"Greetings, "} \OperatorTok{+}\NormalTok{ firstName }\OperatorTok{+} \StringTok{" "} \OperatorTok{+}\NormalTok{ lastName }\OperatorTok{+} \StringTok{"!"}
+\end{Highlighting}
+\end{Shaded}
+
+If a parameter has a default value we can omit it in the method call:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{greet}\OperatorTok{(}\StringTok{"Busy"}\OperatorTok{)}
+\CommentTok{// res10: String = "Greetings, Busy Body!"}
+\end{Highlighting}
+\end{Shaded}
+
+Combining keywords with default parameter values let us skip earlier
+parameters and just provide values for later ones:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{greet}\OperatorTok{(}\NormalTok{lastName }\OperatorTok{=} \StringTok{"Dave"}\OperatorTok{)}
+\CommentTok{// res11: String = "Greetings, Some Dave!"}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{keyword-parameters}{%
+\subsubsection*{Keyword Parameters}\label{keyword-parameters}}
+\addcontentsline{toc}{subsubsection}{Keyword Parameters}
+
+\emph{Keyword parameters are robust to changes in the number and order
+of parameters.} For example, if we add a \texttt{title} parameter to the
+\texttt{greet} method, the meaning of keywordless method calls changes
+but keyworded calls remain the same:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def} \FunctionTok{greet}\OperatorTok{(}\NormalTok{title}\OperatorTok{:} \ExtensionTok{String} \OperatorTok{=} \StringTok{"Citizen"}\OperatorTok{,}\NormalTok{ firstName}\OperatorTok{:} \ExtensionTok{String} \OperatorTok{=} \StringTok{"Some"}\OperatorTok{,}\NormalTok{ lastName}\OperatorTok{:} \ExtensionTok{String} \OperatorTok{=} \StringTok{"Body"}\OperatorTok{)} \OperatorTok{=}
+  \StringTok{"Greetings, "} \OperatorTok{+}\NormalTok{ title }\OperatorTok{+} \StringTok{" "} \OperatorTok{+}\NormalTok{ firstName }\OperatorTok{+} \StringTok{" "} \OperatorTok{+}\NormalTok{ lastName }\OperatorTok{+} \StringTok{"!"}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{greet}\OperatorTok{(}\StringTok{"Busy"}\OperatorTok{)} \CommentTok{// this is now incorrect}
+\CommentTok{// res13: String = "Greetings, Busy Some Body!"}
+\FunctionTok{greet}\OperatorTok{(}\NormalTok{firstName }\OperatorTok{=} \StringTok{"Busy"}\OperatorTok{)} \CommentTok{// this is still correct}
+\CommentTok{// res14: String = "Greetings, Citizen Busy Body!"}
+\end{Highlighting}
+\end{Shaded}
+
+This is particularly useful when creating methods and constructors with
+a large number of parameters.
+
+\hypertarget{scalas-type-hierarchy}{%
+\subsection{Scala's Type Hierarchy}\label{scalas-type-hierarchy}}
+
+Unlike Java, which separates primitive and object types, everything in
+Scala is an object. As a result, ``primitive'' value types like
+\texttt{Int} and \texttt{Boolean} form part of the same type hierarchy
+as classes and traits.
+
+\makebox[\linewidth]{\includegraphics[width=0.8\textwidth]{src/pages/classes/scala-type-hierarchy.pdf}}
+
+Scala has a grand supertype called \texttt{Any}, under which there are
+two types, \texttt{AnyVal} and \texttt{AnyRef}. \texttt{AnyVal} is the
+supertype of all value types, which \texttt{AnyRef} is the supertype of
+all ``reference types'' or classes. All Scala and Java classes are
+subtypes of \texttt{AnyRef}\footnote{We can actually define subtypes of
+  \texttt{AnyVal}, which are known as
+  \href{http://docs.scala-lang.org/overviews/core/value-classes.html}{value
+  classes}. These are useful in a few specialised circumstances and
+  we're not going to discuss them here.}.
+
+Some of these types are simply Scala aliases for types that exist in
+Java: \texttt{Int} is \texttt{int}, \texttt{Boolean} is
+\texttt{boolean}, and \texttt{AnyRef} is \texttt{java.lang.Object}.
+
+There are two special types at the \emph{bottom} of the hierarchy.
+\texttt{Nothing} is the type of \texttt{throw} expressions, and
+\texttt{Null} is the type of the value \texttt{null}. These special
+types are subtypes of everything else, which helps us assign types to
+\texttt{throw} and \texttt{null} while keeping other types in our code
+sane. The following code illustrates this:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def}\NormalTok{ badness }\OperatorTok{=} \ControlFlowTok{throw} \KeywordTok{new} \ExtensionTok{Exception}\OperatorTok{(}\StringTok{"Error"}\OperatorTok{)}
+\KeywordTok{def}\NormalTok{ otherbadness }\OperatorTok{=} \KeywordTok{null}
+\KeywordTok{val}\NormalTok{ bar }\OperatorTok{=} \ControlFlowTok{if}\OperatorTok{(}\KeywordTok{true}\OperatorTok{)} \DecValTok{123} \ControlFlowTok{else}\NormalTok{ badness}
+\CommentTok{// bar: Int = 123}
+\KeywordTok{val}\NormalTok{ baz }\OperatorTok{=} \ControlFlowTok{if}\OperatorTok{(}\KeywordTok{false}\OperatorTok{)} \StringTok{"it worked"} \ControlFlowTok{else}\NormalTok{ otherbadness}
+\CommentTok{// baz: String = null}
+\end{Highlighting}
+\end{Shaded}
+
+Although the types of \texttt{badness} and \texttt{res} are
+\texttt{Nothing} and \texttt{Null} respectively, the types of
+\texttt{bar} and \texttt{baz} are still sensible. This is because
+\texttt{Int} is the least common supertype of \texttt{Int} and
+\texttt{Nothing}, and \texttt{String} is the least common supertype of
+\texttt{String} and \texttt{Null}.
+
+\hypertarget{take-home-points-5}{%
+\subsection{Take Home Points}\label{take-home-points-5}}
+
+In this section we learned how to define \emph{classes}, which allow us
+to create many objects with the same \emph{type}. Thus, classes let us
+\emph{abstract across objects} that have similar properties.
+
+The properties of the objects of a class take the form of \emph{fields}
+and \emph{methods}. Fields are pre-computed values stored within the
+object and methods are computations we can call.
+
+The syntax for declaring classes is
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{class} \ExtensionTok{Name}\OperatorTok{(}\NormalTok{parameter}\OperatorTok{:} \KeywordTok{type}\OperatorTok{,} \OperatorTok{...)} \OperatorTok{\{}
+\NormalTok{  declarationOrExpression }\OperatorTok{...}
+\OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+We create objects from a class by calling the constructor using the
+keyword \texttt{new}.
+
+We also learned about \emph{keyword parameters} and \emph{default
+parameters}.
+
+Finally we learned about Scala's type hierarchy, including the overlap
+with Java's type hierarchy, the special types \texttt{Any},
+\texttt{AnyRef}, \texttt{AnyVal}, \texttt{Nothing}, \texttt{Null}, and
+\texttt{Unit}, and the fact that Java and Scala classes both occupy the
+same subtree of the type hierarchy.
+
+\hypertarget{exercises-5}{%
+\subsection{Exercises}\label{exercises-5}}
+
+We now have enough machinery to have some fun playing with classes.
+
+\hypertarget{cats-again}{%
+\subsubsection{Cats, Again}\label{cats-again}}
+
+Recall the cats from a previous exercise:
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.1667}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.1111}}@{}}
+\toprule()
+\begin{minipage}[b]{\linewidth}\raggedright
+Name
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Colour
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Food
+\end{minipage} \\
+\midrule()
+\endhead
+Oswald & Black & Milk \\
+Henderson & Ginger & Chips \\
+Quentin & Tabby and white & Curry \\
+\bottomrule()
+\end{longtable}
+
+Define a class \texttt{Cat} and then create an object for each cat in
+the table above.
+
+This is a finger exercise to get you used to the syntax of defining
+classes.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{class} \FunctionTok{Cat}\OperatorTok{(}\KeywordTok{val}\NormalTok{ colour}\OperatorTok{:} \ExtensionTok{String}\OperatorTok{,} \KeywordTok{val}\NormalTok{ food}\OperatorTok{:} \ExtensionTok{String}\OperatorTok{)}
+
+\KeywordTok{val}\NormalTok{ oswald }\OperatorTok{=} \KeywordTok{new} \FunctionTok{Cat}\OperatorTok{(}\StringTok{"Black"}\OperatorTok{,} \StringTok{"Milk"}\OperatorTok{)}
+\KeywordTok{val}\NormalTok{ henderson }\OperatorTok{=} \KeywordTok{new} \FunctionTok{Cat}\OperatorTok{(}\StringTok{"Ginger"}\OperatorTok{,} \StringTok{"Chips"}\OperatorTok{)}
+\KeywordTok{val}\NormalTok{ quentin }\OperatorTok{=} \KeywordTok{new} \FunctionTok{Cat}\OperatorTok{(}\StringTok{"Tabby and white"}\OperatorTok{,} \StringTok{"Curry"}\OperatorTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{cats-on-the-prowl}{%
+\subsubsection{Cats on the Prowl}\label{cats-on-the-prowl}}
+
+Define an object \texttt{ChipShop} with a method \texttt{willServe}.
+This method should accept a \texttt{Cat} and return \texttt{true} if the
+cat's favourite food is chips, and false otherwise.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{object}\NormalTok{ ChipShop }\OperatorTok{\{}
+  \KeywordTok{def} \FunctionTok{willServe}\OperatorTok{(}\NormalTok{cat}\OperatorTok{:}\NormalTok{ Cat}\OperatorTok{):} \ExtensionTok{Boolean} \OperatorTok{=}
+    \ControlFlowTok{if}\OperatorTok{(}\NormalTok{cat}\OperatorTok{.}\NormalTok{food }\OperatorTok{==} \StringTok{"Chips"}\OperatorTok{)}
+      \KeywordTok{true}
+    \ControlFlowTok{else}
+      \KeywordTok{false}
+\OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{directorial-debut}{%
+\subsubsection{Directorial Debut}\label{directorial-debut}}
+
+Write two classes, \texttt{Director} and \texttt{Film}, with fields and
+methods as follows:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{Director} should contain:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    a field \texttt{firstName} of type \texttt{String}
+  \item
+    a field \texttt{lastName} of type \texttt{String}
+  \item
+    a field \texttt{yearOfBirth} of type \texttt{Int}
+  \item
+    a method called \texttt{name} that accepts no parameters and returns
+    the full name
+  \end{itemize}
+\item
+  \texttt{Film} should contain:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    a field \texttt{name} of type \texttt{String}
+  \item
+    a field \texttt{yearOfRelease} of type \texttt{Int}
+  \item
+    a field \texttt{imdbRating} of type \texttt{Double}
+  \item
+    a field \texttt{director} of type \texttt{Director}
+  \item
+    a method \texttt{directorsAge} that returns the age of the director
+    at the time of release
+  \item
+    a method \texttt{isDirectedBy} that accepts a \texttt{Director} as a
+    parameter and returns a \texttt{Boolean}
+  \end{itemize}
+\end{itemize}
+
+Copy-and-paste the following demo data into your code and adjust your
+constructors so that the code works without modification:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{val}\NormalTok{ eastwood          }\OperatorTok{=} \KeywordTok{new} \FunctionTok{Director}\OperatorTok{(}\StringTok{"Clint"}\OperatorTok{,} \StringTok{"Eastwood"}\OperatorTok{,} \DecValTok{1930}\OperatorTok{)}
+\KeywordTok{val}\NormalTok{ mcTiernan         }\OperatorTok{=} \KeywordTok{new} \FunctionTok{Director}\OperatorTok{(}\StringTok{"John"}\OperatorTok{,} \StringTok{"McTiernan"}\OperatorTok{,} \DecValTok{1951}\OperatorTok{)}
+\KeywordTok{val}\NormalTok{ nolan             }\OperatorTok{=} \KeywordTok{new} \FunctionTok{Director}\OperatorTok{(}\StringTok{"Christopher"}\OperatorTok{,} \StringTok{"Nolan"}\OperatorTok{,} \DecValTok{1970}\OperatorTok{)}
+\KeywordTok{val}\NormalTok{ someBody          }\OperatorTok{=} \KeywordTok{new} \FunctionTok{Director}\OperatorTok{(}\StringTok{"Just"}\OperatorTok{,} \StringTok{"Some Body"}\OperatorTok{,} \DecValTok{1990}\OperatorTok{)}
+
+\KeywordTok{val}\NormalTok{ memento           }\OperatorTok{=} \KeywordTok{new} \FunctionTok{Film}\OperatorTok{(}\StringTok{"Memento"}\OperatorTok{,} \DecValTok{2000}\OperatorTok{,} \FloatTok{8.5}\OperatorTok{,}\NormalTok{ nolan}\OperatorTok{)}
+\KeywordTok{val}\NormalTok{ darkKnight        }\OperatorTok{=} \KeywordTok{new} \FunctionTok{Film}\OperatorTok{(}\StringTok{"Dark Knight"}\OperatorTok{,} \DecValTok{2008}\OperatorTok{,} \FloatTok{9.0}\OperatorTok{,}\NormalTok{ nolan}\OperatorTok{)}
+\KeywordTok{val}\NormalTok{ inception         }\OperatorTok{=} \KeywordTok{new} \FunctionTok{Film}\OperatorTok{(}\StringTok{"Inception"}\OperatorTok{,} \DecValTok{2010}\OperatorTok{,} \FloatTok{8.8}\OperatorTok{,}\NormalTok{ nolan}\OperatorTok{)}
+
+\KeywordTok{val}\NormalTok{ highPlainsDrifter }\OperatorTok{=} \KeywordTok{new} \FunctionTok{Film}\OperatorTok{(}\StringTok{"High Plains Drifter"}\OperatorTok{,} \DecValTok{1973}\OperatorTok{,} \FloatTok{7.7}\OperatorTok{,}\NormalTok{ eastwood}\OperatorTok{)}
+\KeywordTok{val}\NormalTok{ outlawJoseyWales  }\OperatorTok{=} \KeywordTok{new} \FunctionTok{Film}\OperatorTok{(}\StringTok{"The Outlaw Josey Wales"}\OperatorTok{,} \DecValTok{1976}\OperatorTok{,} \FloatTok{7.9}\OperatorTok{,}\NormalTok{ eastwood}\OperatorTok{)}
+\KeywordTok{val}\NormalTok{ unforgiven        }\OperatorTok{=} \KeywordTok{new} \FunctionTok{Film}\OperatorTok{(}\StringTok{"Unforgiven"}\OperatorTok{,} \DecValTok{1992}\OperatorTok{,} \FloatTok{8.3}\OperatorTok{,}\NormalTok{ eastwood}\OperatorTok{)}
+\KeywordTok{val}\NormalTok{ granTorino        }\OperatorTok{=} \KeywordTok{new} \FunctionTok{Film}\OperatorTok{(}\StringTok{"Gran Torino"}\OperatorTok{,} \DecValTok{2008}\OperatorTok{,} \FloatTok{8.2}\OperatorTok{,}\NormalTok{ eastwood}\OperatorTok{)}
+\KeywordTok{val}\NormalTok{ invictus          }\OperatorTok{=} \KeywordTok{new} \FunctionTok{Film}\OperatorTok{(}\StringTok{"Invictus"}\OperatorTok{,} \DecValTok{2009}\OperatorTok{,} \FloatTok{7.4}\OperatorTok{,}\NormalTok{ eastwood}\OperatorTok{)}
+
+\KeywordTok{val}\NormalTok{ predator          }\OperatorTok{=} \KeywordTok{new} \FunctionTok{Film}\OperatorTok{(}\StringTok{"Predator"}\OperatorTok{,} \DecValTok{1987}\OperatorTok{,} \FloatTok{7.9}\OperatorTok{,}\NormalTok{ mcTiernan}\OperatorTok{)}
+\KeywordTok{val}\NormalTok{ dieHard           }\OperatorTok{=} \KeywordTok{new} \FunctionTok{Film}\OperatorTok{(}\StringTok{"Die Hard"}\OperatorTok{,} \DecValTok{1988}\OperatorTok{,} \FloatTok{8.3}\OperatorTok{,}\NormalTok{ mcTiernan}\OperatorTok{)}
+\KeywordTok{val}\NormalTok{ huntForRedOctober }\OperatorTok{=} \KeywordTok{new} \FunctionTok{Film}\OperatorTok{(}\StringTok{"The Hunt for Red October"}\OperatorTok{,} \DecValTok{1990}\OperatorTok{,} \FloatTok{7.6}\OperatorTok{,}\NormalTok{ mcTiernan}\OperatorTok{)}
+\KeywordTok{val}\NormalTok{ thomasCrownAffair }\OperatorTok{=} \KeywordTok{new} \FunctionTok{Film}\OperatorTok{(}\StringTok{"The Thomas Crown Affair"}\OperatorTok{,} \DecValTok{1999}\OperatorTok{,} \FloatTok{6.8}\OperatorTok{,}\NormalTok{ mcTiernan}\OperatorTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{eastwood}\OperatorTok{.}\NormalTok{yearOfBirth}
+\CommentTok{// res15: Int = 1930}
+\NormalTok{dieHard}\OperatorTok{.}\NormalTok{director}\OperatorTok{.}\NormalTok{name}
+\CommentTok{// res16: String = "John McTiernan"}
+\NormalTok{invictus}\OperatorTok{.}\FunctionTok{isDirectedBy}\OperatorTok{(}\NormalTok{nolan}\OperatorTok{)}
+\CommentTok{// res17: Boolean = false}
+\end{Highlighting}
+\end{Shaded}
+
+Implement a method of \texttt{Film} called \texttt{copy}. This method
+should accept the same parameters as the constructor and create a new
+copy of the film. Give each parameter a default value so you can copy a
+film changing any subset of its values:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{highPlainsDrifter}\OperatorTok{.}\FunctionTok{copy}\OperatorTok{(}\NormalTok{name }\OperatorTok{=} \StringTok{"L\textquotesingle{}homme des hautes plaines"}\OperatorTok{)}
+\CommentTok{// res19: Film = Film(}
+\CommentTok{//   name = "L\textquotesingle{}homme des hautes plaines",}
+\CommentTok{//   yearOfRelease = 1973,}
+\CommentTok{//   imdbRating = 7.7,}
+\CommentTok{//   director = Director(}
+\CommentTok{//     firstName = "Clint",}
+\CommentTok{//     lastName = "Eastwood",}
+\CommentTok{//     yearOfBirth = 1930}
+\CommentTok{//   )}
+\CommentTok{// )}
+\NormalTok{thomasCrownAffair}\OperatorTok{.}\FunctionTok{copy}\OperatorTok{(}\NormalTok{yearOfRelease }\OperatorTok{=} \DecValTok{1968}\OperatorTok{,}
+\NormalTok{  director }\OperatorTok{=} \KeywordTok{new} \FunctionTok{Director}\OperatorTok{(}\StringTok{"Norman"}\OperatorTok{,} \StringTok{"Jewison"}\OperatorTok{,} \DecValTok{1926}\OperatorTok{))}
+\CommentTok{// res20: Film = Film(}
+\CommentTok{//   name = "The Thomas Crown Affair",}
+\CommentTok{//   yearOfRelease = 1968,}
+\CommentTok{//   imdbRating = 6.8,}
+\CommentTok{//   director = Director(}
+\CommentTok{//     firstName = "Norman",}
+\CommentTok{//     lastName = "Jewison",}
+\CommentTok{//     yearOfBirth = 1926}
+\CommentTok{//   )}
+\CommentTok{// )}
+\NormalTok{inception}\OperatorTok{.}\FunctionTok{copy}\OperatorTok{().}\FunctionTok{copy}\OperatorTok{().}\FunctionTok{copy}\OperatorTok{()}
+\CommentTok{// res21: Film = Film(}
+\CommentTok{//   name = "Inception",}
+\CommentTok{//   yearOfRelease = 2010,}
+\CommentTok{//   imdbRating = 8.8,}
+\CommentTok{//   director = Director(}
+\CommentTok{//     firstName = "Christopher",}
+\CommentTok{//     lastName = "Nolan",}
+\CommentTok{//     yearOfBirth = 1970}
+\CommentTok{//   )}
+\CommentTok{// )}
+\end{Highlighting}
+\end{Shaded}
+
+This exercise provides some hands on experience writing Scala classes,
+fields and methods. The model solution is as follows:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{class} \FunctionTok{Director}\OperatorTok{(}
+  \KeywordTok{val}\NormalTok{ firstName}\OperatorTok{:} \ExtensionTok{String}\OperatorTok{,}
+  \KeywordTok{val}\NormalTok{ lastName}\OperatorTok{:} \ExtensionTok{String}\OperatorTok{,}
+  \KeywordTok{val}\NormalTok{ yearOfBirth}\OperatorTok{:} \BuiltInTok{Int}\OperatorTok{)} \OperatorTok{\{}
+
+  \KeywordTok{def}\NormalTok{ name}\OperatorTok{:} \ExtensionTok{String} \OperatorTok{=}
+    \SpecialStringTok{s"$firstName}\StringTok{ }\SpecialStringTok{$lastName"}
+
+  \KeywordTok{def} \FunctionTok{copy}\OperatorTok{(}
+\NormalTok{    firstName}\OperatorTok{:} \ExtensionTok{String} \OperatorTok{=} \KeywordTok{this}\OperatorTok{.}\NormalTok{firstName}\OperatorTok{,}
+\NormalTok{    lastName}\OperatorTok{:} \ExtensionTok{String} \OperatorTok{=} \KeywordTok{this}\OperatorTok{.}\NormalTok{lastName}\OperatorTok{,}
+\NormalTok{    yearOfBirth}\OperatorTok{:} \BuiltInTok{Int} \OperatorTok{=} \KeywordTok{this}\OperatorTok{.}\NormalTok{yearOfBirth}\OperatorTok{):}\NormalTok{ Director }\OperatorTok{=}
+    \KeywordTok{new} \FunctionTok{Director}\OperatorTok{(}\NormalTok{firstName}\OperatorTok{,}\NormalTok{ lastName}\OperatorTok{,}\NormalTok{ yearOfBirth}\OperatorTok{)}
+\OperatorTok{\}}
+
+\KeywordTok{class} \FunctionTok{Film}\OperatorTok{(}
+  \KeywordTok{val}\NormalTok{ name}\OperatorTok{:} \ExtensionTok{String}\OperatorTok{,}
+  \KeywordTok{val}\NormalTok{ yearOfRelease}\OperatorTok{:} \BuiltInTok{Int}\OperatorTok{,}
+  \KeywordTok{val}\NormalTok{ imdbRating}\OperatorTok{:} \ExtensionTok{Double}\OperatorTok{,}
+  \KeywordTok{val}\NormalTok{ director}\OperatorTok{:}\NormalTok{ Director}\OperatorTok{)} \OperatorTok{\{}
+
+  \KeywordTok{def}\NormalTok{ directorsAge }\OperatorTok{=}
+\NormalTok{    yearOfRelease }\OperatorTok{{-}}\NormalTok{ director}\OperatorTok{.}\NormalTok{yearOfBirth}
+
+  \KeywordTok{def} \FunctionTok{isDirectedBy}\OperatorTok{(}\NormalTok{director}\OperatorTok{:}\NormalTok{ Director}\OperatorTok{)} \OperatorTok{=}
+    \KeywordTok{this}\OperatorTok{.}\NormalTok{director }\OperatorTok{==}\NormalTok{ director}
+
+  \KeywordTok{def} \FunctionTok{copy}\OperatorTok{(}
+\NormalTok{    name}\OperatorTok{:} \ExtensionTok{String} \OperatorTok{=} \KeywordTok{this}\OperatorTok{.}\NormalTok{name}\OperatorTok{,}
+\NormalTok{    yearOfRelease}\OperatorTok{:} \BuiltInTok{Int} \OperatorTok{=} \KeywordTok{this}\OperatorTok{.}\NormalTok{yearOfRelease}\OperatorTok{,}
+\NormalTok{    imdbRating}\OperatorTok{:} \ExtensionTok{Double} \OperatorTok{=} \KeywordTok{this}\OperatorTok{.}\NormalTok{imdbRating}\OperatorTok{,}
+\NormalTok{    director}\OperatorTok{:}\NormalTok{ Director }\OperatorTok{=} \KeywordTok{this}\OperatorTok{.}\NormalTok{director}\OperatorTok{):}\NormalTok{ Film }\OperatorTok{=}
+    \KeywordTok{new} \FunctionTok{Film}\OperatorTok{(}\NormalTok{name}\OperatorTok{,}\NormalTok{ yearOfRelease}\OperatorTok{,}\NormalTok{ imdbRating}\OperatorTok{,}\NormalTok{ director}\OperatorTok{)}
+\OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{a-simple-counter}{%
+\subsubsection{A Simple Counter}\label{a-simple-counter}}
+
+Implement a \texttt{Counter} class. The constructor should take an
+\texttt{Int}. The methods \texttt{inc} and \texttt{dec} should increment
+and decrement the counter respectively returning a new \texttt{Counter}.
+Here's an example of the usage:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{new} \FunctionTok{Counter}\OperatorTok{(}\DecValTok{10}\OperatorTok{).}\NormalTok{inc}\OperatorTok{.}\NormalTok{dec}\OperatorTok{.}\NormalTok{inc}\OperatorTok{.}\NormalTok{inc}\OperatorTok{.}\NormalTok{count}
+\CommentTok{// res23: Int = 12}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{class} \FunctionTok{Counter}\OperatorTok{(}\KeywordTok{val}\NormalTok{ count}\OperatorTok{:} \BuiltInTok{Int}\OperatorTok{)} \OperatorTok{\{}
+  \KeywordTok{def}\NormalTok{ dec }\OperatorTok{=} \KeywordTok{new} \FunctionTok{Counter}\OperatorTok{(}\NormalTok{count }\OperatorTok{{-}} \DecValTok{1}\OperatorTok{)}
+  \KeywordTok{def}\NormalTok{ inc }\OperatorTok{=} \KeywordTok{new} \FunctionTok{Counter}\OperatorTok{(}\NormalTok{count }\OperatorTok{+} \DecValTok{1}\OperatorTok{)}
+\OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+Aside from practicing with classes and objects, this exercise has a
+second goal---to think about why \texttt{inc} and \texttt{dec} return a
+new \texttt{Counter}, rather than updating the same counter directly.
+
+Because \texttt{val} fields are immutable, we need to come up with some
+other way of propagating the new value of \texttt{count}. Methods that
+return new \texttt{Counter} objects give us a way of returning new state
+without the side-effects of assignment. They also permit \emph{method
+chaining}, allowing us to write whole sequences of updates in a single
+expression
+
+The use-case \texttt{new\ Counter(10).inc.dec.inc.inc.count} actually
+creates 5 instances of \texttt{Counter} before returning its final
+\texttt{Int} value. You may be concerned about the extra memory and CPU
+overhead for such a simple calculation, but don't be. Modern execution
+environments like the JVM render the extra overhead of this style of
+programming negligible in all but the most performance critical code.
+
+\hypertarget{counting-faster}{%
+\subsubsection{Counting Faster}\label{counting-faster}}
+
+Augment the \texttt{Counter} from the previous exercise to allow the
+user can optionally pass an \texttt{Int} parameter to \texttt{inc} and
+\texttt{dec}. If the parameter is omitted it should default to
+\texttt{1}.
+
+The simplest solution is this:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{class} \FunctionTok{Counter}\OperatorTok{(}\KeywordTok{val}\NormalTok{ count}\OperatorTok{:} \BuiltInTok{Int}\OperatorTok{)} \OperatorTok{\{}
+  \KeywordTok{def} \FunctionTok{dec}\OperatorTok{(}\NormalTok{amount}\OperatorTok{:} \BuiltInTok{Int} \OperatorTok{=} \DecValTok{1}\OperatorTok{)} \OperatorTok{=} \KeywordTok{new} \FunctionTok{Counter}\OperatorTok{(}\NormalTok{count }\OperatorTok{{-}}\NormalTok{ amount}\OperatorTok{)}
+  \KeywordTok{def} \FunctionTok{inc}\OperatorTok{(}\NormalTok{amount}\OperatorTok{:} \BuiltInTok{Int} \OperatorTok{=} \DecValTok{1}\OperatorTok{)} \OperatorTok{=} \KeywordTok{new} \FunctionTok{Counter}\OperatorTok{(}\NormalTok{count }\OperatorTok{+}\NormalTok{ amount}\OperatorTok{)}
+\OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+However, this adds parentheses to \texttt{inc} and \texttt{dec}. If we
+omit the parameter we now have to provide an empty pair of parentheses:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{new} \FunctionTok{Counter}\OperatorTok{(}\DecValTok{10}\OperatorTok{).}\NormalTok{inc}
+\CommentTok{// error:}
+\CommentTok{// missing argument list for value of type Int =\textgreater{} MdocApp6.this.Counter}
+\CommentTok{//   def dec = new Counter(count {-} 1)}
+\CommentTok{//             \^{}}
+\end{Highlighting}
+\end{Shaded}
+
+We can work around this using \emph{method overloading} to recreate our
+original parenthesis-free methods. Note that overloading methods
+requires us to specify the return types:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{class} \FunctionTok{Counter}\OperatorTok{(}\KeywordTok{val}\NormalTok{ count}\OperatorTok{:} \BuiltInTok{Int}\OperatorTok{)} \OperatorTok{\{}
+  \KeywordTok{def}\NormalTok{ dec}\OperatorTok{:}\NormalTok{ Counter }\OperatorTok{=} \FunctionTok{dec}\OperatorTok{()}
+  \KeywordTok{def}\NormalTok{ inc}\OperatorTok{:}\NormalTok{ Counter }\OperatorTok{=} \FunctionTok{inc}\OperatorTok{()}
+  \KeywordTok{def} \FunctionTok{dec}\OperatorTok{(}\NormalTok{amount}\OperatorTok{:} \BuiltInTok{Int} \OperatorTok{=} \DecValTok{1}\OperatorTok{):}\NormalTok{ Counter }\OperatorTok{=} \KeywordTok{new} \FunctionTok{Counter}\OperatorTok{(}\NormalTok{count }\OperatorTok{{-}}\NormalTok{ amount}\OperatorTok{)}
+  \KeywordTok{def} \FunctionTok{inc}\OperatorTok{(}\NormalTok{amount}\OperatorTok{:} \BuiltInTok{Int} \OperatorTok{=} \DecValTok{1}\OperatorTok{):}\NormalTok{ Counter }\OperatorTok{=} \KeywordTok{new} \FunctionTok{Counter}\OperatorTok{(}\NormalTok{count }\OperatorTok{+}\NormalTok{ amount}\OperatorTok{)}
+\OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{new} \FunctionTok{Counter}\OperatorTok{(}\DecValTok{10}\OperatorTok{).}\NormalTok{inc}\OperatorTok{.}\FunctionTok{inc}\OperatorTok{(}\DecValTok{10}\OperatorTok{).}\NormalTok{count}
+\CommentTok{// res28: Int = 21}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{additional-counting}{%
+\subsubsection{Additional Counting}\label{additional-counting}}
+
+Here is a simple class called \texttt{Adder}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{class} \FunctionTok{Adder}\OperatorTok{(}\NormalTok{amount}\OperatorTok{:} \BuiltInTok{Int}\OperatorTok{)} \OperatorTok{\{}
+  \KeywordTok{def} \FunctionTok{add}\OperatorTok{(}\NormalTok{in}\OperatorTok{:} \BuiltInTok{Int}\OperatorTok{)} \OperatorTok{=}\NormalTok{ in }\OperatorTok{+}\NormalTok{ amount}
+\OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+Extend \texttt{Counter} to add a method called \texttt{adjust}. This
+method should accept an \texttt{Adder} and return a new \texttt{Counter}
+with the result of applying the \texttt{Adder} to the \texttt{count}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{class} \FunctionTok{Counter}\OperatorTok{(}\KeywordTok{val}\NormalTok{ count}\OperatorTok{:} \BuiltInTok{Int}\OperatorTok{)} \OperatorTok{\{}
+  \KeywordTok{def}\NormalTok{ dec }\OperatorTok{=} \KeywordTok{new} \FunctionTok{Counter}\OperatorTok{(}\NormalTok{count }\OperatorTok{{-}} \DecValTok{1}\OperatorTok{)}
+  \KeywordTok{def}\NormalTok{ inc }\OperatorTok{=} \KeywordTok{new} \FunctionTok{Counter}\OperatorTok{(}\NormalTok{count }\OperatorTok{+} \DecValTok{1}\OperatorTok{)}
+  \KeywordTok{def} \FunctionTok{adjust}\OperatorTok{(}\NormalTok{adder}\OperatorTok{:}\NormalTok{ Adder}\OperatorTok{)} \OperatorTok{=}
+    \KeywordTok{new} \FunctionTok{Counter}\OperatorTok{(}\NormalTok{adder}\OperatorTok{.}\FunctionTok{add}\OperatorTok{(}\NormalTok{count}\OperatorTok{))}
+\OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+This is an interesting pattern that will become more powerful as we
+learn more features of Scala. \emph{We are using \texttt{Adders} to
+capture computations} and pass them to \texttt{Counter}. Remember from
+our earlier discussion that \emph{methods are not expressions}---they
+cannot be stored in fields or passed around as data. However,
+\emph{\texttt{Adders} are both objects and computations}.
+
+Using objects as computations is a common paradigm in object oriented
+programming languages. Consider, for example, the classic
+\texttt{ActionListener} from Java's Swing:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{public} \KeywordTok{class}\NormalTok{ MyActionListener }\KeywordTok{implements} \BuiltInTok{ActionListener} \OperatorTok{\{}
+  \KeywordTok{public} \DataTypeTok{void} \FunctionTok{actionPerformed}\OperatorTok{(}\BuiltInTok{ActionEvent}\NormalTok{ evt}\OperatorTok{)} \OperatorTok{\{}
+    \CommentTok{// Do some computation}
+  \OperatorTok{\}}
+\OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+The disadvantage of objects like \texttt{Adders} and
+\texttt{ActionListeners} is that they are limited to use in one
+particular circumstance. Scala includes a much more general concept
+called \emph{functions} that allow us to represent any kind of
+computation as an object. We will be introduced to some of the concepts
+behind functions in this chapter.
+
+% Bibliography ----------------------------------
+
+
+% Include-after hook ----------------------------
+
+
+% The end ---------------------------------------
+
+\end{document}

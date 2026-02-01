@@ -29,7 +29,7 @@ object Stormtrooper {
 ```
 
 **Scala 3**
-```scala
+```scala mdoc:nest:silent
 object Stormtrooper:
   def inspect(person: Person): String =
     person match
@@ -165,7 +165,7 @@ object ChipShop {
 ```
 
 **Scala 3**
-```scala
+```scala mdoc:nest:silent
 object ChipShop:
   def willServe(cat: Cat): Boolean =
     cat match

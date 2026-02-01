@@ -310,7 +310,7 @@ object ChipShop {
 }
 ```
 **Scala 3**
-```scala
+```scala mdoc:nest:silent
 object ChipShop:
   def willServe(cat: Cat): Boolean =
     if cat.food == "Chips" then true else false
@@ -648,7 +648,7 @@ class Counter(val count: Int) {
 }
 ```
 **Scala 3**
-```scala
+```scala mdoc:nest:silent
 class Counter(val count: Int):
   def dec = Counter(count - 1)
   def inc = Counter(count + 1)

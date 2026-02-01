@@ -29,3 +29,7 @@ book_deploy_rsa
 
 .bloop/
 .bsp
+
+yarn.lock
+package-lock.json
+metals.sbt
