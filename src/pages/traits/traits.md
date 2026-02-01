@@ -13,7 +13,6 @@ Traits are very much like Java 8's *interfaces* with *default methods*. If you h
 
 Let's start with an example of a trait. Imagine we're modelling visitors to a website. There are two types of visitor: those who have registered on our site and those who are anonymous. We can model this with two classes:
 
-
 ```scala mdoc:silent
 import java.util.Date
 
@@ -30,7 +29,6 @@ With these class definitions we're saying that both anonymous and registered vis
 
 There is obvious duplication here, and it would be nice to not have to write the same definitions twice. More important though, is to create some common type for the two kinds of visitors. If they had some type in common (other than `AnyRef` and `Any`) we could write methods that worked on any kind of visitor. We can do this with a trait like so:
 
-**Scala 2**
 ```scala mdoc:reset:silent
 import java.util.Date
 
@@ -51,29 +49,6 @@ case class User(
   id: String,
   email: String,
   createdAt: Date = new Date()
-) extends Visitor
-```
-
-**Scala 3**
-```scala mdoc:reset:silent
-import java.util.Date
-
-trait Visitor:
-  def id: String      // Unique id assigned to each user
-  def createdAt: Date // Date this user first visited the site
-
-  // How long has this visitor been around?
-  def age: Long = Date().getTime - createdAt.getTime
-
-case class Anonymous(
-  id: String,
-  createdAt: Date = Date()
-) extends Visitor
-
-case class User(
-  id: String,
-  email: String,
-  createdAt: Date = Date()
 ) extends Visitor
 ```
 
@@ -195,7 +170,6 @@ Demand for Cat Simulator 1.0 is exploding! For v2 we're going to go beyond the d
 <div class="solution">
 This is mostly a finger exercise to get you used to trait syntax but there are a few interesting things in the solution.
 
-**Scala 2**
 ```scala mdoc:silent
 trait Feline {
   def colour: String
@@ -219,28 +193,8 @@ case class Cat(colour: String, food: String) extends Feline {
 }
 ```
 
-**Scala 3**
-```scala mdoc:reset:silent
-trait Feline:
-  def colour: String
-  def sound: String
-
-case class Lion(colour: String, maneSize: Int) extends Feline:
-  val sound = "roar"
-
-case class Tiger(colour: String) extends Feline:
-  val sound = "roar"
-
-case class Panther(colour: String) extends Feline:
-  val sound = "roar"
-
-case class Cat(colour: String, food: String) extends Feline:
-  val sound = "meow"
-```
-
 Notice that `sound` is not defined as a constructor argument. Since it is a constant, it doesn't make sense to give users a chance to modify it. There is a lot of duplication in the definition of `sound`. We could define a default value in `Feline` like so
 
-**Scala 2**
 ```scala
 trait Feline {
   def colour: String
@@ -248,28 +202,14 @@ trait Feline {
 }
 ```
 
-**Scala 3**
-```scala
-trait Feline:
-  def colour: String
-  def sound: String = "roar"
-```
-
 This is generally a bad practice. If we define a default implementation it should be an implementation that is suitable for all subtypes.
 
 Another alternative to define an intermediate type, perhaps called `BigCat` that defines sound as `"roar"`. This is a better solution.
 
-**Scala 2**
 ```scala mdoc:silent
 trait BigCat extends Feline {
   override val sound = "roar"
 }
-```
-
-**Scala 3**
-```scala
-trait BigCat extends Feline:
-  override val sound = "roar"
 ```
 
 ```scala
@@ -292,7 +232,6 @@ Implement `Shape` with three classes: `Circle`, `Rectangle`, and `Square`. In ea
 **Tip:** The value of &pi; is accessible as `math.Pi`.
 
 <div class="solution">
-**Scala 2**
 ```scala mdoc:silent
 trait Shape {
   def sides: Int
@@ -321,32 +260,6 @@ case class Square(size: Double) extends Shape {
   val area = size * size
 }
 ```
-
-**Scala 3**
-```scala mdoc:reset:silent
-trait Shape:
-  def sides: Int
-  def perimeter: Double
-  def area: Double
-
-case class Circle(radius: Double) extends Shape:
-  val sides = 1
-  val perimeter = 2 * math.Pi * radius
-  val area = math.Pi * radius * radius
-
-case class Rectangle(
-  width: Double,
-  height: Double
-) extends Shape:
-  val sides = 4
-  val perimeter = 2 * width + 2 * height
-  val area = width * height
-
-case class Square(size: Double) extends Shape:
-  val sides = 4
-  val perimeter = 4 * size
-  val area = size * size
-```
 </div>
 
 #### Shaping Up 2 (Da Streets) {#sec:traits:shaping-up-2}
@@ -360,7 +273,6 @@ Refactor the solution to the last exercise so that `Square` and `Rectangle` are 
 <div class="solution">
 The new code looks like this:
 
-**Scala 2**
 ```scala
 // trait Shape ...
 
@@ -378,29 +290,6 @@ case class Square(size: Double) extends Rectangular {
   val width = size
   val height = size
 }
-
-case class Rectangle(
-  val width: Double,
-  val height: Double
-) extends Rectangular
-```
-
-**Scala 3**
-```scala
-// trait Shape ...
-
-// case class Circle ...
-
-sealed trait Rectangular extends Shape:
-  def width: Double
-  def height: Double
-  val sides = 4
-  override val perimeter = 2*width + 2*height
-  override val area = width*height
-
-case class Square(size: Double) extends Rectangular:
-  val width = size
-  val height = size
 
 case class Rectangle(
   val width: Double,

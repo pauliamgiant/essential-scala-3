@@ -39,6 +39,7 @@ pages:
   - traits/sealed-traits.md
   - traits/modelling-data-with-traits.md
   - traits/working-with-data.md
+  - traits/recursive-data.md
   - traits/extended-examples.md
   - traits/conclusions.md
 

@@ -374,7 +374,7 @@ object wrapper {
 }; import wrapper._
 ```
 
-```scala
+```scala mdoc:nest:silent
 object wrapper {
   sealed trait Expression {
     def eval: Sum[String, Double] =

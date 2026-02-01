@@ -6,14 +6,8 @@ We have almost finished our basic introduction to Scala. In this section we are 
 
 A conditional allows us to choose an expression to evaluate based on some condition. For example, we can choose a string based on which of two numbers is the smallest.
 
-**Scala 2**
 ```scala mdoc
 if(1 < 2) "Yes" else "No"
-```
-
-**Scala 3**
-```scala mdoc
-if 1 < 2 then "Yes" else "No"
 ```
 
 <div class="callout callout-info">
@@ -24,13 +18,8 @@ Scala's `if` statement has the same syntax as Java's. One important difference i
 
 The expression that is not selected does not get evaluated. This is apparent if we use an expression with a side-effect.
 
-**Scala 2**
 ```scala mdoc
 if(1 < 2) println("Yes") else println("No")
-```
-**Scala 3**
-```scala mdoc
-if 1 < 2 then println("Yes") else println("No")
 ```
 
 We can tell the expression `println("No")` is not evaluated because `No` is not output to the console.
@@ -40,19 +29,11 @@ We can tell the expression `println("No")` is not evaluated because `No` is not 
 
 The syntax for a conditional expression is
 
-**Scala 2**
 ```scala
 if(condition)
   trueExpression
 else
   falseExpression
-```
-
-**Scala 3**
-```scala
-if condition 
-then trueExpression 
-else falseExpression
 ```
 
 where
@@ -101,20 +82,6 @@ def name: String = {
 name
 ```
 
-**Scala 3**
-Blocks can also be used in Scala 3 by using significant indentation to define the block.
-
-```scala mdoc:silent
-def scala3Name: String = 
-  val title = "Professor"
-  val name = "Funkenstein"
-  title + " " + name
-```
-
-```scala mdoc
-scala3Name
-```
-
 <div class="callout callout-info">
 
 #### Block Expression Syntax {-}
@@ -138,17 +105,11 @@ where
 
 Conditional expressions allow us to choose an expression to evaluate based on a `Boolean` condition. The syntax is
 
-**Scala 2**
 ```scala
 if(condition)
   trueExpression
 else
   falseExpression
-```
-
-**Scala 3**
-```scala
-if condition then trueExpression else falseExpression
 ```
 
 A conditional, being an expression, has a type and evaluates to an object.
@@ -172,27 +133,15 @@ The type and value of a block is that of the last expression in the block.
 
 What is the type and value of the following conditional?
 
-**Scala 2**
 ```scala mdoc:silent
 if(1 > 2) "alien" else "predator"
-```
-
-**Scala 3**
-```scala mdoc:silent
-if 1 > 2 then "alien" else "predator"
 ```
 
 <div class="solution">
 It's a `String` with value `"predator"`. Predators are clearly best:
 
-**Scala 2**
 ```scala mdoc
 if(1 > 2) "alien" else "predator"
-```
-
-**Scala 3**
-```scala mdoc:silent
-if 1 > 2 then "alien" else "predator"
 ```
 
 The type is determined by the upper bound of the types in the *then* and *else* expressions. In this case both expressions are `Strings` so the result is also a `String`.

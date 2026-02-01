@@ -1,22 +1,32 @@
-enum Tree:
-  case Node(l: Tree, r: Tree)
-  case Leaf(elt: Int)
-  
-  def sum: Int = this match
-    case Leaf(elt) => elt
-    case Node(l, r) => l.sum + r.sum
-  
-  def double: Tree = this match
-    case Leaf(elt) => Leaf(elt * 2)
-    case Node(l, r) => Node(l.double, r.double)
+sealed trait Tree {
+  def sum: Int
+  def double: Tree
+}
+final case class Node(l: Tree, r: Tree) extends Tree {
+  def sum: Int =
+    l.sum + r.sum
 
-object TreeOps:
+  def double: Tree =
+    Node(l.double, r.double)
+}
+final case class Leaf(elt: Int) extends Tree {
+  def sum: Int =
+    elt
+
+  def double: Tree =
+    Leaf(elt * 2)
+}
+
+object TreeOps {
   def sum(tree: Tree): Int =
-    tree match
-      case Tree.Leaf(elt) => elt
-      case Tree.Node(l, r) => sum(l) + sum(r)
-
+    tree match {
+      case Leaf(elt) => elt
+      case Node(l, r) => sum(l) + sum(r)
+    }
+    
   def double(tree: Tree): Tree =
-    tree match
-      case Tree.Leaf(elt) => Tree.Leaf(elt * 2)
-      case Tree.Node(l, r) => Tree.Node(double(l), double(r))
+    tree match {
+      case Leaf(elt) => Leaf(elt * 2)
+      case Node(l, r) => Node(double(l), double(r))
+    }
+}

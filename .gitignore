@@ -33,3 +33,5 @@ book_deploy_rsa
 yarn.lock
 package-lock.json
 metals.sbt
+
+test.tex
