@@ -12,7 +12,7 @@ Let's start with something simple---suppose we want to double every element of a
 
 In Scala we can use the `map` method defined on any sequence. `Map` takes a function and applies it to every element, creating a sequence of the results. To double every element we can write:
 
-```tut:book
+```scala mdoc
 val sequence = Seq(1, 2, 3)
 
 sequence.map(elt => elt * 2)
@@ -20,25 +20,25 @@ sequence.map(elt => elt * 2)
 
 If we use *placeholder syntax* we can write this even more compactly:
 
-```tut:book
+```scala mdoc
 sequence.map(_ * 2)
 ```
 
 Given a sequence with type `Seq[A]`, the function we pass to `map` must have type `A => B` and we get a `Seq[B]` as a result. This isn't right for every situation. For example, suppose we have a sequence of strings, and we want to generate a sequence of all the permutations of those strings. We can call the `permutations` method on a string to get all permutations of it:
 
-```tut:book
+```scala mdoc
 "dog".permutations
 ```
 
 This returns an `Iterable`, which is a bit like a Java `Iterator`. We're going to look at iterables in more detail later. For now all we need to know is that we can call the `toList` method to convert an `Iterable` to a `List`.
 
-```tut:book
+```scala mdoc
 "dog".permutations.toList
 ```
 
 Thus we could write
 
-```tut:book
+```scala mdoc
 Seq("a", "wet", "dog").map(_.permutations.toList)
 ```
 
@@ -60,23 +60,23 @@ What is the method `???` that we can use to collect a single flat sequence?
 
 Our mystery method above is called `flatMap`. If we simply replace `map` with `flatMap` we get the answer we want:
 
-```tut:book
+```scala mdoc
 Seq("a", "wet", "dog").flatMap(_.permutations.toList)
 ```
 
 `flatMap` is similar to `map` except that it expects our function to return a sequence. The sequences for each input element are appended together. For example:
 
-```tut:book
+```scala mdoc
 Seq(1, 2, 3).flatMap(num => Seq(num, num * 10))
 ```
 
 The end result is (nearly) always the same type as the original sequence: `aList.flatMap(...)` returns another `List`, `aVector.flatMap(...)` returns another `Vector`, and so on:
 
-```tut:book:silent
+```scala mdoc:nest:silent
 import scala.collection.immutable.Vector
 ```
 
-```tut:book
+```scala mdoc
 Vector(1, 2, 3).flatMap(num => Seq(num, num * 10))
 ```
 
@@ -136,7 +136,7 @@ There is one more traversal method that is commonly used: `foreach`. Unlike `map
 
 A common example of using `foreach` is printing the elements of a sequence:
 
-```tut:book
+```scala mdoc
 List(1, 2, 3).foreach(num => println("And a " + num + "..."))
 ```
 
@@ -179,7 +179,7 @@ These exercises re-use the example code from the *Intranet Movie Database* exerc
 
 Starting with the definition of `nolan`, create a list containing the names of the films directed by Christopher Nolan.
 
-```tut:invisible
+```scala mdoc:nest:invisible
 // some definitions from previous section
 case class Film(name: String, yearOfRelease: Int, imdbRating: Double)
 case class Director(firstName: String, lastName: String, yearOfBirth: Int, films: Seq[Film])
@@ -195,7 +195,7 @@ val directors = Seq(mcTiernan, nolan, someBody)
 ```
 
 <div class="solution">
-```tut:book:silent
+```scala mdoc:silent
 nolan.films.map(_.name)
 ```
 </div>
@@ -205,7 +205,7 @@ nolan.films.map(_.name)
 Starting with the definition of `directors`, create a list containing the names of all films by all directors.
 
 <div class="solution">
-```tut:book:silent
+```scala mdoc:silent
 directors.flatMap(director => director.films.map(film => film.name))
 ```
 </div>
@@ -219,7 +219,7 @@ Tip: you can concisely find the minimum of two numbers `a` and `b` using `math.m
 <div class="solution">
 There are a number of ways to do this. We can sort the list of films and then retrieve the smallest element.
 
-```tut:book:silent
+```scala mdoc:silent
 mcTiernan.films.sortWith { (a, b) =>
   a.yearOfRelease < b.yearOfRelease
 }.headOption
@@ -227,7 +227,7 @@ mcTiernan.films.sortWith { (a, b) =>
 
 We can also do this by using a `fold`.
 
-```tut:book:silent
+```scala mdoc:silent
 mcTiernan.films.foldLeft(Int.MaxValue) { (current, film) =>
   math.min(current, film.yearOfRelease)
 }
@@ -237,7 +237,7 @@ mcTiernan.films.foldLeft(Int.MaxValue) { (current, film) =>
 
 There's a far simpler solution to this problem using a convenient method on sequences called `min`. This method finds the smallest item in a list of naturally comparable elements. We don't even need to sort them:
 
-```tut:book:silent
+```scala mdoc:silent
 mcTiernan.films.map(_.yearOfRelease).min
 ```
 
@@ -245,7 +245,7 @@ We didn't introduce `min` in this section because our focus is on working with g
 
 Not all data types have a natural sort order. We might naturally wonder how `min` would work on a list of values of an unsortable data type. A quick experiment shows that the call doesn't even compile:
 
-```tut:book:fail
+```scala mdoc:fail
 mcTiernan.films.min
 ```
 
@@ -257,7 +257,7 @@ The `min` method is a strange beast---it only compiles when it is called on a li
 Starting with `directors`, find all films sorted by descending IMDB rating:
 
 <div class="solution">
-```tut:book:silent
+```scala mdoc:silent
 directors.
   flatMap(director => director.films).
   sortWith((a, b) => a.imdbRating > b.imdbRating)
@@ -269,7 +269,7 @@ Starting with `directors` again, find the *average score* across all films:
 <div class="solution">
 We cache the list of films in a variable because we use it twice---once to calculate the sum of the ratings and once to fetch the number of films:
 
-```tut:book:silent
+```scala mdoc:silent
 val films = directors.flatMap(director => director.films)
 
 films.foldLeft(0.0)((sum, film) => sum + film.imdbRating) / films.length
@@ -283,7 +283,7 @@ Starting with `directors`, print the following for every film: `"Tonight only! F
 <div class="solution">
 Println is used for its side-effects so we don't need to accumulate a result---we use `println` as a simple iterator:
 
-```tut:book:silent
+```scala mdoc:silent
 directors.foreach { director =>
   director.films.foreach { film =>
     println(s"Tonight! ${film.name} by ${director.firstName} ${director.lastName}!")
@@ -299,7 +299,7 @@ Finally, starting with `directors` again, find the *earliest film* by any direct
 <div class="solution">
 Here's the solution written using `sortWith`:
 
-```tut:book:silent
+```scala mdoc:silent
 directors.
   flatMap(director => director.films).
   sortWith((a, b) => a.yearOfRelease < b.yearOfRelease).
@@ -308,7 +308,7 @@ directors.
 
 We have to be careful in this solution to handle situations where there are no films. We can't use the `head` method, or even the `min` method we saw in the solution to *Vintage McTiernan*, because these methods throw exceptions if the sequence is empty:
 
-```tut:book:fail
+```scala mdoc:crash
 someBody.films.map(_.yearOfRelease).min
 ```
 </div>
@@ -328,7 +328,7 @@ What is the identity for `min` so that `min(x, identity) = x`. It is positive in
 
 Thus the solution is:
 
-```tut:book:silent
+```scala mdoc:silent
 def smallest(seq: Seq[Int]): Int =
   seq.foldLeft(Int.MaxValue)(math.min)
 ```
@@ -345,7 +345,7 @@ Once again we follow the same pattern. The types are:
 2. We want a `Seq[Int]`
 3. Constructing the operation we want to use requires a bit more thought. The hint is to use `contains`. We can keep a sequence of the unique elements we've seen so far, and use `contains` to test if the sequence contains the current element. If we have seen the element we don't add it, otherwise we do. In code
 
-```tut:book:silent
+```scala mdoc:silent
 def insert(seq: Seq[Int], elt: Int): Seq[Int] = {
  if(seq.contains(elt))
    seq
@@ -358,7 +358,7 @@ With these three pieces we can solve the problem. Looking at the type table we s
 
 Thus the solution is
 
-```tut:book:silent
+```scala mdoc:nest:silent
 def insert(seq: Seq[Int], elt: Int): Seq[Int] = {
   if(seq.contains(elt))
     seq
@@ -383,7 +383,7 @@ Write a function that reverses the elements of a sequence. Your output does not 
 <div class="solution">
 In this exercise, and the ones that follow, using the types are particularly important. Start by writing down the type of `reverse`.
 
-```tut:book:silent
+```scala mdoc:silent
 def reverse[A, B](seq: Seq[A], f: A => B): Seq[B] = {
   ???
 }
@@ -406,7 +406,7 @@ For the zero element we know that it must have the same type as the return type 
 
 So we now we can fill in the answer.
 
-```tut:book:silent
+```scala mdoc:nest:silent
 def reverse[A](seq: Seq[A]): Seq[A] = {
   seq.foldLeft(Seq.empty[A]){ (seq, elt) => elt +: seq }
 }
@@ -428,7 +428,7 @@ def map[A, B](seq: Seq[A], f: A => B): Seq[B] = {
 
 As usual we need to fill in the zero element and the function. The zero element must have type `Seq[B]`, and the function has type `(A, Seq[B]) => Seq[B])`. The zero element is straightforward: `Seq.empty[B]` is the only sequence we can construct of type `Seq[B]`. For the function, we clearly have to convert that `A` to a `B` somehow. There is only one way to do that, which is with the function supplied to `map`. We then need to add that `B` to our `Seq[B]`, for which we can use the `+:` method. This gives us our final result.
 
-```tut:book:silent
+```scala mdoc:nest:silent
 def map[A, B](seq: Seq[A], f: A => B): Seq[B] = {
   seq.foldRight(Seq.empty[B]){ (elt, seq) => f(elt) +: seq }
 }
@@ -439,7 +439,7 @@ def map[A, B](seq: Seq[A], f: A => B): Seq[B] = {
 
 Write your own implementation of `foldLeft` that uses `foreach` and mutable state. Remember you can create a mutable variable using the `var` keyword, and assign a new value using `=`. For example
 
-```tut:book
+```scala mdoc
 var mutable = 1
 
 mutable = 2
@@ -466,7 +466,7 @@ def foldLeft[A, B](seq: Seq[A], zero: B, f: (B, A) => B): B = {
 
 At this point we can just follow the types. `result` must be initially assigned to the value of `zero` as that is the only `B` we have. The body of the function we pass to `foreach` must call `f` with `result` and `elt`. This returns a `B` which we must store somewhere---the only place we have to store it is in `result`. So the final answer becomes
 
-```tut:book:silent
+```scala mdoc:nest:silent
 def foldLeft[A, B](seq: Seq[A], zero: B, f: (B, A) => B): B = {
   var result = zero
   seq.foreach { elt => result = f(result, elt) }
