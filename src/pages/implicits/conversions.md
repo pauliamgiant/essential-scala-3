@@ -9,7 +9,7 @@ Scala has a third implicit mechanism called *implicit conversions* that we will 
 
 As we shall see later in this section, undisciplined use of implicit conversions can cause as many problems as it fixes for the beginning programmer. Scala even requires us to write a special import statement to silence compiler warnings resulting from the use of implicit conversions:
 
-```tut:book:silent
+```scala mdoc:silent
 import scala.language.implicitConversions
 ```
 
@@ -22,7 +22,7 @@ You have been warned!
 
 Implicit conversions are a more general form of implicit classes. We can tag any single-argument method with the `implicit` keyword to allow the compiler to implicitly use the method to perform automated conversions from one type to another:
 
-```tut:book:silent
+```scala mdoc:silent
 class B {
   def bar = "This is the best method ever!"
 }
@@ -32,7 +32,7 @@ class A
 implicit def aToB(in: A): B = new B()
 ```
 
-```tut:book
+```scala mdoc
 new A().bar
 ```
 
@@ -42,11 +42,11 @@ Implicit classes are actually just syntactic sugar for the combination of a regu
 
 The power of implicit conversions tends to cause problems for newer Scala developers. We can easily define very general type conversions that play strange games with the semantics of our programs:
 
-```tut:book:silent
-implicit def intToBoolean(int: Int) = int == 0
+```scala mdoc:silent
+implicit def intToBoolean(int: Int): Boolean = int == 0
 ```
 
-```tut:book
+```scala mdoc
 if(1) "yes" else "no"
 
 if(0) "yes" else "no"
@@ -73,7 +73,7 @@ Any implicit class can be reimplemented as a class paired with an implicit metho
 <div class="solution">
 Here is the solution. The methods `yeah` and `times` are exactly as we implemented them previously. The only differences are the removal of the `implicit` keyword on the `class` and the addition of the `implicit def` to do the job of the implicit constructor:
 
-```tut:book:silent
+```scala mdoc:silent
 object IntImplicits {
   class IntOps(n: Int) {
     def yeah() =
@@ -83,24 +83,24 @@ object IntImplicits {
       for(i <- 0 until n) func(i)
   }
 
-  implicit def intToIntOps(value: Int) =
+  implicit def intToIntOps(value: Int): IntOps =
     new IntOps(value)
 }
 ```
 
 The code still works the same way it did previously. The implicit conversion is not available until we bring it into scope:
 
-```tut:book:fail
+```scala mdoc:fail
 5.yeah()
 ```
 
 Once the conversion has been brought into scope, we can use `yeah` and `times` as usual:
 
-```tut:book:silent
+```scala mdoc:silent
 import IntImplicits._
 ```
 
-```tut:book
+```scala mdoc
 5.yeah()
 ```
 </div>
