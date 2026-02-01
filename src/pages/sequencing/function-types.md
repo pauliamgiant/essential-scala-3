@@ -5,7 +5,7 @@ title: Function Types
 
 In the previous section we described how to write function literals and function types, but we glossed over how exactly function types are implemented. Scala has 23 built-in generic classes for functions of 0 to 22 arguments. Here's what they look like:
 
-```tut:book:silent
+```scala mdoc:reset:silent
 trait Function0[+R] {
   def apply: R
 }
@@ -41,7 +41,7 @@ A type `Foo[-T]` is **contravariant** in terms of `T`, meaning that `Foo[A]` is 
 
 Functions are contravariant in terms of their arguments and covariant in terms of their return type. This seems counterintuitive but it makes sense if we look at it from the point of view of function arguments. Consider some code that expects a `Function1[A, B]`:
 
-```tut:book:silent
+```scala mdoc:reset:silent
 case class Box[A](value: A) {
   /** Apply `func` to `value`, returning a `Box` of the result. */
   def map[B](func: Function1[A, B]): Box[B] =
@@ -66,7 +66,7 @@ As functions are instances of a `Function` class we might ask what methods we ge
 
 - for functions of a single parameters we can compose them together to apply one function to the result of another
 
-  ```tut:book
+  ```scala mdoc
   val f = ((x: Int) => x + 1).compose((x: Int) => x * 2)
 
   f(2)
@@ -78,7 +78,7 @@ As functions are instances of a `Function` class we might ask what methods we ge
 
 - for functions with two or more parameters we can convert them to functions that accepts a tuple of arguments, or a "curried" function which takes a single argument and returns a function.
 
-  ```tut:book
+  ```scala mdoc
   val f = ((x: Int, y: Int) => x + y).curried
 
   f(1)
@@ -94,7 +94,7 @@ As functions are instances of a `Function` class we might ask what methods we ge
 
 #### Covariance and Contravariance
 
-```tut:invisible
+```scala mdoc:invisible
 object catExample {
   trait Animal
   trait Cat extends Animal { val color: String; val food: String }
@@ -115,7 +115,7 @@ Using the notation `A <: B` to indicate `A` is a subtype of `B` and assuming:
 
 if I have a method
 
-```tut:book:silent
+```scala mdoc:silent
 def groom(groomer: Cat => CatSound): CatSound = {
   val oswald = Cat("Black", "Cat food")
   groomer(oswald)

@@ -4,7 +4,7 @@ Functions allow us to *abstract over methods*, turning methods into values that 
 
 Let's look at three methods we wrote that manipulate `IntList`.
 
-```tut:book:silent
+```scala mdoc:silent
 object wrapper {
   sealed trait IntList {
     def length: Int =
@@ -53,13 +53,13 @@ A function is like a method: we can call it with parameters and it evaluates to 
 
 Much earlier in this course we introduced the `apply` method, which lets us treat objects as functions in a syntactic sense:
 
-```tut:book:silent
+```scala mdoc:reset:silent
 object add1 {
   def apply(in: Int) = in + 1
 }
 ```
 
-```tut:book
+```scala mdoc
 add1(2)
 ```
 
@@ -101,7 +101,7 @@ A => B
 
 Scala also gives us a *function literal syntax* specifically for creating new functions. Here are some example function literals:
 
-```tut:book
+```scala mdoc:reset
 val sayHi = () => "Hi!"
 
 sayHi()
@@ -118,7 +118,7 @@ sum(10, 20)
 In code where we know the argument types, we can sometimes *drop the type annotations* and allow Scala to infer them[^parens]. There is no syntax for declaring the result type of
 a function and it is normally inferred, but if we find ourselves needing to do this we can put a type on the function's body expression:
 
-```tut:book:silent
+```scala mdoc:silent
 (x: Int) => (x + 1): Int
 ```
 
@@ -158,7 +158,7 @@ Rename this function to `fold`, which is the name it is usually known as, and fi
 <div class="solution">
 Your `fold` method should look like this:
 
-```tut:book:silent
+```scala mdoc:reset:silent
 object wrapper {
   sealed trait IntList {
     def fold(end: Int, f: (Int, Int) => Int): Int =
@@ -178,7 +178,7 @@ object wrapper {
 Now reimplement `sum`, `length`, and `product` in terms of `fold`.
 
 <div class="solution">
-```tut:book:silent
+```scala mdoc:reset:silent
 object wrapper {
   sealed trait IntList {
     def fold(end: Int, f: (Int, Int) => Int): Int =
@@ -246,7 +246,7 @@ def fold[A](end: A, f: (Int, A) => A): A
 
 where we've used a generic type on the method to capture the changing return type. With this we can implement `double`. When we try to do so we'll see that type inference fails, so we have to give it a bit of help.
 
-```tut:book:silent
+```scala mdoc:reset:silent
 object wrapper {
   sealed trait IntList {
     def fold[A](end: A, f: (Int, A) => A): A =

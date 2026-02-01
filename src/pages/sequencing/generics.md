@@ -6,11 +6,11 @@ Generic types allow us to *abstract over types*. There are useful for all sorts 
 
 Let's start with a collection that is even simpler than our list---a box that stores a single value. We don't care what type is stored in the box, but we want to make sure we preserve that type when we get the value out of the box. To do this we use a generic type.
 
-```tut:book:silent
+```scala mdoc:silent
 final case class Box[A](value: A)
 ```
 
-```tut:book
+```scala mdoc
 Box(2)
 
 res0.value
@@ -22,11 +22,11 @@ res2.value
 
 The syntax `[A]` is called a *type parameter*. We can also add type parameters to methods, which limits the scope of the parameter to the method declaration and body:
 
-```tut:book:silent
+```scala mdoc:silent
 def generic[A](in: A): A = in
 ```
 
-```tut:book
+```scala mdoc
 generic[String]("foo")
 
 generic(1) // again, if we omit the type parameter, scala will infer it
@@ -61,7 +61,7 @@ We described type parameters as analogous to method parameters, and this analogy
 
 In previous sections we've seen sum types like the following:
 
-```tut:book:silent
+```scala mdoc:reset:silent
 sealed trait Calculation
 final case class Success(result: Double) extends Calculation
 final case class Failure(reason: String) extends Calculation
@@ -71,7 +71,7 @@ Let's generalise this so that our result is not restricted to a `Double` but can
 
 A `Result` of type `A` is either a `Success` of type `A` or a `Failure` with a `String` reason. This translates to the following code
 
-```tut:book:silent
+```scala mdoc:reset:silent
 sealed trait Result[A]
 case class Success[A](result: A) extends Result[A]
 case class Failure[A](reason: String) extends Result[A]
@@ -84,14 +84,14 @@ Notice that both `Success` and `Failure` introduce a type parameter `A` which is
 
 If `A` of type `T` is a `B` or `C` write
 
-```tut:book:silent
+```scala mdoc:reset:silent
 sealed trait A[T]
 final case class B[T]() extends A[T]
 final case class C[T]() extends A[T]
 ```
 </div>
 
-```tut:invisible:reset
+```scala mdoc:reset:invisible
 // clear the types defined so far
 ```
 
@@ -101,7 +101,7 @@ final case class C[T]() extends A[T]
 
 Our `IntList` type was defined as
 
-```tut:book:silent
+```scala mdoc:reset:silent
 sealed trait IntList
 case object End extends IntList
 final case class Pair(head: Int, tail: IntList) extends IntList
@@ -113,7 +113,7 @@ Change the name to `LinkedList` and make it generic in the type of data stored i
 
 This is an application of the generic sum type pattern.
 
-```tut:book:silent
+```scala mdoc:reset:silent
 sealed trait LinkedList[A]
 final case class Pair[A](head: A, tail: LinkedList[A]) extends LinkedList[A]
 final case class End[A]() extends LinkedList[A]
@@ -136,7 +136,7 @@ assert(End().length == 0)
 <div class="solution">
 This code is largely unchanged from the implementation of `length` on `IntList`.
 
-```tut:book:silent
+```scala mdoc:reset:silent
 object wrapper {
   sealed trait LinkedList[A] {
     def length: Int =
@@ -165,7 +165,7 @@ assert(End().contains(0) == false)
 <div class="solution">
 This is another example of the standard structural recursion pattern. The important point is `contains` takes a parameter of type `A`.
 
-```tut:book:silent
+```scala mdoc:reset:silent
 object wrapper {
   sealed trait LinkedList[A] {
     def contains(item: A): Boolean =
@@ -189,7 +189,7 @@ Implement a method `apply` that returns the <em>n<sup>th</sup></em> item in the 
 
 **Hint:** If you need to signal an error in your code (there's one situation in which you will need to do this), consider throwing an exception. Here is an example:
 
-```tut:book:fail:silent
+```scala mdoc:fail:silent
 throw new Exception("Bad things happened")
 ```
 
@@ -215,7 +215,7 @@ Next up is the `End` case, which the hint suggested you through an `Exception` f
 
 Finally we get to the actual structural recursion, which is perhaps the trickiest part. The key insight is that if the index is zero, we're selecting the current element, otherwise we subtract one from the index and recurse. We can recursively define the integers in terms of addition by one. For example, 3 = 2 + 1 = 1 + 1 + 1. Here we are performing structural recursion on the list *and* on the integers.
 
-```tut:book:silent
+```scala mdoc:reset:silent
 object wrapper {
   sealed trait LinkedList[A] {
     def apply(index: Int): A =
@@ -237,7 +237,7 @@ object wrapper {
 
 Throwing an exception isn't cool. Whenever we throw an exception we lose type safety as there is nothing in the type system that will remind us to deal with the error. It would be much better to return some kind of result that encodes we can succeed or failure. We introduced such a type in this very section.
 
-```tut:book:silent
+```scala mdoc:reset:silent
 sealed trait Result[A]
 case class Success[A](result: A) extends Result[A]
 case class Failure[A](reason: String) extends Result[A]
@@ -253,7 +253,7 @@ assert(example(3) == Failure("Index out of bounds"))
 ```
 
 <div class="solution">
-```tut:book:silent
+```scala
 object wrapper {
   sealed trait Result[A]
   case class Success[A](result: A) extends Result[A]
