@@ -4,7 +4,7 @@ Most of the interfaces we've have covered so far do not have any side-effects---
 
 The default `Seq` is defined to be `scala.collection.immutable.Seq`. If we want a mutable sequence we can use `scala.collection.mutable.Seq`.
 
-```tut:book
+```scala mdoc
 val mutableCollection = scala.collection.mutable.Seq(1, 2, 3)
 ```
 
@@ -14,21 +14,21 @@ Note that the concrete implementation class is now an `ArrayBuffer` and not a `L
 
 In addition to all the methods of an immutable sequence, a mutable sequence can be updated using the `update` method. Note that `update` returns `Unit`, so no value is printed in the REPL after this call. When we print the original sequence we see it is changed:
 
-```tut:book:silent
+```scala mdoc:silent
 mutableCollection.update(0, 5)
 ```
 
-```tut:book
+```scala mdoc
 mutableCollection
 ```
 
 A more idiomatic way of calling `update` is to use *assignment operator syntax*, which is another special syntax built in to Scala, similar to infix operator syntax and function application syntax:
 
-```tut:book:silent
+```scala mdoc:silent
 mutableCollection(1) = 7
 ```
 
-```tut:book
+```scala mdoc
 mutableCollection
 ```
 
@@ -36,7 +36,7 @@ mutableCollection
 
 Methods defined on both mutable and immutable sequences will never perform destructive updates. For example, `:+` always returns a new copy of the sequence without updating the original:
 
-```tut:book
+```scala mdoc:nest
 val mutableCollection = scala.collection.mutable.Seq[Int](1, 2, 3)
 
 mutableCollection :+ 4
@@ -51,11 +51,11 @@ Scala programmers tend to favour immutable collections and only bring in mutable
 
 To work around this, I suggest importing the `mutable` package itself rather than its contents. We can then explicitly refer to any mutable collection using the package name as a prefix, leaving the unprefixed names referring to the immutable versions:
 
-```tut:book:silent
+```scala mdoc:silent
 import scala.collection.mutable
 ```
 
-```tut:book
+```scala doc:nest
 mutable.Seq(1, 2, 3)
 
 Seq(1, 2, 3)
@@ -80,7 +80,7 @@ Scala's collections library includes mutable sequences in the `scala.collection.
 Create a `Seq` containing the `String`s `"cat"`, `"dog"`, and `"penguin"`. Bind it to the name `animals`.
 
 <div class="solution">
-```tut:book
+```scala mdoc
 val animals = Seq("cat", "dog", "penguin")
 ```
 </div>
@@ -88,7 +88,7 @@ val animals = Seq("cat", "dog", "penguin")
 Append the element `"tyrannosaurus"` to `animals` and prepend the element `"mouse"`.
 
 <div class="solution">
-```tut:book
+```scala mdoc
 "mouse" +: animals :+ "tyrannosaurus"
 ```
 </div>
@@ -112,11 +112,11 @@ Now create a mutable sequence containing `"cat"`, `"dog"`, and `"penguin"` and `
 <div class="solution">
 If we try to mutate a sequence we *do* get a type error:
 
-```tut:book
+```scala mdoc
 val mutable = scala.collection.mutable.Seq("cat", "dog", "penguin")
 ```
 
-```tut:book:silent:fail
+```scala mdoc:fail:silent
 mutable(0) = 2
 // <console>:9: error: type mismatch;
 //  found   : Int(2)

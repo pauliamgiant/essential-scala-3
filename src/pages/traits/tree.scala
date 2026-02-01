@@ -23,7 +23,7 @@ object TreeOps {
       case Leaf(elt) => elt
       case Node(l, r) => sum(l) + sum(r)
     }
-
+    
   def double(tree: Tree): Tree =
     tree match {
       case Leaf(elt) => Leaf(elt * 2)

@@ -4,13 +4,13 @@ Until now we have interacted with objects by calling methods or accessing fields
 
 Pattern matching is like an extended `if` expression that allows us to evaluate an expression depending on the "shape" of the data. Recall the `Person` case class we've seen in previous examples:
 
-```tut:book:silent
+```scala mdoc:silent
 case class Person(firstName: String, lastName: String)
 ```
 
 Now imagine we wanted to implement a `Stormtrooper` that is looking for members of the rebellion. We could use pattern matching like this:
 
-```tut:book:silent
+```scala mdoc:silent
 object Stormtrooper {
   def inspect(person: Person): String =
     person match {
@@ -25,7 +25,7 @@ Notice the syntax for a pattern (`Person("Luke", "Skywalker")`) matches the synt
 
 Here it is in use:
 
-```tut:book
+```scala mdoc
 Stormtrooper.inspect(Person("Noel", "Welsh"))
 Stormtrooper.inspect(Person("Han", "Solo"))
 ```
@@ -59,7 +59,7 @@ Pattern matching is itself an expression and thus evaluates to a value---the val
 
 Scala has an expressive syntax for writing patterns or guards. For case classes the pattern syntax matches the constructor syntax. Take the data
 
-```tut:book
+```scala mdoc
 Person("Noel", "Welsh")
 ```
 
@@ -112,7 +112,7 @@ Define an object `ChipShop` with a method `willServe`. This method should accept
 <div class="solution">
 We can start by writing the skeleton suggested by the problem text.
 
-```tut:book:silent
+```scala mdoc:silent
 case class Cat(name: String, colour: String, food: String)
 ```
 
@@ -127,7 +127,7 @@ object ChipShop {
 
 As the return type is `Boolean` we know we need at least two cases, one for true and one for false. The text of the exercise tells us what they should be: cats that prefer chips, and all other cats. We can implement this with a literal pattern and an `_` pattern.
 
-```tut:book:silent
+```scala mdoc:silent
 object ChipShop {
   def willServe(cat: Cat): Boolean =
     cat match {

@@ -10,11 +10,11 @@ Imagine we want to sort a `List` of `Int`s. There are many different ways to sor
 
 Let's define some `Ordering`s and see them in action.
 
-```tut:book:silent
+```scala mdoc:silent
 import scala.math.Ordering
 ```
 
-```tut:book
+```scala mdoc
 val minOrdering = Ordering.fromLessThan[Int](_ < _)
 
 val maxOrdering = Ordering.fromLessThan[Int](_ > _)
@@ -33,11 +33,11 @@ The type class pattern separates the implementation of functionality (the type c
 
 It can be inconvenient to continually pass the type class instance to a method when we want to repeatedly use the same instance. Scala provides a convenience, called an *implicit value*, that allows us to get the compiler to pass the type class instance for us. Here's an example of use:
 
-```tut:book:silent
-implicit val ordering = Ordering.fromLessThan[Int](_ < _)
+```scala mdoc:silent
+implicit val ordering: Ordering[Int] = Ordering.fromLessThan[Int](_ < _)
 ```
 
-```tut:book
+```scala mdoc
 List(2, 4, 3).sorted
 
 List(1, 7 ,5).sorted
@@ -64,13 +64,13 @@ An implicit value must be declared within a surrounding object, class, or trait.
 
 What happens when multiple implicit values are in scope? Let's ask the console.
 
-```tut:book:silent
-implicit val minOrdering = Ordering.fromLessThan[Int](_ < _)
+```scala mdoc:nest:silent
+implicit val minOrdering: Ordering[Int] = Ordering.fromLessThan[Int](_ < _)
 
-implicit val maxOrdering = Ordering.fromLessThan[Int](_ > _)
+implicit val maxOrdering: Ordering[Int] = Ordering.fromLessThan[Int](_ > _)
 ```
 
-```tut:book:fail
+```scala mdoc:fail
 List(3,4,5).sorted
 //  <console>:12: error: ambiguous implicit values:
 //  both value ordering of type => scala.math.Ordering[Int]
@@ -108,7 +108,7 @@ assert(List(-4, -3, -2, -1).sorted(absOrdering) == List(-1, -2, -3, -4))
 ```
 
 <div class="solution">
-```tut:book:silent
+```scala mdoc:silent
 val absOrdering = Ordering.fromLessThan[Int]{ (x, y) =>
   Math.abs(x) < Math.abs(y)
 }
@@ -125,8 +125,8 @@ assert(List(-4, -3, -2, -1).sorted == List(-1, -2, -3, -4))
 <div class="solution">
 Simply mark the value as implicit (and make sure it is in scope)
 
-```tut:book:silent
-implicit val absOrdering = Ordering.fromLessThan[Int]{ (x, y) =>
+```scala mdoc:nest:silent
+implicit val absOrdering: Ordering[Int] = Ordering.fromLessThan[Int]{ (x, y) =>
   Math.abs(x) < Math.abs(y)
 }
 ```
@@ -136,7 +136,7 @@ implicit val absOrdering = Ordering.fromLessThan[Int]{ (x, y) =>
 
 Scala doesn't have a class to represent rational numbers, but we can easily implement one ourselves.
 
-```tut:book:silent
+```scala mdoc:silent
 final case class Rational(numerator: Int, denominator: Int)
 ```
 
@@ -148,8 +148,8 @@ assert(List(Rational(1, 2), Rational(3, 4), Rational(1, 3)).sorted ==
 ```
 
 <div class="solution">
-```tut:book:silent
-implicit val ordering = Ordering.fromLessThan[Rational]((x, y) =>
+```scala mdoc:nest:silent
+implicit val ordering: Ordering[Rational] = Ordering.fromLessThan[Rational]((x, y) =>
   (x.numerator.toDouble / x.denominator.toDouble) <
   (y.numerator.toDouble / y.denominator.toDouble)
 )

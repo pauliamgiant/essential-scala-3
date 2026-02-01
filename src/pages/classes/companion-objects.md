@@ -4,7 +4,7 @@ Sometimes we want to create a method that logically belongs to a class but is in
 
 One common use case is auxiliary constructors. Although Scala does have syntax that lets us define multiple constructors for a class, Scala programmers almost always prefer to implement additional constructors as `apply` methods on an object with the same name as the class. We refer to the object as the *companion object* of the class. For example:
 
-```tut:book:silent
+```scala mdoc:silent
 class Timestamp(val seconds: Long)
 
 object Timestamp {
@@ -13,7 +13,7 @@ object Timestamp {
 }
 ```
 
-```tut:book
+```scala mdoc
 Timestamp(1, 1, 1).seconds
 ```
 
@@ -29,7 +29,7 @@ As we saw earlier, Scala has two namespaces: a space of *type names* and a space
 
 It is important to note that *the companion object is not an instance of the class*---it is a singleton object with its own type:
 
-```tut:book
+```scala mdoc
 Timestamp // note that the type is `Timestamp.type`, not `Timestamp`
 ```
 
@@ -67,7 +67,7 @@ Implement a companion object for `Person` containing an `apply` method that acce
 
 Tip: you can split a `String` into an `Array` of components as follows:
 
-```tut:book
+```scala mdoc
 val parts = "John Doe".split(" ")
 parts(0)
 ```
@@ -75,7 +75,7 @@ parts(0)
 <div class="solution">
 Here is the code:
 
-```tut:book:silent
+```scala mdoc:silent
 class Person(val firstName: String, val lastName: String) {
   def name: String =
     s"$firstName $lastName"
@@ -91,7 +91,7 @@ object Person {
 
 And here it is in use:
 
-```tut:book
+```scala mdoc
 Person.apply("John Doe").firstName // full method call
 Person("John Doe").firstName // sugared apply syntax
 ```
@@ -119,7 +119,7 @@ Write companion objects for `Director` and `Film` as follows:
 
 This exercise is inteded to provide more practice writing code. The model solution, including the class definitions from the previous section, is now:
 
-```tut:book:silent
+```scala mdoc:silent
 class Director(
   val firstName: String,
   val lastName: String,

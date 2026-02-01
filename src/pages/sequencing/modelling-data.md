@@ -38,11 +38,11 @@ Generics provide a different approach to defining product types--- one that reli
 
 Implement the `Pair` class from above. It should store two values---`one` and `two`---and be generic in both arguments. Example usage:
 
-```tut:invisible
+```scala mdoc:invisible
 case class Pair[A, B](one: A, two: B)
 ```
 
-```tut:book
+```scala mdoc
 val pair = Pair[String, Int]("hi", 2)
 
 pair.one
@@ -53,7 +53,7 @@ pair.two
 <div class="solution">
 If one type parameter is good, two type parameters are better:
 
-```tut:book:silent
+```scala mdoc:reset:silent
 case class Pair[A, B](one: A, two: B)
 ```
 
@@ -61,7 +61,7 @@ This is just the product type pattern we have seen before, but we introduce gene
 
 Note that we don't always need to specify the type parameters when we construct `Pairs`. The compiler will attempt to infer the types as usual wherever it can:
 
-```tut:book
+```scala mdoc
 val pair = Pair("hi", 2)
 ```
 </div>
@@ -74,7 +74,7 @@ The classes are called `Tuple1[A]` through to `Tuple22[A, B, C, ...]` but they c
 
 [^sugar]: The term "syntactic sugar" is used to refer to convenience syntax that is not needed but makes programming sweeter. Operator syntax is another example of syntactic sugar that Scala provides.
 
-```tut:book
+```scala mdoc
 Tuple2("hi", 1) // unsugared syntax
 
 ("hi", 1) // sugared syntax
@@ -84,7 +84,7 @@ Tuple2("hi", 1) // unsugared syntax
 
 We can define methods that accept tuples as parameters using the same syntax:
 
-```tut:book
+```scala mdoc
 def tuplized[A, B](in: (A, B)) = in._1
 
 tuplized(("a", 1))
@@ -92,7 +92,7 @@ tuplized(("a", 1))
 
 We can also pattern match on tuples as follows:
 
-```tut:book
+```scala mdoc
 (1, "a") match {
   case (a, b) => a + b
 }
@@ -100,7 +100,7 @@ We can also pattern match on tuples as follows:
 
 Although pattern matching is the natural way to deconstruct a tuple, each class also has a complement of fields named `_1`, `_2` and so on:
 
-```tut:book
+```scala mdoc
 val x = (1, "b", true)
 
 x._1
@@ -114,14 +114,14 @@ Now let's look at using generics to model a *sum type*. Again, we have previousl
 
 Consider a method that, depending on the value of its parameters, returns one of two types:
 
-```tut:book
+```scala mdoc
 def intOrString(input: Boolean) =
   if(input == true) 123 else "abc"
 ```
 
 We can't simply write this method as shown above because the compiler infers the result type as `Any`. Instead we have to introduce a new type to explicitly represent the disjunction:
 
-```tut:invisible
+```scala mdoc:invisible
 object sum {
   sealed trait Sum[A, B]
   final case class Left[A, B](value: A) extends Sum[A, B]
@@ -130,7 +130,7 @@ object sum {
 import sum._
 ```
 
-```tut:book
+```scala
 def intOrString(input: Boolean): Sum[Int, String] =
   if(input == true) {
     Left[Int, String](123)
@@ -147,7 +147,7 @@ Implement a trait `Sum[A, B]` with two subtypes `Left` and `Right`. Create type 
 
 Hint: you will need to put both type parameters on all three types. Example usage:
 
-```tut:book
+```scala
 Left[Int, String](1).value
 
 Right[Int, String]("foo").value
@@ -163,7 +163,7 @@ sum match {
 <div class="solution">
 The code is an adaptation of our invariant generic sum type pattern, with another type parameter:
 
-```tut:book:silent
+```scala mdoc:reset:silent
 sealed trait Sum[A, B]
 final case class Left[A, B](value: A) extends Sum[A, B]
 final case class Right[A, B](value: B) extends Sum[A, B]
@@ -192,7 +192,7 @@ val perhaps: Maybe[Int] = Full(1)
 <div class="solution">
 We can apply our invariant generic sum type pattern and get
 
-```tut:book:silent
+```scala mdoc:reset:silent
 sealed trait Maybe[A]
 final case class Full[A](value: A) extends Maybe[A]
 final case class Empty[A]() extends Maybe[A]
@@ -223,7 +223,7 @@ Generic data structures---`Tuples`, `Options`, `Eithers`, and so on---are extrem
 
 In this section we implemented a sum type for modelling optional data:
 
-```tut:book:silent
+```scala mdoc:reset:silent
 sealed trait Maybe[A]
 final case class Full[A](value: A) extends Maybe[A]
 final case class Empty[A]() extends Maybe[A]
@@ -234,7 +234,7 @@ Implement fold for this type.
 <div class="solution">
 The code is very similar to the implementation for `LinkedList`. I choose pattern matching in the base trait for my solution.
 
-```tut:book:silent
+```scala mdoc:reset:silent
 object wrapper {
   sealed trait Maybe[A] {
     def fold[B](full: A => B, empty: B): B =
@@ -253,7 +253,7 @@ object wrapper {
 
 In this section we implemented a generic sum type:
 
-```tut:book:silent
+```scala mdoc:reset:silent
 sealed trait Sum[A, B]
 final case class Left[A, B](value: A) extends Sum[A, B]
 final case class Right[A, B](value: B) extends Sum[A, B]
@@ -262,7 +262,7 @@ final case class Right[A, B](value: B) extends Sum[A, B]
 Implement `fold` for `Sum`.
 
 <div class="solution">
-```tut:book:silent
+```scala mdoc:reset:silent
 object wrapper {
   sealed trait Sum[A, B] {
     def fold[C](left: A => C, right: B => C): C =

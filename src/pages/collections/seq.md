@@ -4,7 +4,7 @@ A *sequence* is a collection of items with a defined and stable order. Sequences
 
 Here's how you create a sequence in Scala:
 
-```tut:book
+```scala mdoc
 val sequence = Seq(1, 2, 3)
 ```
 
@@ -18,7 +18,7 @@ Sequences implement [many methods](http://docs.scala-lang.org/overviews/collecti
 
 We can access the elements of a sequence using its `apply` method, which accepts an `Int` index as a parameter. Indices start from `0`.
 
-```tut:book
+```scala mdoc
 sequence.apply(0)
 
 sequence(0) // sugared syntax
@@ -26,7 +26,7 @@ sequence(0) // sugared syntax
 
 An exception is raised if we use an index that is out of bounds:
 
-```tut:book:fail:silent
+```scala mdoc:fail:silent
 sequence(3)
 // java.lang.IndexOutOfBoundsException: 3
 //        at ...
@@ -34,7 +34,7 @@ sequence(3)
 
 We can also access the head and tail of the sequence:
 
-```tut:book
+```scala mdoc
 sequence.head
 
 sequence.tail
@@ -44,7 +44,7 @@ sequence.tail.head
 
 Again, trying to access an element that doesn't exist throws an exception:
 
-```tut:book:fail:silent
+```scala mdoc:fail:silent
 Seq().head
 // java.util.NoSuchElementException: head of empty list
 //   at scala.collection.immutable.Nil$.head(List.scala:337)
@@ -58,7 +58,7 @@ Seq().tail
 
 If we want to safely get the `head` without risking an exception, we can use `headOption`:
 
-```tut:book
+```scala mdoc
 sequence.headOption
 
 Seq().headOption
@@ -70,7 +70,7 @@ The `Option` class here is Scala's built-in equivalent of our `Maybe` class from
 
 Finding the length of a sequence is straightforward:
 
-```tut:book
+```scala mdoc
 sequence.length
 ```
 
@@ -78,13 +78,13 @@ sequence.length
 
 There are a few ways of searching for elements. The `contains` method tells us whether a sequence contains an element (using `==` for comparison):
 
-```tut:book
+```scala mdoc
 sequence.contains(2)
 ```
 
 The `find` method is like a generalised version of `contains` - we provide a test function and the sequence returns the first item for which the test returns `true`:
 
-```tut:book
+```scala mdoc
 sequence.find(_ == 3)
 
 sequence.find(_ > 4)
@@ -92,7 +92,7 @@ sequence.find(_ > 4)
 
 The `filter` method is a variant of `find` that returns *all* the matching elements in the sequence:
 
-```tut:book
+```scala mdoc
 sequence.filter(_ > 1)
 ```
 
@@ -100,7 +100,7 @@ sequence.filter(_ > 1)
 
 We can use the `sortWith` method to sort a list using a binary function. The function takes two list items as parameters and returns `true` if they are in the correct order and `false` if they are the wrong way around. For example, to sort a list of `Ints` in descending order:
 
-```tut:book
+```scala mdoc
 sequence.sortWith(_ > _)
 ```
 
@@ -108,25 +108,25 @@ sequence.sortWith(_ > _)
 
 There are many ways to add elements to a sequence. We can append an element with the `:+` method:
 
-```tut:book
+```scala mdoc
 sequence.:+(4)
 ```
 
 It is more idiomatic to call `:+` as an infix operator:
 
-```tut:book
+```scala mdoc
 sequence :+ 4
 ```
 
 We can similarly *prepend* an element using the `+:` method:
 
-```tut:book
+```scala mdoc
 sequence.+:(0)
 ```
 
 Again, it is more idiomatic to call `+:` as an infix operator. Here *the trailing colon makes it right associative*, so we write the operator-style expression the other way around:
 
-```tut:book
+```scala mdoc
 0 +: sequence
 ```
 
@@ -134,7 +134,7 @@ This is another of Scala's general syntax rules---any method ending with a `:` c
 
 Finally we can concatenate entire sequences using the `++` method.
 
-```tut:book
+```scala mdoc
 sequence ++ Seq(4, 5, 6)
 ```
 
@@ -143,7 +143,7 @@ sequence ++ Seq(4, 5, 6)
 
 The `updated` method replaces the *nth* item in a sequence with a new value:
 
-```tut:book
+```scala mdoc
 sequence.updated(0, 5)
 ```
 -->
@@ -154,13 +154,13 @@ The default implementation of `Seq` is a `List`, which is a classic [linked list
 
 We can write an empty list using the singleton object `Nil`:
 
-```tut:book
+```scala mdoc
 Nil
 ```
 
 Longer lists can be created by prepending elements in classic linked-list style using the `::` method, which is equivalent to `+:`:
 
-```tut:book
+```scala mdoc
 val list = 1 :: 2 :: 3 :: Nil
 
 4 :: 5 :: list
@@ -168,13 +168,13 @@ val list = 1 :: 2 :: 3 :: Nil
 
 We can also use the `List.apply` method for a more conventional constructor notation:
 
-```tut:book
+```scala mdoc
 List(1, 2, 3)
 ```
 
 Finally, the `:::` method is a right-associative `List`-specific version of `++`:
 
-```tut:book
+```scala mdoc
 List(1, 2, 3) ::: List(4, 5, 6)
 ```
 
@@ -189,37 +189,37 @@ The `Seq` and `List` types are so ubiquitous in Scala that they are made automat
 
 The main collections package is called `scala.collection.immutable`. We can import specific collections from this package as follows:
 
-```tut:book:silent
+```scala mdoc:nest:silent
 import scala.collection.immutable.Vector
 ```
 
-```tut:book
+```scala mdoc
 Vector(1, 2, 3)
 ```
 
 We can also use *wildcard imports* to import everything in a package:
 
-```tut:book:silent
+```scala mdoc:silent
 import scala.collection.immutable._
 ```
 
-```tut:book
+```scala mdoc
 Queue(1, 2, 3)
 ```
 
 We can also use `import` to bring methods and fields into scope from a singleton:
 
-```tut:book:silent
+```scala mdoc:silent
 import scala.collection.immutable.Vector.apply
 ```
 
-```tut:book
+```scala mdoc
 apply(1, 2, 3)
 ```
 
 We can write import statements anywhere in our code---imported identifiers are lexically scoped to the block where we use them:
 
-```tut:book:silent
+```scala mdoc:silent
 // `empty` is unbound here
 
 def someMethod = {
@@ -309,14 +309,14 @@ The methods for retrieving the first element in a list are:
 
 The `mkString` method allows us to quickly display a `Seq` as a `String`:
 
-```tut:book:silent
+```scala mdoc:silent
 Seq(1, 2, 3).mkString(",")               // returns "1,2,3"
 Seq(1, 2, 3).mkString("[ ", ", ", " ]") // returns "[ 1, 2, 3 ]"
 ```
 
 `Options` contain two methods, `isDefined` and `isEmpty`, that we can use as a quick test:
 
-```tut:book:silent
+```scala mdoc:silent
 Some(123).isDefined // returns true
 Some(123).isEmpty   // returns false
 None.isDefined      // returns false
@@ -329,7 +329,7 @@ None.isEmpty        // returns true
 Create a `Seq` containing the `String`s `"cat"`, `"dog"`, and `"penguin"`. Bind it to the name `animals`.
 
 <div class="solution">
-```tut:book
+```scala mdoc
 val animals = Seq("cat", "dog", "penguin")
 ```
 </div>
@@ -337,7 +337,7 @@ val animals = Seq("cat", "dog", "penguin")
 Append the element `"tyrannosaurus"` to `animals` and prepend the element `"mouse"`.
 
 <div class="solution">
-```tut:book
+```scala mdoc
 "mouse" +: animals :+ "tyrannosaurus"
 ```
 </div>
@@ -362,7 +362,7 @@ Let's revisit our films and directors example from the [Classes](/classes) chapt
 
 The code below is a partial rewrite of the previous sample code in which `Films` is stored as a field of `Director` instead of the other way around. Copy and paste this into a new Scala worksheet and continue with the exercises below:
 
-```tut:book:silent
+```scala mdoc:nest:silent
 case class Film(
   name: String,
   yearOfRelease: Int,
@@ -414,7 +414,7 @@ Using this sample code, write implementations of the following methods:
    <div class="solution">
     We use `filter` because we are expecting more than one result:
 
-```tut:book:silent
+```scala mdoc:silent
 def directorsWithBackCatalogOfSize(numberOfFilms: Int): Seq[Director] =
  directors.filter(_.films.length > numberOfFilms)
 ```
@@ -427,7 +427,7 @@ def directorsWithBackCatalogOfSize(numberOfFilms: Int): Seq[Director] =
    We use `find` because we are expecting at most one result. This solution
    will return the first director found who matches the criteria of the search:
 
-```tut:book:silent
+```scala mdoc:silent
 def directorBornBefore(year: Int): Option[Director] =
  directors.find(_.yearOfBirth < year)
 ```
@@ -442,7 +442,7 @@ def directorBornBefore(year: Int): Option[Director] =
    This solution performs each part of the query separately and uses
    `filter` and `contains` to calculate the intersection of the results:
 
-```tut:book:silent
+```scala mdoc:silent
 def directorBornBeforeWithBackCatalogOfSize(year: Int, numberOfFilms: Int): Seq[Director] = {
  val byAge   = directors.filter(_.yearOfBirth < year)
  val byFilms = directors.filter(_.films.length > numberOfFilms)
@@ -457,7 +457,7 @@ def directorBornBeforeWithBackCatalogOfSize(year: Int, numberOfFilms: Int): Seq[
    <div class="solution">
    Here is one solution. Note that sorting by ascending age is the same as sorting by descending year of birth:
 
-```tut:book:silent
+```scala mdoc:silent
 def directorsSortedByAge(ascending: Boolean = true) =
   if(ascending) {
     directors.sortWith((a, b) => a.yearOfBirth > b.yearOfBirth)
@@ -468,7 +468,7 @@ def directorsSortedByAge(ascending: Boolean = true) =
 
    Because Scala is a functional language, we can also factor our code as follows:
 
-```tut:book:silent
+```scala mdoc:nest:silent
 def directorsSortedByAge(ascending: Boolean = true) = {
   val comparator: (Director, Director) => Boolean =
     if(ascending) {
@@ -484,7 +484,7 @@ def directorsSortedByAge(ascending: Boolean = true) = {
    Here is a final refactoring that is slightly less efficient because it rechecks
    the value of `ascending` multiple times.
 
-```tut:book:silent
+```scala mdoc:nest:silent
 def directorsSortedByAge(ascending: Boolean = true) =
   directors.sortWith { (a, b) =>
     if(ascending) {

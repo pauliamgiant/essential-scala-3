@@ -3,12 +3,12 @@
 A second type of type class interface, called *type enrichment*[^pimping] allow us to create
  interfaces that act as if they were methods defined on the classes of interest. For example, suppose we have a method called `numberOfVowels`:
 
-```tut:book:silent
+```scala mdoc:silent
 def numberOfVowels(str: String) =
   str.filter(Seq('a', 'e', 'i', 'o', 'u').contains(_)).length
 ```
 
-```tut:book
+```scala mdoc
 numberOfVowels("the quick brown fox")
 ```
 
@@ -21,7 +21,7 @@ This is a method that we use all the time. It would be great if `numberOfVowels`
 
 Let's build up implicit classes piece by piece. We can wrap `String` in a class that adds our `numberOfVowels`:
 
-```tut:book:silent
+```scala mdoc:silent
 class ExtraStringMethods(str: String) {
   val vowels = Seq('a', 'e', 'i', 'o', 'u')
 
@@ -32,17 +32,17 @@ class ExtraStringMethods(str: String) {
 
 We can use this to wrap up our `String` and gain access to our new method:
 
-```tut:book:silent
+```scala mdoc:silent
 new ExtraStringMethods("the quick brown fox").numberOfVowels
 ```
 
 Writing `new ExtraStringMethods` every time we want to use `numberOfVowels` is unwieldy. However, if we tag our class with the `implicit` keyword, we give Scala the ability to insert the constructor call automatically into our code:
 
-```scala
+```scala mdoc:nest
 implicit class ExtraStringMethods(str: String) { /* ... */ }
 ```
 
-```tut:invisible
+```scala mdoc:reset:invisible
 implicit class ExtraStringMethods(str: String) {
   val vowels = Seq('a', 'e', 'i', 'o', 'u')
 
@@ -51,7 +51,7 @@ implicit class ExtraStringMethods(str: String) {
 }
 ```
 
-```tut:book
+```scala mdoc
 "the quick brown fox".numberOfVowels
 ```
 
@@ -65,7 +65,7 @@ There is one additional restriction for implicit classes: only a single implicit
 
 Implicit classes can be used on their own but we most often combine them with type classes to create a more natural style of interface. We keep the type class (`HtmlWriter`) and adapters (`PersonWriter`, `DateWriter` and so on) from our type class example, and add an implicit class with methods that themselves take implicit parameters. For example:
 
-```tut:invisible
+```scala mdoc:invisible
 trait HtmlWriter[A] {
   def toHtml(a: A): String
 }
@@ -76,7 +76,7 @@ implicit object PersonWriter extends HtmlWriter[Person] {
 }
 ```
 
-```tut:book:silent
+```scala mdoc:silent
 implicit class HtmlOps[T](data: T) {
   def toHtml(implicit writer: HtmlWriter[T]) =
     writer.toHtml(data)
@@ -85,7 +85,7 @@ implicit class HtmlOps[T](data: T) {
 
 This allows us to invoke our type-class pattern on any type for which we have an adapter *as if it were a built-in feature of the class*:
 
-```tut:book
+```scala mdoc
 Person("John", "john@example.com").toHtml
 ```
 
@@ -117,7 +117,7 @@ Use your newfound powers to add a method `yeah` to `Int`, which prints `Oh yeah!
 When you have written your implicit class, package it in an `IntImplicits` object.
 
 <div class="solution">
-```tut:book:silent
+```scala mdoc:silent
 object IntImplicits {
   implicit class IntOps(n: Int) {
     def yeah() = for{ _ <- 0 until n } println("Oh yeah!")
@@ -127,7 +127,7 @@ object IntImplicits {
 import IntImplicits._
 ```
 
-```tut:book
+```scala mdoc
 2.yeah()
 ```
 
@@ -147,7 +147,7 @@ Extend your previous example to give `Int` an extra method called `times` that a
 For bonus points, re-implement `yeah` in terms of `times`.
 
 <div class="solution">
-```tut:book:silent
+```scala mdoc:nest:silent
 object IntImplicits {
   implicit class IntOps(n: Int) {
     def yeah() =
@@ -164,7 +164,7 @@ object IntImplicits {
 
 Recall our `Equal` type class from a previous section.
 
-```tut:book:silent
+```scala mdoc:silent
 trait Equal[A] {
   def equal(v1: A, v2: A): Boolean
 }
@@ -179,7 +179,7 @@ Implement an enrichment so we can use this type class via a triple equal (`===`)
 <div class="solution">
 We just need to define an implicit class, which I have here placed in the companion object of `Equal`.
 
-```tut:book:silent
+```scala mdoc:nest:silent
 trait Equal[A] {
   def equal(v1: A, v2: A): Boolean
 }
@@ -196,7 +196,7 @@ object Equal {
 
 Here is an example of use.
 
-```tut:book:silent
+```scala mdoc:silent
 implicit val caseInsensitiveEquals = new Equal[String] {
   def equal(s1: String, s2: String) =
     s1.toLowerCase == s2.toLowerCase

@@ -7,7 +7,7 @@ We've seen that when we define a class with generic data, we cannot implement ve
 
 Last time we saw fold we were working with a list of integers. Let's generalise to a list of a generic type. We've already seen all the tools we need. First our data definition, in this instance slightly modified to use the invariant sum type pattern.
 
-```tut:book:silent
+```scala mdoc:reset:silent
 sealed trait LinkedList[A]
 final case class Pair[A](head: A, tail: LinkedList[A]) extends LinkedList[A]
 final case class End[A]() extends LinkedList[A]
@@ -25,7 +25,7 @@ def fold[A](end: A, f: (Int, A) => A): A =
 
 It's reasonably straightforward to extend this to `LinkedList[A]`. We merely have to account for the head element of a `Pair` being of type `A` not `Int`.
 
-```tut:book:silent
+```scala mdoc:reset:silent
 object wrapper {
   sealed trait LinkedList[A] {
     def fold[B](end: B, f: (A, B) => B): B =
@@ -127,35 +127,35 @@ Placeholder syntax, while wonderfully terse, can be confusing for large expressi
 
 Scala contains another feature that is directly relevant to this section---the ability to convert method calls to functions. This is closely related to placeholder syntax---simply follow a method with an underscore:
 
-```tut:book:silent
+```scala mdoc:reset:silent
 object Sum {
   def sum(x: Int, y: Int) = x + y
 }
 ```
 
-```tut:book:fail
+```scala mdoc:fail
 Sum.sum
 ```
 
-```tut:book
+```scala mdoc
 (Sum.sum _)
 ```
 
 In situations where Scala can infer that we need a function, we can even drop the underscore and simply write the method name---the compiler will promote the method to a function automatically:
 
-```tut:book:silent
+```scala mdoc:reset:silent
 object MathStuff {
   def add1(num: Int) = num + 1
 }
 ```
 
-```tut:invisible
+```scala mdoc:invisible
 case class Counter(value: Int) {
   def adjust(f: Int => Int): Counter = Counter(f(value))
 }
 ```
 
-```tut:book
+```scala mdoc
 Counter(2).adjust(MathStuff.add1)
 ```
 
@@ -163,7 +163,7 @@ Counter(2).adjust(MathStuff.add1)
 
 Methods in Scala can actually have multiple parameter lists. Such methods work just like normal methods, except we must bracket each parameter list separately.
 
-```tut:book
+```scala mdoc
 def example(x: Int)(y: Int) = x + y
 
 example(1)(2)
@@ -221,7 +221,7 @@ Implement this algebraic data type along with a fold method.
 <div class="solution">
 This is another recursive data type just like list. Follow the patterns and you should be ok.
 
-```tut:book:silent
+```scala mdoc:reset:silent
 sealed trait Tree[A] {
   def fold[B](node: (B, B) => B, leaf: A => B): B
 }
@@ -238,7 +238,7 @@ final case class Leaf[A](value: A) extends Tree[A] {
 
 Using `fold` convert the following `Tree` to a `String`
 
-```tut:book:silent
+```scala
 val tree: Tree[String] =
   Node(Node(Leaf("To"), Leaf("iterate")),
        Node(Node(Leaf("is"), Leaf("human,")),
@@ -250,7 +250,7 @@ Remember you can append `String`s using the `+` method.
 <div class="solution">
 Note it is necessary to instantiate the generic type variable for `fold`. Type inference fails in this case.
 
-```tut:book:silent
+```scala
 tree.fold[String]((a, b) => a + " " + b, str => str)
 ```
 </div>

@@ -4,7 +4,7 @@ In this section we cover *variance annotations*, which allow us to control subcl
 
 Recall our `Maybe` type, which we defined as
 
-```tut:book:silent
+```scala mdoc:reset:silent
 sealed trait Maybe[A]
 final case class Full[A](value: A) extends Maybe[A]
 final case class Empty[A]() extends Maybe[A]
@@ -12,7 +12,7 @@ final case class Empty[A]() extends Maybe[A]
 
 Ideally we would like to drop the unused type parameter on `Empty` and write something like
 
-```scala
+```scala:reset:silent
 sealed trait Maybe[A]
 final case class Full[A](value: A) extends Maybe[A]
 case object Empty extends Maybe[???]
@@ -20,13 +20,13 @@ case object Empty extends Maybe[???]
 
 Objects can't have type parameters. In order to make `Empty` an object we need to provide a concrete type in the `extends Maybe` part of the definition. But what type parameter should we use? In the absence of a preference for a particular data type, we could use something like `Unit` or `Nothing`. However this leads to type errors:
 
-```tut:book
+```scala mdoc:reset:silent
 sealed trait Maybe[A]
 final case class Full[A](value: A) extends Maybe[A]
 case object Empty extends Maybe[Nothing]
 ```
 
-```tut:book:fail
+```scala mdoc:fail
 val possible: Maybe[Int] = Empty
 ```
 
@@ -53,7 +53,7 @@ A type `Foo[-T]` is *contravariant* in terms of `T`, meaning that `Foo[A]` is a 
 
 When we discussed function types we glossed over how exactly they are implemented. Scala has 23 built-in generic classes for functions of 0 to 22 arguments. Here's what they look like:
 
-```tut:book:silent
+```scala mdoc:reset:silent
 trait Function0[+R] {
   def apply: R
 }
@@ -71,7 +71,7 @@ trait Function2[-A, -B, +C] {
 
 Functions are contravariant in terms of their arguments and covariant in terms of their return type. This seems counterintuitive but it makes sense if we look at it from the point of view of function arguments. Consider some code that expects a `Function1[A, B]`:
 
-```tut:book:silent
+```scala mdoc:reset:silent
 case class Box[A](value: A) {
   /** Apply `func` to `value`, returning a `Box` of the result. */
   def map[B](func: Function1[A, B]): Box[B] =
@@ -95,7 +95,7 @@ To understand variance, consider what functions can we safely pass to this `map`
 
 Now we know about variance annotations we can solve our problem with `Maybe` by making it covariant.
 
-```tut:book:silent
+```scala mdoc:reset:silent
 sealed trait Maybe[+A]
 final case class Full[A](value: A) extends Maybe[A]
 case object Empty extends Maybe[Nothing]
@@ -103,7 +103,7 @@ case object Empty extends Maybe[Nothing]
 
 In use we get the behaviour we expect. `Empty` is a subtype of all `Full` values.
 
-```tut:book
+```scala mdoc
 val perhaps: Maybe[Int] = Empty
 ```
 
@@ -114,7 +114,7 @@ This pattern is the most commonly used one with generic sum types. We should onl
 
 If `A` of type `T` is a `B` or `C`, and `C` is not generic, write
 
-```tut:book:silent
+```scala mdoc:reset:silent
 sealed trait A[+T]
 final case class B[T](t: T) extends A[T]
 case object C extends A[Nothing]
@@ -123,7 +123,7 @@ case object C extends A[Nothing]
 This pattern extends to more than one type parameter. If a type parameter is not needed for a specific case of a sum type, we can substitute `Nothing` for that parameter.
 </div>
 
-```tut:reset:invisible
+```scala mdoc:reset:invisible
 // clear previously defined types
 ```
 
@@ -136,7 +136,7 @@ There is another pattern we need to learn for covariant sum types, which involve
 Implement a covariant `Sum` using the covariant generic sum type pattern.
 
 <div class="solution">
-```tut:book:silent
+```scala mdoc:reset:silent
 sealed trait Sum[+A, +B]
 final case class Failure[A](value: A) extends Sum[A, Nothing]
 final case class Success[B](value: B) extends Sum[Nothing, B]
@@ -156,7 +156,7 @@ error: covariant type A occurs in contravariant position in type B => Sum[A,C] o
 ```
 
 <div class="solution">
-```tut:book:silent:fail
+```scala mdoc:fail:silent
 object wrapper {
   sealed trait Sum[+A, +B] {
     def flatMap[C](f: B => Sum[A, C]): Sum[A, C] =
@@ -173,7 +173,7 @@ object wrapper {
 
 What is going on here? Let's momentarily switch to a simpler example that illustrates the problem.
 
-```tut:book:silent:fail
+```scala mdoc:fail:silent
 case class Box[+A](value: A) {
   def set(a: A): Box[A] = Box(a)
 }
@@ -191,7 +191,7 @@ Remember that functions, and hence methods, which are just like functions, are c
 
 The solution is introduce a new type that is a supertype of `A`. We can do this with the notation `[AA >: A]` like so:
 
-```tut:book:silent
+```scala mdoc:reset:silent
 case class Box[+A](value: A) {
   def set[AA >: A](a: AA): Box[AA] = Box(a)
 }
@@ -201,7 +201,7 @@ This successfully compiles.
 
 Back to `flatMap`, the function `f` is a parameter, and thus in a contravariant position. This means we accept *supertypes* of `f`. It is declared with type `B => Sum[A, C]` and thus a supertype is *covariant* in `B` and *contravariant* in `A` and `C`. `B` is declared as covariant, so that is fine. `C` is invariant, so that is fine as well. `A` on the other hand is covariant but in a contravariant position. Thus we have to apply the same solution we did for `Box` above.
 
-```tut:book:silent
+```scala mdoc:reset:silent
 object wrapper {
   sealed trait Sum[+A, +B] {
     def flatMap[AA >: A, C](f: B => Sum[AA, C]): Sum[AA, C] =
@@ -220,7 +220,7 @@ object wrapper {
 
 If `A` of a covariant type `T` and a method `f` of `A` complains that `T` is used in a contravariant position, introduce a type `TT >: T` in `f`.
 
-```tut:book:silent
+```scala mdoc:reset:silent
 case class A[+T]() {
   def f[TT >: T](t: TT): A[TT] = ???
 }
@@ -230,18 +230,18 @@ case class A[+T]() {
 
 ### Type Bounds
 
-```tut:reset
+```scala mdoc:reset
 ```
 
 We have seen some type bounds above, in the contravariant position pattern. Type bounds extend to specify subtypes as well as supertypes. The syntax is `A <: Type` to declare `A` must be a subtype of `Type` and `A >: Type` to declare a supertype.
 
 For example, the following type allows us to store a `Visitor` or any subtype:
 
-```tut:invisible
+```scala mdoc:reset:invisible
 trait Visitor
 ```
 
-```tut:book:silent
+```scala mdoc:silent
 case class WebAnalytics[A <: Visitor](
   visitor: A,
   pageViews: Int,
@@ -255,7 +255,7 @@ case class WebAnalytics[A <: Visitor](
 
 #### Covariance and Contravariance
 
-```tut:invisible
+```scala mdoc:invisible
 object catExample {
   trait Animal
   trait Cat extends Animal { val color: String; val food: String }
@@ -276,7 +276,7 @@ Using the notation `A <: B` to indicate `A` is a subtype of `B` and assuming:
 
 if I have a method
 
-```tut:book:silent
+```scala mdoc:silent
 def groom(groomer: Cat => CatSound): CatSound = {
   val oswald = Cat("Black", "Cat food")
   groomer(oswald)
@@ -301,7 +301,7 @@ We're going to return to the interpreter example we saw at the end of the last c
 We're going to represent calculations as `Sum[String, Double]`, where the `String` is an error message. Extend `Sum` to have `map` and `fold` method.
 
 <div class="solution">
-```tut:book:silent
+```scala mdoc:reset:silent
 object wrapper {
   sealed trait Sum[+A, +B] {
     def fold[C](error: A => C, success: B => C): C =
@@ -328,7 +328,7 @@ object wrapper {
 
 Now we're going to reimplement the calculator from last time. We have an abstract syntax tree defined via the following algebraic data type:
 
-```tut:book:silent
+```scala mdoc:reset:silent
 sealed trait Expression
 final case class Addition(left: Expression, right: Expression) extends Expression
 final case class Subtraction(left: Expression, right: Expression) extends Expression
@@ -349,7 +349,7 @@ assert(Division(Addition(Subtraction(Number(8), Number(6)), Number(2)), Number(2
 <div class="solution">
 Here's my solution. I used a helper method `lift2` to "lift" a function into the result of two expressions. I hope you'll agree the code is both more compact and easier to read than our previous solution!
 
-```tut:invisible
+```scala mdoc:invisible
 // must re-paste the Sum definition...
 object wrapper {
   sealed trait Sum[+A, +B] {
@@ -374,7 +374,7 @@ object wrapper {
 }; import wrapper._
 ```
 
-```tut:book:silent
+```scala mdoc:nest:silent
 object wrapper {
   sealed trait Expression {
     def eval: Sum[String, Double] =

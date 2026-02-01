@@ -23,3 +23,15 @@ project/target
 
 book_deploy_rsa
 
+.cursor/
+.vscode/
+.metals/
+
+.bloop/
+.bsp
+
+yarn.lock
+package-lock.json
+metals.sbt
+
+test.tex

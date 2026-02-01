@@ -23,7 +23,7 @@ scala>
 
 You can enter individual expressions at the `scala>` prompt and press *Enter* to compile and execute them:
 
-```tut
+```scala mdoc
 "Hello world!"
 ```
 
@@ -31,7 +31,7 @@ You can enter individual expressions at the `scala>` prompt and press *Enter* to
 
 Let's try entering a simple expression:
 
-```tut
+```scala mdoc
 1 + 2 + 3
 ```
 
@@ -45,13 +45,13 @@ As we will see in the next chapter, every expression in Scala has a *type* and a
 
 The identifier `res1` is a convenience provided by the console to allow us to refer to the result of the expression in future expressions. For example, we can multiply our result by two as follows:
 
-```tut
+```scala mdoc
 res1 * 2
 ```
 
 If we enter an expression that doesn't yield a useful value, the console won't print anything in response:
 
-```tut
+```scala mdoc
 println("Hello world!")
 ```
 
@@ -61,7 +61,7 @@ Here, the output `"Hello world!"` is from our `println` statement---the expressi
 
 We can split long expressions across multiple lines quite simply. If we press enter before the end of an expression, the console will print a `|` character to indicate that we can continue on the next line:
 
-```tut
+```scala mdoc
 for(i <- 1 to 3) {
   println(i)
 }
@@ -157,7 +157,7 @@ A project is no good without code to run! Let's create our first simple Scala ap
 
 The content of the file should read as follows:
 
-```tut:book:silent
+```scala mdoc:silent
 object HelloWorld {
 
 }
@@ -165,7 +165,7 @@ object HelloWorld {
 
 Replace this text with the following minimalist application:
 
-```tut:book:silent
+```scala mdoc:reset:silent
 object HelloWorld {
   def main(args: Array[String]): Unit = {
     println("Hello world!")
@@ -211,7 +211,7 @@ Enter a **Worksheet name** of `FirstSteps` and click **Finish**. A new file call
 
 Note that the object on the left contains a single line of Scala code:
 
-```tut:book:silent
+```scala mdoc:silent
 println("Welcome to the Scala worksheet")
 ```
 

@@ -25,12 +25,12 @@ In the previous section we defined an `Ordering` for a `Rational` type we create
 
 First let's define the ordering in the local scope.
 
-```tut:book:silent
+```scala mdoc:silent
 final case class Rational(numerator: Int, denominator: Int)
 
 object Example {
   def example() = {
-    implicit val ordering = Ordering.fromLessThan[Rational]((x, y) =>
+    implicit val ordering: Ordering[Rational] = Ordering.fromLessThan[Rational]((x, y) =>
       (x.numerator.toDouble / x.denominator.toDouble) <
       (y.numerator.toDouble / y.denominator.toDouble)
     )
@@ -44,18 +44,18 @@ This works as we expect.
 
 Now let's shift the type class instance out of the local scope and see that it doesn't compile.
 
-```tut:book:silent
+```scala mdoc:nest:silent
 final case class Rational(numerator: Int, denominator: Int)
 
 object Instance {
-  implicit val ordering = Ordering.fromLessThan[Rational]((x, y) =>
+  implicit val ordering: Ordering[Rational] = Ordering.fromLessThan[Rational]((x, y) =>
     (x.numerator.toDouble / x.denominator.toDouble) <
     (y.numerator.toDouble / y.denominator.toDouble)
   )
 }
 ```
 
-```tut:book:fail
+```scala mdoc:fail
 object Example {
   def example =
     assert(List(Rational(1, 2), Rational(3, 4), Rational(1, 3)).sorted ==
@@ -73,16 +73,16 @@ assert(List(Rational(1, 2), Rational(3, 4), Rational(1, 3)).sorted ==
 
 Finally let's move the type class instance into the companion object of `Rational` and see that the code compiles again.
 
-```tut:reset:invisible
+```scala mdoc:reset:invisible
 // need to clear the previous Rational definitions...
 ```
 
-```tut:book:silent
+```scala mdoc:silent
 object wrapper {
   final case class Rational(numerator: Int, denominator: Int)
 
   object Rational {
-    implicit val ordering = Ordering.fromLessThan[Rational]((x, y) =>
+    implicit val ordering: Ordering[Rational] = Ordering.fromLessThan[Rational]((x, y) =>
       (x.numerator.toDouble / x.denominator.toDouble) <
       (y.numerator.toDouble / y.denominator.toDouble)
     )
@@ -90,7 +90,7 @@ object wrapper {
 }; import wrapper._
 ```
 
-```tut:book:silent
+```scala mdoc:silent
 object Example {
   def example() =
     assert(List(Rational(1, 2), Rational(3, 4), Rational(1, 3)).sorted ==
@@ -121,16 +121,16 @@ The [full priority rules](http://eed3si9n.com/implicit-parameter-precedence-agai
 
 Let's see this in practice, by defining an `Ordering` for `Rational` within the local scope.
 
-```tut:reset:invisible
+```scala mdoc:reset:invisible
 // need to clear the previous Rational definitions...
 ```
 
-```tut:book:silent
+```scala mdoc:silent
 object wrapper {
   final case class Rational(numerator: Int, denominator: Int)
 
   object Rational {
-    implicit val ordering = Ordering.fromLessThan[Rational]((x, y) =>
+    implicit val ordering: Ordering[Rational] = Ordering.fromLessThan[Rational]((x, y) =>
       (x.numerator.toDouble / x.denominator.toDouble) <
       (y.numerator.toDouble / y.denominator.toDouble)
     )
@@ -138,9 +138,9 @@ object wrapper {
 }; import wrapper._
 ```
 
-```tut:book:silent
+```scala mdoc:silent
 object Example {
-  implicit val higherPriorityImplicit = Ordering.fromLessThan[Rational]((x, y) =>
+  implicit val higherPriorityImplicit: Ordering[Rational] = Ordering.fromLessThan[Rational]((x, y) =>
       (x.numerator.toDouble / x.denominator.toDouble) >
       (y.numerator.toDouble / y.denominator.toDouble)
   )
@@ -170,18 +170,18 @@ If there is no good default instance for a type class instance, or if there are 
 
 In this case, one simple way to package instances is to place each in its own object that the user can import into the local scope. For instance, we might define orderings for `Rational` as follows:
 
-```tut:book:silent
+```scala mdoc:nest:silent
 final case class Rational(numerator: Int, denominator: Int)
 
 object RationalLessThanOrdering {
-  implicit val ordering = Ordering.fromLessThan[Rational]((x, y) =>
+  implicit val ordering: Ordering[Rational] = Ordering.fromLessThan[Rational]((x, y) =>
     (x.numerator.toDouble / x.denominator.toDouble) <
     (y.numerator.toDouble / y.denominator.toDouble)
   )
 }
 
 object RationalGreaterThanOrdering {
-  implicit val ordering = Ordering.fromLessThan[Rational]((x, y) =>
+  implicit val ordering: Ordering[Rational] = Ordering.fromLessThan[Rational]((x, y) =>
     (x.numerator.toDouble / x.denominator.toDouble) >
     (y.numerator.toDouble / y.denominator.toDouble)
   )
@@ -207,7 +207,7 @@ When packaging type class instances, if there is a single instance or a single g
 
 Here is a case class to store orders of some arbitrary item.
 
-```tut:book:silent
+```scala mdoc:silent
 final case class Order(units: Int, unitPrice: Double) {
   val totalPrice: Double = units * unitPrice
 }
@@ -224,25 +224,25 @@ Implement and package implicits to provide these orderings, and justify your pac
 <div class="solution">
 My implementation is below. I decided that ordering by `totalPrice` is likely to be the most common choice, and therefore should be the default. Thus I placed it in the companion object for `Order`. The other two orderings I placed in objects so the user could explicitly import them.
 
-```tut:book:silent
+```scala mdoc:nest:silent
 final case class Order(units: Int, unitPrice: Double) {
   val totalPrice: Double = units * unitPrice
 }
 
 object Order {
-  implicit val lessThanOrdering = Ordering.fromLessThan[Order]{ (x, y) =>
+  implicit val lessThanOrdering: Ordering[Order] = Ordering.fromLessThan[Order]{ (x, y) =>
     x.totalPrice < y.totalPrice
   }
 }
 
 object OrderUnitPriceOrdering {
-  implicit val unitPriceOrdering = Ordering.fromLessThan[Order]{ (x, y) =>
+  implicit val unitPriceOrdering: Ordering[Order] = Ordering.fromLessThan[Order]{ (x, y) =>
     x.unitPrice < y.unitPrice
   }
 }
 
 object OrderUnitsOrdering {
-  implicit val unitsOrdering = Ordering.fromLessThan[Order]{ (x, y) =>
+  implicit val unitsOrdering: Ordering[Order] = Ordering.fromLessThan[Order]{ (x, y) =>
     x.units < y.units
   }
 }
