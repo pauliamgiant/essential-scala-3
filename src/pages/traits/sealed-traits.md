@@ -4,7 +4,7 @@ In many cases we can enumerate all the possible classes that can extend a trait.
 
 We create a sealed trait by simply writing `sealed` in front of our trait declaration:
 
-```tut:book:silent
+```scala mdoc:silent
 import java.util.Date
 
 sealed trait Visitor {
@@ -16,12 +16,12 @@ sealed trait Visitor {
 
 When we mark a trait as `sealed` we *must* define all of its subtypes in the same file. Once the trait is sealed, the compiler knows the complete set of subtypes and will warn us if a pattern matching expression is missing a case:
 
-```tut:invisible
+```scala mdoc:invisible
 final case class User(id: String, createdAt: Date, override val age: Long) extends Visitor
 final case class Anonymous(id: String, createdAt: Date) extends Visitor
 ```
 
-```tut:book:fail
+```scala mdoc
 def missingCase(v: Visitor) =
   v match {
     case User(_, _, _) => "Got a user"
@@ -86,7 +86,7 @@ Let's revisit the `Shapes` example from Section [@sec:traits:shaping-up-2].
 
 First make `Shape` a sealed trait. Then write a singleton object called `Draw` with an `apply` method that takes a `Shape` as an argument and returns a description of it on the console. For example:
 
-```tut:book:invisible
+```scala mdoc:invisible
 trait Shape {
   def sides: Int
   def perimeter: Double
@@ -131,7 +131,7 @@ object Draw {
 }
 ```
 
-```tut:book
+```scala mdoc
 Draw(Circle(10))
 Draw(Rectangle(3, 4))
 ```
@@ -139,7 +139,7 @@ Draw(Rectangle(3, 4))
 Finally, verify that the compiler complains when you comment out a `case` clause.
 
 <div class="solution">
-```tut:book:silent
+```scala
 object Draw {
   def apply(shape: Shape): String = shape match {
     case Rectangle(width, height) =>
@@ -157,7 +157,7 @@ object Draw {
 
 #### The Color and the Shape
 
-```tut:book:invisible
+```scala mdoc:reset:invisible
 // Shape uses Color so we define Color first:
 sealed trait Color {
   // We decided to store RGB values as doubles between 0.0 and 1.0.
@@ -279,7 +279,7 @@ Finally, update the code for `Draw.apply` to print the colour of the argument as
 
  - if the argument is a predefined colour, print that colour by name:
 
-```tut:book
+```scala mdoc
 Draw(Circle(10, Yellow))
 ```
 
@@ -315,7 +315,7 @@ One solution to this exercise is presented below. Remember that a lot of the imp
 
  - The whole codebase should compile and produce sensible values when tested!
 
-```tut:book:silent
+```scala mdoc:reset:silent
 // Shape uses Color so we define Color first:
 sealed trait Color {
   // We decided to store RGB values as doubles between 0.0 and 1.0.
@@ -422,7 +422,7 @@ object Draw {
 }
 ```
 
-```tut:book
+```scala mdoc
 // Test code:
 
 Draw(Circle(10, Pink))
@@ -438,11 +438,11 @@ Good Scala developers don't just use types to model data. Types are a great way 
 
 Dividing by zero is a tricky problem---it can lead to exceptions. The JVM has us covered as far as floating point division is concerned but integer division is still a problem:
 
-```tut:book
+```scala mdoc
 1.0 / 0.0
 ```
 
-```tut:book:fail
+```scala mdoc:crash
 1 / 0
 ```
 
@@ -465,7 +465,7 @@ Finally, write some sample code that calls `divide`, matches on the result, and 
 <div class="solution">
 Here's the code:
 
-```tut:book:silent
+```scala mdoc:reset:silent
 sealed trait DivisionResult
 final case class Finite(value: Int) extends DivisionResult
 case object Infinite extends DivisionResult
@@ -476,7 +476,7 @@ object divide {
 }
 ```
 
-```tut:book
+```scala mdoc
 divide(1, 0) match {
   case Finite(value) => s"It's finite: ${value}"
   case Infinite      => s"It's infinite"

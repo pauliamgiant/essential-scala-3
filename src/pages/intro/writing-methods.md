@@ -28,7 +28,7 @@ assert(square(-2.0) == 4.0)
 
 With types and test cases ready we can now write the method declaration. We haven't developed the body yet so use `???`, another nifty Scala feature, in its place.
 
-```tut:book:silent
+```scala mdoc:silent
 def square(in: Double): Double =
   ???
 ```
@@ -53,7 +53,7 @@ Our next technique is to look at the type of input parameters to the method. In 
 
 We can now write our complete method as
 
-```tut:book:silent
+```scala mdoc:reset:silent
 def square(in: Double): Double =
   in * in
 ```

@@ -6,7 +6,7 @@ In this chapter we look at the fundamental building blocks of Scala programs: *e
 
 In the Scala console or worksheet enter `"Hello world!"` and press return (in the console) or save the worksheet. You should see an interaction similar to this:
 
-```tut:book
+```scala mdoc
 "Hello world!"
 ```
 
@@ -18,7 +18,7 @@ Although the output value "Hello world!" looks the same as the program that crea
 
 Let's look at a slightly more complex program
 
-```tut:book
+```scala mdoc
 "Hello world!".toUpperCase
 ```
 
@@ -36,13 +36,13 @@ Compilation is a process of checking that a program makes sense. There are two w
 
 1. It must be *syntactically correct*, meaning the parts of the program must be arranged according to the grammar of the language. An example English sentence that is not syntactically correct is "on cat mat sat the". An example syntactically incorrect Scala program is
 
-```tut:book:fail
+```scala
 toUpperCase."Hello world!"
 ```
 
 2. It must *type check*, meaning it must obey certain constraints on what a sensible program is. An example English sentence that is syntactically correct but fails to make sense is "the mat sat on the cat". A simple program that would fail to type check is trying to convert a number to uppercase.
 
-```tut:book:fail
+```scala mdoc:fail
 2.toUpperCase
 ```
 
@@ -52,7 +52,7 @@ If a program passes the checks at compile-time it may then be run. This is the p
 
 Even though a program successfully compiles it can still fail at run-time. Dividing an integer by zero causes a run-time error in Scala.
 
-```tut:book:fail
+```scala mdoc:crash
 2 / 0
 ```
 
@@ -69,7 +69,7 @@ The defining characteristic of an expression is that it evaluates to a value. A 
 
 We compute with values. They are entities that our programs can pass around and manipulate. For example, to compute the minimum of two numbers we might write a program like
 
-```tut:book
+```scala mdoc
 2.min(3)
 ```
 
@@ -88,7 +88,7 @@ We can show that types exist at compile-time by asking the Scala console to tell
 // Int
 ```
 
-```tut:book:fail
+```scala mdoc:crash
 2 / 0
 ```
 
@@ -120,7 +120,7 @@ Values exist in the computer's memory, and are what a running program manipulate
 
 Using the Scala console or worksheet, determine the type and value of the following expressions:
 
-```tut:book:silent
+```scala mdoc:silent
 1 + 2
 ```
 
@@ -128,7 +128,7 @@ Using the Scala console or worksheet, determine the type and value of the follow
 Type is `Int` and value is `3`.
 </div>
 
-```tut:book:silent
+```scala mdoc:silent
 "3".toInt
 ```
 
@@ -136,20 +136,20 @@ Type is `Int` and value is `3`.
 Type is `Int` and value is `3`.
 </div>
 
-```tut:book:fail:silent
+```scala mdoc:fail:silent
 "foo".toInt
 ```
 
 <div class="solution">
 Type is `Int`, but this one doesn't evaluate to a value---it raises an exception instead, and a raised exception is not a value. How can we tell this? We can't continue computing with the result of the expression. For example, we can't print it. Compare
 
-```tut:book
+```scala mdoc
 println("foo")
 ```
 
 and
 
-```tut:book:fail
+```scala mdoc:crash
 println("foo".toInt)
 ```
 

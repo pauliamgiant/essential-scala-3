@@ -15,20 +15,20 @@ The way we write this is to use a case class. We've already done this many times
 
 If `A` has a `b` (with type `B`) and a `c` (with type `C`) write
 
-```tut:invisible
+```scala mdoc:reset:invisible
 type A = Any
 type B = Any
 type C = Any
 type D = Any
 ```
 
-```tut:book:silent
+```scala
 case class A(b: B, c: C)
 ```
 
 or
 
-```tut:book:silent
+```scala
 trait A {
   def b: B
   def c: C
@@ -47,7 +47,7 @@ We write this using the sealed trait / final case class pattern.
 
 If `A` is a `B` or `C` write
 
-```tut:book:silent
+```scala mdoc:reset:silent
 sealed trait A
 final case class B() extends A
 final case class C() extends A
@@ -76,7 +76,7 @@ What about the missing two patterns?
 
 The "is-a and" pattern means that `A` is a `B` and `C`. This pattern is in some ways the inverse of the sum type pattern, and we can implement it as
 
-```tut:book:silent
+```scala mdoc:reset:silent
 trait B
 trait C
 trait A extends B with C
@@ -89,7 +89,7 @@ In Scala a trait can extend as many traits as we like using the `with` keyword l
 
 The "has-a or" patterns means that `A` has a `B` or `C`. There are two ways we can implement this. We can say that `A` has a `d` of type `D`, where `D` is a `B` or `C`. We can mechanically apply our two patterns to implement this:
 
-```tut:book:silent
+```scala
 trait A {
   def d: D
 }
@@ -100,7 +100,7 @@ final case class C() extends D
 
 Alternatively we could implement this as `A` is a `D` or `E`, and `D` has a `B` and `E` has a `C`. Again this translates directly into code
 
-```tut:book:silent
+```scala
 sealed trait A
 final case class D(b: B) extends A
 final case class E(c: C) extends A
@@ -119,7 +119,7 @@ A traffic light is red, green, or yellow. Translate this description into Scala 
 <div class="solution">
 This is a direct application of the sum type pattern.
 
-```tut:book:silent
+```scala mdoc:reset:silent
 sealed trait TrafficLight
 case object Red extends TrafficLight
 case object Green extends TrafficLight
@@ -134,7 +134,7 @@ As there are no fields or methods on the three cases, and thus there is no need 
 A calculation may succeed (with an `Int` result) or fail (with a `String` message). Implement this.
 
 <div class="solution">
-```tut:book:silent
+```scala mdoc:reset:silent
 sealed trait Calculation
 final case class Success(result: Int) extends Calculation
 final case class Failure(reason: String) extends Calculation
@@ -148,7 +148,7 @@ Bottled water has a size (an `Int`), a source (which is a well, spring, or tap),
 <div class="solution">
 Crank the handle on the product and sum type patterns.
 
-```tut:book:silent
+```scala mdoc:reset:silent
 sealed trait Source
 case object Well extends Source
 case object Spring extends Source

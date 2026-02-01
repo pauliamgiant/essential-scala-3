@@ -13,13 +13,13 @@ We have some special terminology for the data and operations of an object. The o
 
 We interact with objects by *calling* methods[^patterns]. We have already seen some examples of calling methods. For example, we have seen we can get the uppercase version of a `String` by calling its `toUpperCase` method.
 
-```tut:book
+```scala mdoc
 "hello".toUpperCase
 ```
 
 Some methods accept *parameters* or *arguments*, which control how the method works. The `take` method, for example, takes characters from a `String`. We must pass a parameter to `take` to specify how many characters we want.
 
-```tut:book
+```scala mdoc
 "abcdef".take(3)
 "abcdef".take(2)
 ```
@@ -48,13 +48,13 @@ where
 
 A method call is an expression, and thus evaluates to an object. This means we can chain method calls together to make more complex programs:
 
-```tut:book
+```scala mdoc
 "hello".toUpperCase.toLowerCase
 ```
 
 In what order are the various expressions in a method call evaluated? Method parameters are evaluated left-to-right, before the method is called. So in the expression
 
-```tut:book
+```scala mdoc
 "Hello world!".take(2 + 3)
 ```
 
@@ -64,14 +64,14 @@ the expression `"Hello world!"` is evaluated first, then `2 + 3` (which requires
 
 Because every value in Scala is an object we can also call methods on primitive types such as `Int` and `Boolean`. This is in contrast to Java where `int` and `boolean` are not objects:
 
-```tut:book
+```scala mdoc
 123.toShort // this is how we define a `Short` in Scala
 123.toByte // this is how we define a `Byte`
 ```
 
 But if an `Int` is an object, what are the basic mathematical operators such as `+` and `-`? Are they also methods? Yes---Scala methods can have symbolic names as well as alphanumeric ones!
 
-```tut:book
+```scala mdoc
 43 - 3 + 2
 43.-(3).+(2)
 ```
@@ -88,7 +88,7 @@ Note that `a b c d e` is equivalent to `a.b(c).d(e)`, not `a.b(c, d, e)`.
 
 We can use *infix operator notation* with any method that takes one parameter, regardless of whether it has a symbolic or alphanumeric name:
 
-```tut:book:silent
+```scala mdoc:silent
 "the quick brown fox" split " "
 // res: Array[String] = Array(the, quick, brown, fox)
 ```
@@ -97,7 +97,7 @@ Infix notation is one of several syntactic shorthands that allow us to write sim
 
 A question poses itself---what precedence rules should we associate with infix operators? Scala uses a set of [precedence rules][link-precedence-rules] derived from the identifiers we use as method names that follow our intuitive understanding from mathematics and logic:
 
-```tut:book
+```scala mdoc
 2 * 3 + 4 * 5
 (2 * 3) + (4 * 5)
 2 * (3 + 4) * 5
@@ -129,24 +129,24 @@ As we will see, Scala's focus on programming with expressions allows us to write
 
 Rewrite in operator-style
 
-```tut:book
+```scala mdoc
 "foo".take(1)
 ```
 
 <div class="solution">
-```tut:book
+```scala mdoc
 "foo" take 1
 ```
 </div>
 
 Rewrite in method call style
 
-```tut:book
+```scala mdoc
 1 + 2 + 3
 ```
 
 <div class="solution">
-```tut:book
+```scala mdoc
 1.+(2).+(3)
 ```
 </div>
@@ -155,7 +155,7 @@ Rewrite in method call style
 
 What is the difference between the following expressions? What are the similarities?
 
-```tut:book:silent
+```scala mdoc:silent
 1 + 2 + 3
 
 6

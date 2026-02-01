@@ -6,7 +6,7 @@ When we write an object literal we use a *declaration*, which is a different kin
 
 We can declare an empty object as follows:
 
-```tut:book:silent
+```scala mdoc:silent
 object Test {}
 ```
 
@@ -14,7 +14,7 @@ This is not an expression---it does not evaluate to a value. Rather, it binds a 
 
 Once we have bound the name `Test` we can use it in expressions, where it evaluates to the object we have declared. The simplest expression is just the name on its own, which evaluates to the value itself:
 
-```tut:book
+```scala mdoc
 Test
 ```
 
@@ -28,10 +28,17 @@ Empty objects are not so useful. Within the body (between the braces) of an obje
 
 The syntax for declaring an object is
 
+**Scala 2**
 ```scala
 object name {
   declarationOrExpression ...
 }
+```
+
+**Scala 3**
+```scala
+object name:
+  declarationOrExpression ...
 ```
 
 where
@@ -47,28 +54,43 @@ Let's see how to declare methods and fields.
 
 We interact with objects via methods so let's create an object with a method.
 
-```tut:book:silent
+**Scala 2**
+```scala mdoc:silent
 object Test2 {
   def name: String = "Probably the best object ever"
 }
 ```
 
+**Scala 3**
+```scala mdoc:reset:silent
+object Test2:
+  def name: String = "Probably the best object ever"
+```
+
 Here we've create a method called `name`. We can call it in the usual way.
 
-```tut:book
+```scala mdoc
 Test2.name
 ```
 
 Here's an object with a more complex method:
 
-```tut:book:silent
+**Scala 2**
+```scala mdoc:silent
 object Test3 {
   def hello(name: String) =
     "Hello " + name
 }
 ```
 
-```tut:book
+**Scala 3**
+```scala mdoc:reset:silent
+object Test3:
+  def hello(name: String) =
+    "Hello " + name
+```
+
+```scala mdoc
 Test3.hello("Noel")
 ```
 
@@ -113,7 +135,8 @@ The return value of the method is determined by evaluating the body---there is n
 
 An object can also contain other objects, called *fields*. We introduce these using the keywords `val` or `var`, which look similar to `def`:
 
-```tut:book:silent
+**Scala 2**
+```scala mdoc:silent
 object Test4 {
   val name = "Noel"
   def hello(other: String): String =
@@ -121,7 +144,15 @@ object Test4 {
 }
 ```
 
-```tut:book
+**Scala 3**
+```scala mdoc:reset:silent
+object Test4:
+  val name = "Noel"
+  def hello(other: String): String =
+    name + " says hi to " + other
+```
+
+```scala mdoc
 Test4.hello("Dave")
 ```
 
@@ -158,7 +189,8 @@ You might wonder why we need fields when we can have methods of no arguments tha
 
 Here's an object that shows the difference:
 
-```tut:book:silent
+**Scala 2**
+```scala mdoc:silent
 object Test7 {
    val simpleField = {
      println("Evaluating simpleField")
@@ -171,6 +203,18 @@ object Test7 {
 }
 ```
 
+**Scala 3**
+```scala mdoc:reset:silent
+object Test7:
+   val simpleField = 
+     println("Evaluating simpleField")
+     42
+   
+   def noParameterMethod = 
+     println("Evaluating noParameterMethod")
+     42
+   
+```
 Here we have used a `println` expression to print something to the console, and a block expression (expressions surrounded by `{` and `}`) to group expressions. We'll see more about block expressions in the next section.
 
 Notice how the console says we've defined an object, but it hasn't run either of our `println` statements? This is due to a quirk of Scala and Java called *lazy loading*.
@@ -179,7 +223,7 @@ Objects and classes (which we'll see later) aren't loaded until they are referen
 
 Let's force Scala to evaluate our object body by referencing `Test7` in an expression:
 
-```tut:book
+```scala mdoc
 Test7
 ```
 
@@ -187,14 +231,14 @@ When the object is first loaded, Scala runs through its definitions and calculat
 
 *The body expression of a field is run only once* after which the final value is stored in the object. The expression is never evaluated again---notice the lack of `println` output below.
 
-```tut:book
+```scala mdoc
 Test7.simpleField
 Test7.simpleField
 ```
 
 The body of a method, on the other hand, is evaluated every time we call the method---notice the repeated println output below.
 
-```tut:book
+```scala mdoc
 Test7.noParameterMethod
 Test7.noParameterMethod
 ```
@@ -205,10 +249,17 @@ In this section we have created our own objects, given them methods and fields, 
 
 We have seen the syntax for declaring objects
 
+**Scala 2**
 ```scala
 object name {
   declarationOrExpression ...
 }
+```
+
+**Scala 3**
+```scala
+object name:
+  declarationOrExpression ...
 ```
 
 for declaring methods
@@ -249,7 +300,8 @@ The table below shows the names, colour, and favourite foods of three cats. Defi
 
 This is just a finger exercise to get you used to the syntax of defining objects. You should have a solution similar to the code below.
 
-```tut:book:silent
+**Scala 2**
+```scala mdoc:silent
 object Oswald {
   val colour: String = "Black"
   val food: String = "Milk"
@@ -266,6 +318,26 @@ object Quentin {
 }
 ```
 
+**Scala 3**
+```scala mdoc:reset:silent
+object Oswald:
+  val colour: String = "Black"
+  val food: String = "Milk"
+
+object Henderson:
+  val colour: String = "Ginger"
+  val food: String = "Chips"
+
+object Quentin:
+  val colour: String = "Tabby and white"
+  val food: String = "Curry"
+```
+
+```scala mdoc
+Oswald.colour
+Henderson.food
+Quentin.food
+```
 </div>
 
 
@@ -276,11 +348,19 @@ Define an object called `calc` with a method `square` that accepts a `Double` as
 <div class="solution">
 Here is the solution. `cube(x)` calls `square(x)` and multiplies its value by `x` one more time. The return type of each method is inferred by the compiler as `Double`.
 
-```tut:book:silent
+**Scala 2**
+```scala mdoc:silent
 object calc {
   def square(x: Double) = x * x
   def cube(x: Double) = x * square(x)
 }
+```
+
+**Scala 3**
+```scala mdoc:reset:silent
+object calc:
+  def square(x: Double) = x * x
+  def cube(x: Double) = x * square(x)
 ```
 </div>
 
@@ -291,7 +371,8 @@ Copy and paste `calc` from the previous exercise to create a `calc2` that is gen
 <div class="solution">
 Like Java, Scala can't generalize particularly well across `Ints` and `Doubles`. However, it will allow us to *"overload"* the `square` and `cube` methods by defining them for each type of parameter.
 
-```tut:book:silent
+**Scala 2**
+```scala mdoc:silent
 object calc2 {
   def square(value: Double) = value * value
   def cube(value: Double) = value * square(value)
@@ -301,9 +382,18 @@ object calc2 {
 }
 ```
 
+**Scala 3**
+```scala mdoc:silent
+object calc2Scala3:
+  def square(x: Double) = x * x
+  def cube(x: Double) = x * square(x)
+
+  def square(x: Int) = x * x
+  def cube(x: Int) = x * square(x)
+```
 "Overloaded" methods are ones we have defined several times for different argument types. Whenever we call an overloaded method type, Scala automatically determines which variant we need by looking at the type of the argument.
 
-```tut:book
+```scala mdoc
 calc2.square(1.0) // calls the `Double` version of `square`
 calc2.square(1)   // calls the `Int` version `square`
 ```
@@ -312,13 +402,13 @@ The Scala compiler is able to insert automatic conversions between numeric types
 
 Conversions in the opposite direction, from high precision to low precision, are not handled automatically because they can lead to rounding errors. For example, the code below will not compile because `x` is an `Int` and its body expression is a `Double` (try it and see)!
 
-```tut:book:fail
+```scala mdoc:fail
 val x: Int = calc.square(2) // compile error
 ```
 
 You can manually use the `toInt` method of `Double` to work around this:
 
-```tut:book
+```scala mdoc
 val x: Int = calc.square(2).toInt // toInt rounds down
 ```
 
@@ -335,7 +425,8 @@ The fact that string concatenation and numeric addition share the same `+` metho
 
 When entered on the console, what does the following program output, and what is the type and value of the final expression? Think carefully about the types, dependencies, and evaluation behaviour of each field and method.
 
-```tut:book:silent
+**Scala 2**
+```scala mdoc:silent
 object argh {
   def a = {
     println("a")
@@ -355,6 +446,21 @@ object argh {
 }
 ```
 
+**Scala 3**
+```scala mdoc:reset:silent
+object argh:
+  def a = 
+    println("a")
+    1
+  val b = 
+    println("b")
+    a + 2
+  def c = 
+    println("c")
+    a
+    b + "c"
+```
+
 ```scala
 argh.c + argh.b + argh.a
 ```
@@ -362,7 +468,7 @@ argh.c + argh.b + argh.a
 <div class="solution">
 Here is the solution:
 
-```tut:book
+```scala mdoc
 argh.c + argh.b + argh.a
 ```
 
@@ -412,10 +518,12 @@ Define an object called `person` that contains fields called `firstName` and `la
 What is the type of the `greet` method? Can we use this method to greet other objects?
 
 <div class="solution">
-```tut:book:silent
+
+**Scala 2**
+```scala mdoc:silent
 object person {
-  val firstName = "Dave"
-  val lastName = "Gurnell"
+  val firstName = "Roman"
+  val lastName = "Swan"
 }
 
 object alien {
@@ -424,7 +532,18 @@ object alien {
 }
 ```
 
-```tut:book
+**Scala 3**
+```scala mdoc:reset:silent
+object person:
+  val firstName = "Roman"
+  val lastName = "Swan"
+
+object alien:
+  def greet(p: person.type) =
+    "Greetings, " + p.firstName + " " + p.lastName
+```
+
+```scala mdoc
 alien.greet(person)
 ```
 
@@ -440,37 +559,51 @@ Are methods values? Are they expressions? Why might this be the case?
 <div class="solution">
 First let's deal with the equivalence between methods and expressions. As we know, expressions are program fragments that produce values. A simple test of whether something is an expression is to see if we can assign it to a field.
 
-```tut:book:silent
+**Scala 2**
+```scala mdoc:silent
 object calculator {
   def square(x: Int) = x * x
 }
 ```
 
-```tut:book:fail
+**Scala 3**
+```scala mdoc:reset:silent
+object calculator:
+  def square(x: Int) = x * x
+```
+
+```scala
 val someField = calculator.square
 ```
 
 Although we don't understand this error message fully yet (we shall learn about "partially applied functions" later), it does show us that `square` *is not an expression*. However, a *call* to `square` *does* yield a value:
 
-```tut:book
+```scala mdoc
 val someField = calculator.square(2)
 ```
 
 A method with no arguments looks like it behaves differently. However, this is a trick of the syntax.
 
-```tut:book:silent
+**Scala 2**
+```scala mdoc:silent
 object clock {
   def time = System.currentTimeMillis
 }
 ```
 
-```tut:book
+**Scala 3**
+```scala mdoc:reset:silent
+object clock:
+  def time = System.currentTimeMillis
+```
+
+```scala mdoc
 val now = clock.time
 ```
 
 Although it looks like `now` is being assigned `clock.time` as a value, it is actually being assigned the *value returned by calling `clock.time`*. We can demonstrate this by calling the method again:
 
-```tut:book
+```scala mdoc
 val aBitLaterThanNow = clock.time
 ```
 

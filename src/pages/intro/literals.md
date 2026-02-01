@@ -2,7 +2,7 @@
 
 We have already covered some of Scala's basic types. In this section we're going to round out that knowledge by covering all of Scala's *literal expressions*. A literal expression represents a fixed value that stands "for itself". Here's an example:
 
-```tut:book
+```scala mdoc
 42
 ```
 
@@ -16,7 +16,7 @@ If you have prior programming experience, particularly Java experience, the lite
 
 Numbers share the same types available in Java: `Int` for 32-bit integers, `Double` for 64-bit floating point, `Float` for 32-bit floating point, and `Long` for 64-bit integers.
 
-```tut:book
+```scala mdoc
 42
 42.0
 42.0f
@@ -29,7 +29,7 @@ Scala also has 16-bit `Short` integers and 8-bit `Byte`s, but there is no litera
 
 Booleans are exactly the same as Java: `true` or `false`.
 
-```tut:book
+```scala mdoc
 true
 false
 ```
@@ -38,7 +38,7 @@ false
 
 `Chars` are 16-bit Unicode values written as a single character enclosed in single quotes.
 
-```tut:book
+```scala mdoc
 'a'
 ```
 
@@ -54,7 +54,7 @@ In Scala all of these types act like objects with methods and fields. However, o
 
 Strings are exactly Java's strings, and are written the same way.
 
-```tut:book
+```scala mdoc
 "this is a string"
 "the\nusual\tescape characters apply"
 ```
@@ -63,7 +63,7 @@ Strings are exactly Java's strings, and are written the same way.
 
 Null is the same as Java, though not used nearly as often. Scala's `null` also has its own type: `Null`.
 
-```tut:book
+```scala
 null
 ```
 
@@ -81,7 +81,7 @@ Later we will see that Scala has the means to define optional values that *are* 
 
 Unit, written `()`, is the Scala equivalent of Java's `void`. Unit is the result of expressions that evaluate to no interesting value, such as printing to standard output using `println`. The console doesn't print unit but we can ask for the type of an expression to see that unit is in fact the result of some expressions.
 
-```tut:book
+```scala mdoc
 ()
 ```
 
@@ -90,7 +90,7 @@ Unit, written `()`, is the Scala equivalent of Java's `void`. Unit is the result
 // Unit
 ```
 
-```tut:book
+```scala mdoc
 println("something")
 ```
 
@@ -115,7 +115,7 @@ In the next section we will learn how to define our own object literals.
 
 What are the values and types of the following Scala literals?
 
-```tut:book:silent
+```scala mdoc:silent
 42
 
 true
@@ -135,7 +135,7 @@ This exercise just gives you some experience using the Scala console or Workshee
 
 What is the difference between the following literals? What is the type and value of each?
 
-```tut:book:silent
+```scala mdoc:silent
 'a'
 
 "a"
@@ -149,7 +149,7 @@ The first is a literal `Char` and the second is a literal `String`.
 
 What is the difference between the following expressions? What is the type and value of each?
 
-```tut:book:silent
+```scala mdoc:silent
 "Hello world!"
 
 println("Hello world!")

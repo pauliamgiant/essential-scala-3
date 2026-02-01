@@ -6,8 +6,14 @@ We have almost finished our basic introduction to Scala. In this section we are 
 
 A conditional allows us to choose an expression to evaluate based on some condition. For example, we can choose a string based on which of two numbers is the smallest.
 
-```tut:book
+**Scala 2**
+```scala mdoc
 if(1 < 2) "Yes" else "No"
+```
+
+**Scala 3**
+```scala mdoc
+if 1 < 2 then "Yes" else "No"
 ```
 
 <div class="callout callout-info">
@@ -18,8 +24,13 @@ Scala's `if` statement has the same syntax as Java's. One important difference i
 
 The expression that is not selected does not get evaluated. This is apparent if we use an expression with a side-effect.
 
-```tut:book
+**Scala 2**
+```scala mdoc
 if(1 < 2) println("Yes") else println("No")
+```
+**Scala 3**
+```scala mdoc
+if 1 < 2 then println("Yes") else println("No")
 ```
 
 We can tell the expression `println("No")` is not evaluated because `No` is not output to the console.
@@ -29,11 +40,19 @@ We can tell the expression `println("No")` is not evaluated because `No` is not 
 
 The syntax for a conditional expression is
 
+**Scala 2**
 ```scala
 if(condition)
   trueExpression
 else
   falseExpression
+```
+
+**Scala 3**
+```scala
+if condition 
+then trueExpression 
+else falseExpression
 ```
 
 where
@@ -48,7 +67,7 @@ where
 
 Blocks are expressions that allow us to sequence computations together. They are written as a pair of braces containing sub-expressions separated by semicolons or newlines.
 
-```tut:book:fail
+```scala mdoc
 { 1; 2; 3 }
 ```
 
@@ -60,7 +79,7 @@ Why execute `1` and `2` if we're going to throw their values away? This is a goo
 
 One reason to use a block is to use code that produces side-effects before calculating a final value:
 
-```tut:book
+```scala mdoc
 {
   println("This is a side-effect")
   println("This is a side-effect as well")
@@ -70,7 +89,7 @@ One reason to use a block is to use code that produces side-effects before calcu
 
 We can also use a block when we want to name intermediate results, such as
 
-```tut:book:silent
+```scala mdoc:silent
 def name: String = {
   val title = "Professor"
   val name = "Funkenstein"
@@ -78,8 +97,22 @@ def name: String = {
 }
 ```
 
-```tut:book
+```scala mdoc
 name
+```
+
+**Scala 3**
+Blocks can also be used in Scala 3 by using significant indentation to define the block.
+
+```scala mdoc:silent
+def scala3Name: String = 
+  val title = "Professor"
+  val name = "Funkenstein"
+  title + " " + name
+```
+
+```scala mdoc
+scala3Name
 ```
 
 <div class="callout callout-info">
@@ -105,11 +138,17 @@ where
 
 Conditional expressions allow us to choose an expression to evaluate based on a `Boolean` condition. The syntax is
 
+**Scala 2**
 ```scala
 if(condition)
   trueExpression
 else
   falseExpression
+```
+
+**Scala 3**
+```scala
+if condition then trueExpression else falseExpression
 ```
 
 A conditional, being an expression, has a type and evaluates to an object.
@@ -133,15 +172,27 @@ The type and value of a block is that of the last expression in the block.
 
 What is the type and value of the following conditional?
 
-```tut:book:silent
+**Scala 2**
+```scala mdoc:silent
 if(1 > 2) "alien" else "predator"
+```
+
+**Scala 3**
+```scala mdoc:silent
+if 1 > 2 then "alien" else "predator"
 ```
 
 <div class="solution">
 It's a `String` with value `"predator"`. Predators are clearly best:
 
-```tut:book
+**Scala 2**
+```scala mdoc
 if(1 > 2) "alien" else "predator"
+```
+
+**Scala 3**
+```scala mdoc:silent
+if 1 > 2 then "alien" else "predator"
 ```
 
 The type is determined by the upper bound of the types in the *then* and *else* expressions. In this case both expressions are `Strings` so the result is also a `String`.
@@ -153,14 +204,14 @@ The value is determined at runtime. `2` is greater than `1` so the conditional e
 
 What about this conditional?
 
-```tut:book:silent
+```scala mdoc:silent
 if(1 > 2) "alien" else 2001
 ```
 
 <div class="solution">
 It's a value of type `Any` with value `2001`:
 
-```tut:book
+```scala mdoc
 if(1 > 2) "alien" else 2001
 ```
 
@@ -175,14 +226,14 @@ We'll learn more about `Any` in the following sections. Java programmers shouldn
 
 What about this conditional?
 
-```tut:book:silent
+```scala mdoc:silent
 if(false) "hello"
 ```
 
 <div class="solution">
 The result type and value are `Any` and `()` respectively:
 
-```tut:book
+```scala mdoc
 if(false) "hello"
 ```
 
