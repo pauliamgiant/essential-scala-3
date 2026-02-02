@@ -45,7 +45,7 @@ scalacOptions ++= Seq(
   "-feature"
 )
 
-resolvers ++= Seq(Resolver.sonatypeRepo("snapshots"))
+resolvers ++= Resolver.sonatypeOssRepos("snapshots")
 
 libraryDependencies ++= Seq()
 

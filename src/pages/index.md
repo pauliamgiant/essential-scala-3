@@ -25,9 +25,10 @@ References to external resources are written as [hyperlinks][link-underscore]. R
 Source code blocks are written as follows. Syntax is highlighted appropriately where applicable:
 
 ```scala
-object MyApp extends App {
-  println("Hello world!") // Print a fine message to the user!
-}
+object MyApp:
+  def main(args: Array[String]): Unit =
+    println("Hello world!") // Print a fine message to the user!
+
 ```
 
 Some lines of program code are too wide to fit on the page. In these cases we use a *continuation character* (curly arrow) to indicate that longer code should all be written on one line. For example, the following code:

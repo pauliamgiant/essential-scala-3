@@ -11,14 +11,12 @@ case class Person(firstName: String, lastName: String)
 Now imagine we wanted to implement a `Stormtrooper` that is looking for members of the rebellion. We could use pattern matching like this:
 
 ```scala mdoc:silent
-object Stormtrooper {
+object Stormtrooper:
   def inspect(person: Person): String =
-    person match {
+    person match
       case Person("Luke", "Skywalker") => "Stop, rebel scum!"
       case Person("Han", "Solo") => "Stop, rebel scum!"
       case Person(first, last) => s"Move along, $first"
-    }
-}
 ```
 
 Notice the syntax for a pattern (`Person("Luke", "Skywalker")`) matches the syntax for constructing the object the pattern matches (`Person("Luke", "Skywalker")`).
@@ -36,11 +34,10 @@ Stormtrooper.inspect(Person("Han", "Solo"))
 The syntax of a pattern matching expression is
 
 ```scala
-expr0 match {
+expr0 match
   case pattern1 => expr1
   case pattern2 => expr2
   ...
-}
 ```
 
 where
@@ -89,11 +86,10 @@ Case classes allow a new form of interaction, called *pattern matching*. Pattern
 The syntax for pattern matching is
 
 ```scala
-expr0 match {
+expr0 match
   case pattern1 => expr1
   case pattern2 => expr2
   ...
-}
 ```
 
 A pattern can be one of
@@ -117,24 +113,20 @@ case class Cat(name: String, colour: String, food: String)
 ```
 
 ```scala
-object ChipShop {
+object ChipShop:
   def willServe(cat: Cat): Boolean =
-    cat match {
+    cat match
       case Cat(???, ???, ???) => ???
-    }
-}
 ```
 
 As the return type is `Boolean` we know we need at least two cases, one for true and one for false. The text of the exercise tells us what they should be: cats that prefer chips, and all other cats. We can implement this with a literal pattern and an `_` pattern.
 
 ```scala mdoc:silent
-object ChipShop {
+object ChipShop:
   def willServe(cat: Cat): Boolean =
-    cat match {
+    cat match
       case Cat(_, _, "Chips") => true
       case Cat(_, _, _) => false
-    }
-}
 ```
 </div>
 
@@ -145,14 +137,12 @@ In this exercise we're going to write a simulator of my Dad, the movie critic. I
 
 <div class="solution">
 ```scala
-object Dad {
+object Dad:
   def rate(film: Film): Double =
-    film match {
+    film match
       case Film(_, _, _, Director("Clint", "Eastwood", _)) => 10.0
       case Film(_, _, _, Director("John", "McTiernan", _)) => 7.0
       case _ => 3.0
-    }
-}
 ```
 
 Pattern matching is becoming quite verbose in this case. Later on we'll learn how we can use pattern matching to match a particular value, called a *constant pattern*.

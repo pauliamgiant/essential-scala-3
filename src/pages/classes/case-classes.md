@@ -5,15 +5,14 @@
 Case classes are created simply by prepending a class definition with the keyword `case`:
 
 ```scala mdoc:silent
-case class Person(firstName: String, lastName: String) {
+case class Person(firstName: String, lastName: String):
   def name = firstName + " " + lastName
-}
 ```
 
 Whenever we declare a case class, Scala automatically generates a *class and companion object*:
 
 ```scala mdoc
-val dave = new Person("Dave", "Gurnell") // we have a class
+val dave = Person("Dave", "Gurnell") // we have a class
 Person // and a companion object too
 ```
 
@@ -38,8 +37,8 @@ dave
    This makes it easy to use case classes with collections like `Lists`, `Sets` and `Maps`. It also means we can compare objects on the basis of their contents rather than their reference identity:
 
 ```scala mdoc
-new Person("Noel", "Welsh").equals(new Person("Noel", "Welsh"))
-new Person("Noel", "Welsh") == new Person("Noel", "Welsh")
+Person("Noel", "Welsh").equals(Person("Noel", "Welsh"))
+Person("Noel", "Welsh") == Person("Noel", "Welsh")
 ```
 
 4. *A `copy` method* that creates a new object with the same field values as the current one:
@@ -66,7 +65,7 @@ Scala's `==` operator is different from Java's---it delegates to `equals` rather
 Scala has an operator called `eq` with the same behaviour as Java's `==`. However, it is rarely used in application code:
 
 ```scala mdoc
-new Person("Noel", "Welsh") eq (new Person("Noel", "Welsh"))
+Person("Noel", "Welsh") eq (Person("Noel", "Welsh"))
 dave eq dave
 ```
 </div>
@@ -90,9 +89,8 @@ Finally, the companion object also contains code to implement an *extractor patt
 The syntax to declare a case class is
 
 ```scala
-case class Name(parameter: type, ...) {
+case class Name(parameter: type, ...):
   declarationOrExpression ...
-}
 ```
 
 where
@@ -108,11 +106,10 @@ where
 A final note. If you find yourself defining a case class with no constructor arguments you can instead a define a *case object*. A case object is defined just like a regular singleton object, but has a more meaningful `toString` method and extends the `Product` and `Serializable` traits:
 
 ```scala mdoc:silent
-case object Citizen {
+case object Citizen:
   def firstName = "John"
   def lastName  = "Doe"
   def name = firstName + " " + lastName
-}
 ```
 
 ```scala mdoc
@@ -126,9 +123,8 @@ Case classes are the *bread and butter of Scala data types*. Use them, learn the
 The syntax for declaring a case class is the same as for declaring a class, but with `case` appended
 
 ```scala
-case class Name(parameter: type, ...) {
+case class Name(parameter: type, ...):
   declarationOrExpression ...
-}
 ```
 
 
@@ -161,42 +157,37 @@ The same can't always be said for code, but in this case we can get rid of a lot
 Case classes provide our `copy` methods and our `apply` methods and remove the need to write val` before each constructor argument. The final codebase looks like this:
 
 ```scala mdoc:silent
-case class Director(firstName: String, lastName: String, yearOfBirth: Int) {
+case class Director(firstName: String, lastName: String, yearOfBirth: Int):
   def name: String =
     s"$firstName $lastName"
-}
 
-object Director {
+object Director:
   def older(director1: Director, director2: Director): Director =
-    if (director1.yearOfBirth < director2.yearOfBirth) director1 else director2
-}
+    if director1.yearOfBirth < director2.yearOfBirth then director1 else director2
 
 case class Film(
   name: String,
   yearOfRelease: Int,
   imdbRating: Double,
-  director: Director) {
+  director: Director):
 
   def directorsAge =
     yearOfRelease - director.yearOfBirth
 
   def isDirectedBy(director: Director) =
     this.director == director
-}
 
-object Film {
+object Film:
   def newer(film1: Film, film2: Film): Film =
-    if (film1.yearOfRelease < film2.yearOfRelease) film1 else film2
+    if film1.yearOfRelease < film2.yearOfRelease then film1 else film2
 
-  def highestRating(film1: Film, film2: Film): Double = {
+  def highestRating(film1: Film, film2: Film): Double =
     val rating1 = film1.imdbRating
     val rating2 = film2.imdbRating
-    if (rating1 > rating2) rating1 else rating2
-  }
+    if rating1 > rating2 then rating1 else rating2
 
   def oldestDirectorAtTheTime(film1: Film, film2: Film): Director =
-    if (film1.directorsAge > film2.directorsAge) film1.director else film2.director
-}
+    if film1.directorsAge > film2.directorsAge then film1.director else film2.director
 ```
 
 Not only is this code significantly shorter, it also provides us with `equals` methods, `toString` methods, and pattern matching functionality that will set us up for later exercises.
@@ -233,18 +224,15 @@ Take our `Person` class from the previous section and turn it into a case class 
 Here's the code:
 
 ```scala mdoc:nest:silent
-case class Person(firstName: String, lastName: String) {
+case class Person(firstName: String, lastName: String):
   def name = firstName + " " + lastName
-}
 ```
 
 ```scala
-object Person {
-  def apply(name: String): Person = {
+object Person:
+  def apply(name: String): Person =
     val parts = name.split(" ")
     apply(parts(0), parts(1))
-  }
-}
 ```
 
 Even though we are defining a companion object for `Person`, Scala's case class code generator is still working as expected---it adds the auto-generated companion methods to the object we have defined, which is why we need to place the class and companion in a single compilation unit.

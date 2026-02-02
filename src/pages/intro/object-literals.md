@@ -29,9 +29,9 @@ Empty objects are not so useful. Within the body (between the braces) of an obje
 The syntax for declaring an object is
 
 ```scala
-object name {
+object name:
   declarationOrExpression ...
-}
+
 ```
 
 where
@@ -48,9 +48,9 @@ Let's see how to declare methods and fields.
 We interact with objects via methods so let's create an object with a method.
 
 ```scala mdoc:silent
-object Test2 {
+object Test2:
   def name: String = "Probably the best object ever"
-}
+
 ```
 
 Here we've create a method called `name`. We can call it in the usual way.
@@ -62,10 +62,9 @@ Test2.name
 Here's an object with a more complex method:
 
 ```scala mdoc:silent
-object Test3 {
+object Test3:
   def hello(name: String) =
     "Hello " + name
-}
 ```
 
 ```scala mdoc
@@ -114,11 +113,10 @@ The return value of the method is determined by evaluating the body---there is n
 An object can also contain other objects, called *fields*. We introduce these using the keywords `val` or `var`, which look similar to `def`:
 
 ```scala mdoc:silent
-object Test4 {
+object Test4:
   val name = "Noel"
   def hello(other: String): String =
     name + " says hi to " + other
-}
 ```
 
 ```scala mdoc
@@ -159,16 +157,14 @@ You might wonder why we need fields when we can have methods of no arguments tha
 Here's an object that shows the difference:
 
 ```scala mdoc:silent
-object Test7 {
-   val simpleField = {
+object Test7:
+   val simpleField =
      println("Evaluating simpleField")
      42
-   }
-   def noParameterMethod = {
+
+   def noParameterMethod =
      println("Evaluating noParameterMethod")
      42
-   }
-}
 ```
 
 Here we have used a `println` expression to print something to the console, and a block expression (expressions surrounded by `{` and `}`) to group expressions. We'll see more about block expressions in the next section.
@@ -206,9 +202,8 @@ In this section we have created our own objects, given them methods and fields, 
 We have seen the syntax for declaring objects
 
 ```scala
-object name {
+object name:
   declarationOrExpression ...
-}
 ```
 
 for declaring methods
@@ -250,20 +245,17 @@ The table below shows the names, colour, and favourite foods of three cats. Defi
 This is just a finger exercise to get you used to the syntax of defining objects. You should have a solution similar to the code below.
 
 ```scala mdoc:silent
-object Oswald {
+object Oswald:
   val colour: String = "Black"
   val food: String = "Milk"
-}
 
-object Henderson {
+object Henderson:
   val colour: String = "Ginger"
   val food: String = "Chips"
-}
 
-object Quentin {
+object Quentin:
   val colour: String = "Tabby and white"
   val food: String = "Curry"
-}
 ```
 
 </div>
@@ -277,10 +269,9 @@ Define an object called `calc` with a method `square` that accepts a `Double` as
 Here is the solution. `cube(x)` calls `square(x)` and multiplies its value by `x` one more time. The return type of each method is inferred by the compiler as `Double`.
 
 ```scala mdoc:silent
-object calc {
+object calc:
   def square(x: Double) = x * x
   def cube(x: Double) = x * square(x)
-}
 ```
 
 </div>
@@ -293,13 +284,12 @@ Copy and paste `calc` from the previous exercise to create a `calc2` that is gen
 Like Java, Scala can't generalize particularly well across `Ints` and `Doubles`. However, it will allow us to *"overload"* the `square` and `cube` methods by defining them for each type of parameter.
 
 ```scala mdoc:silent
-object calc2 {
+object calc2:
   def square(value: Double) = value * value
   def cube(value: Double) = value * square(value)
 
   def square(value: Int) = value * value
   def cube(value: Int) = value * square(value)
-}
 ```
 
 "Overloaded" methods are ones we have defined several times for different argument types. Whenever we call an overloaded method type, Scala automatically determines which variant we need by looking at the type of the argument.
@@ -337,23 +327,19 @@ The fact that string concatenation and numeric addition share the same `+` metho
 When entered on the console, what does the following program output, and what is the type and value of the final expression? Think carefully about the types, dependencies, and evaluation behaviour of each field and method.
 
 ```scala mdoc:silent
-object argh {
-  def a = {
+object argh:
+  def a =
     println("a")
     1
-  }
 
-  val b = {
+  val b =
     println("b")
     a + 2
-  }
 
-  def c = {
+  def c =
     println("c")
     a
     b + "c"
-  }
-}
 ```
 
 ```scala
@@ -415,15 +401,13 @@ What is the type of the `greet` method? Can we use this method to greet other ob
 <div class="solution">
 
 ```scala mdoc:silent
-object person {
+object person:
   val firstName = "Roman"
   val lastName = "Swan"
-}
 
-object alien {
+object alien:
   def greet(p: person.type) =
     "Greetings, " + p.firstName + " " + p.lastName
-}
 ```
 
 ```scala mdoc
@@ -443,9 +427,8 @@ Are methods values? Are they expressions? Why might this be the case?
 First let's deal with the equivalence between methods and expressions. As we know, expressions are program fragments that produce values. A simple test of whether something is an expression is to see if we can assign it to a field.
 
 ```scala mdoc:silent
-object calculator {
+object calculator:
   def square(x: Int) = x * x
-}
 ```
 
 ```scala
@@ -461,9 +444,8 @@ val someField = calculator.square(2)
 A method with no arguments looks like it behaves differently. However, this is a trick of the syntax.
 
 ```scala mdoc:silent
-object clock {
+object clock:
   def time = System.currentTimeMillis
-}
 ```
 
 ```scala mdoc
