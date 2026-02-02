@@ -42,3 +42,4 @@ list
 ### JavaConversions
 
 There is another set of conversions in `scala.collection.JavaConversions`, which perform conversions without needing the calls to `asJava` or `asScala`. Many people find this confusing in large systems and thus it is not recommended.
+

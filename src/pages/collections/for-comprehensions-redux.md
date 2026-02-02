@@ -19,10 +19,10 @@ Note that, unlike the normal `if` expression, an `if` clause in a generator does
 Another common problem is to iterate over two or more collections in parallel. For example, say we have the sequences `Seq(1, 2, 3)` and `Seq(4, 5, 6)` and we want to add together elements with the same index yielding `Seq(5, 7 , 9)`. If we write
 
 ```scala mdoc
-for {
+for
   x <- Seq(1, 2, 3)
   y <- Seq(4, 5, 6)
-} yield x + y
+yield x + y
 ```
 
 we see that iterations are nested. We traverse the first element from the first sequence and then all the elements of the second sequence, then the second element from the first sequence and so on.
@@ -66,9 +66,9 @@ for((a, b) <- Seq(1, 2, 3).zip(Seq(4, 5, 6))) yield a + b
 It is often useful to create an intermediate result within a sequence of generators. We can do this by inserting an assignment expression like so:
 
 ```scala mdoc
-for {
+for
   x     <- Seq(1, 2, 3)
   square = x * x
   y     <- Seq(4, 5, 6)
-} yield square * y
+yield square * y
 ```

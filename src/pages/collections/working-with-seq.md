@@ -208,6 +208,12 @@ Starting with the definition of `directors`, create a list containing the names 
 ```scala mdoc:silent
 directors.flatMap(director => director.films.map(film => film.name))
 ```
+
+or using Scala 3's simplified tuple syntax:
+
+```scala mdoc:silent
+directors.flatMap(_.films.map(_.name))
+```
 </div>
 
 *Vintage McTiernan*
@@ -220,17 +226,16 @@ Tip: you can concisely find the minimum of two numbers `a` and `b` using `math.m
 There are a number of ways to do this. We can sort the list of films and then retrieve the smallest element.
 
 ```scala mdoc:silent
-mcTiernan.films.sortWith { (a, b) =>
+mcTiernan.films.sortWith: (a, b) =>
   a.yearOfRelease < b.yearOfRelease
-}.headOption
+.headOption
 ```
 
 We can also do this by using a `fold`.
 
 ```scala mdoc:silent
-mcTiernan.films.foldLeft(Int.MaxValue) { (current, film) =>
+mcTiernan.films.foldLeft(Int.MaxValue): (current, film) =>
   math.min(current, film.yearOfRelease)
-}
 ```
 
 **A quick aside:**
@@ -258,9 +263,9 @@ Starting with `directors`, find all films sorted by descending IMDB rating:
 
 <div class="solution">
 ```scala mdoc:silent
-directors.
-  flatMap(director => director.films).
-  sortWith((a, b) => a.imdbRating > b.imdbRating)
+directors
+  .flatMap(director => director.films)
+  .sortWith((a, b) => a.imdbRating > b.imdbRating)
 ```
 </div>
 
@@ -284,11 +289,9 @@ Starting with `directors`, print the following for every film: `"Tonight only! F
 Println is used for its side-effects so we don't need to accumulate a result---we use `println` as a simple iterator:
 
 ```scala mdoc:silent
-directors.foreach { director =>
-  director.films.foreach { film =>
+directors.foreach: director =>
+  director.films.foreach: film =>
     println(s"Tonight! ${film.name} by ${director.firstName} ${director.lastName}!")
-  }
-}
 ```
 </div>
 
@@ -300,10 +303,10 @@ Finally, starting with `directors` again, find the *earliest film* by any direct
 Here's the solution written using `sortWith`:
 
 ```scala mdoc:silent
-directors.
-  flatMap(director => director.films).
-  sortWith((a, b) => a.yearOfRelease < b.yearOfRelease).
-  headOption
+directors
+  .flatMap(director => director.films)
+  .sortWith((a, b) => a.yearOfRelease < b.yearOfRelease)
+  .headOption
 ```
 
 We have to be careful in this solution to handle situations where there are no films. We can't use the `head` method, or even the `min` method we saw in the solution to *Vintage McTiernan*, because these methods throw exceptions if the sequence is empty:
@@ -346,12 +349,11 @@ Once again we follow the same pattern. The types are:
 3. Constructing the operation we want to use requires a bit more thought. The hint is to use `contains`. We can keep a sequence of the unique elements we've seen so far, and use `contains` to test if the sequence contains the current element. If we have seen the element we don't add it, otherwise we do. In code
 
 ```scala mdoc:silent
-def insert(seq: Seq[Int], elt: Int): Seq[Int] = {
- if(seq.contains(elt))
-   seq
- else
-   elt +: seq
-}
+def insert(seq: Seq[Int], elt: Int): Seq[Int] = 
+  if seq.contains(elt) then
+    seq
+  else
+    elt +: seq
 ```
 
 With these three pieces we can solve the problem. Looking at the type table we see we want a `fold`. Once again we must find the identity element. In this case the empty sequence is what we want. Why so? Think about what the answer should be if we try to find the unique elements of the empty sequence.
@@ -359,16 +361,14 @@ With these three pieces we can solve the problem. Looking at the type table we s
 Thus the solution is
 
 ```scala mdoc:nest:silent
-def insert(seq: Seq[Int], elt: Int): Seq[Int] = {
-  if(seq.contains(elt))
+def insert(seq: Seq[Int], elt: Int): Seq[Int] = 
+  if seq.contains(elt) then
     seq
   else
     elt +: seq
-}
 
-def unique(seq: Seq[Int]): Seq[Int] = {
-  seq.foldLeft(Seq.empty[Int]){ insert _ }
-}
+def unique(seq: Seq[Int]): Seq[Int] = 
+  seq.foldLeft(Seq.empty[Int])(insert(_, _))
 
 unique(Seq(1, 1, 2, 4, 3, 4))
 ```
@@ -384,17 +384,15 @@ Write a function that reverses the elements of a sequence. Your output does not 
 In this exercise, and the ones that follow, using the types are particularly important. Start by writing down the type of `reverse`.
 
 ```scala mdoc:silent
-def reverse[A, B](seq: Seq[A], f: A => B): Seq[B] = {
+def reverse[A, B](seq: Seq[A], f: A => B): Seq[B] = 
   ???
-}
 ```
 
 The hint says to use `foldLeft`, so let's go ahead and fill in the body as far as we can.
 
 ```scala
-def reverse[A](seq: Seq[A]): Seq[A] = {
-  seq.foldLeft(???){ ??? }
-}
+def reverse[A](seq: Seq[A]): Seq[A] = 
+  seq.foldLeft(???)(???)
 ```
 
 We need to work out the function to provide to `foldLeft` and the zero or identity element. For the function, the type of `foldLeft` is required to be of type `(Seq[A], A) => Seq[A]`. If we flip the types around the `+:` method on `Seq` has the right types.
@@ -407,9 +405,8 @@ For the zero element we know that it must have the same type as the return type 
 So we now we can fill in the answer.
 
 ```scala mdoc:nest:silent
-def reverse[A](seq: Seq[A]): Seq[A] = {
-  seq.foldLeft(Seq.empty[A]){ (seq, elt) => elt +: seq }
-}
+def reverse[A](seq: Seq[A]): Seq[A] = 
+  seq.foldLeft(Seq.empty[A])((seq, elt) => elt +: seq)
 ```
 </div>
 
@@ -421,17 +418,15 @@ Write `map` in terms of `foldRight`.
 Follow the same process as before: write out the type of the method we need to create, and fill in what we know. We start with `map` and `foldRight`.
 
 ```scala
-def map[A, B](seq: Seq[A], f: A => B): Seq[B] = {
-  seq.foldRight(???){ ??? }
-}
+def map[A, B](seq: Seq[A], f: A => B): Seq[B] = 
+  seq.foldRight(???)(???)
 ```
 
 As usual we need to fill in the zero element and the function. The zero element must have type `Seq[B]`, and the function has type `(A, Seq[B]) => Seq[B])`. The zero element is straightforward: `Seq.empty[B]` is the only sequence we can construct of type `Seq[B]`. For the function, we clearly have to convert that `A` to a `B` somehow. There is only one way to do that, which is with the function supplied to `map`. We then need to add that `B` to our `Seq[B]`, for which we can use the `+:` method. This gives us our final result.
 
 ```scala mdoc:nest:silent
-def map[A, B](seq: Seq[A], f: A => B): Seq[B] = {
-  seq.foldRight(Seq.empty[B]){ (elt, seq) => f(elt) +: seq }
-}
+def map[A, B](seq: Seq[A], f: A => B): Seq[B] = 
+  seq.foldRight(Seq.empty[B])((elt, seq) => f(elt) +: seq)
 ```
 </div>
 
@@ -449,29 +444,26 @@ mutable = 2
 Once again, write out the skeleton and then fill in the details using the types. We start with
 
 ```scala
-def foldLeft[A, B](seq: Seq[A], zero: B, f: (B, A) => B): B = {
-  seq.foreach { ??? }
-}
+def foldLeft[A, B](seq: Seq[A], zero: B, f: (B, A) => B): B = 
+  seq.foreach(???)
 ```
 
 Let's look at what we have need to fill in. `foreach` returns `Unit` but we need to return a `B`. `foreach` takes a function of type `A => Unit` but we only have a `(B, A) => B` available. The `A` can come from `foreach` and by now we know that the `B` is the intermediate result. We have the hint to use mutable state and we know that we need to keep a `B` around and return it, so let's fill that in.
 
 ```scala
-def foldLeft[A, B](seq: Seq[A], zero: B, f: (B, A) => B): B = {
+def foldLeft[A, B](seq: Seq[A], zero: B, f: (B, A) => B): B = 
   var result: B = ???
-  seq.foreach { (elt: A) => ??? }
+  seq.foreach((elt: A) => ???)
   result
-}
 ```
 
 At this point we can just follow the types. `result` must be initially assigned to the value of `zero` as that is the only `B` we have. The body of the function we pass to `foreach` must call `f` with `result` and `elt`. This returns a `B` which we must store somewhere---the only place we have to store it is in `result`. So the final answer becomes
 
 ```scala mdoc:nest:silent
-def foldLeft[A, B](seq: Seq[A], zero: B, f: (B, A) => B): B = {
+def foldLeft[A, B](seq: Seq[A], zero: B, f: (B, A) => B): B = 
   var result = zero
-  seq.foreach { elt => result = f(result, elt) }
+  seq.foreach(elt => result = f(result, elt))
   result
-}
 ```
 </div>
 

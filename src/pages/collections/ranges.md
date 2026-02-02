@@ -38,7 +38,7 @@ We can rectify this by specifying a different step, using the `by` method on `Ra
 Now we can write the Scala equivalent of our Java program.
 
 ```scala mdoc:silent
-for(i <- 99 until 0 by -1) println(i + " bottles of beer on the wall!")
+for i <- 99 until 0 by -1 do println(i + " bottles of beer on the wall!")
 // 99 bottles of beer on the wall!
 // 98 bottles of beer on the wall!
 // 97 bottles of beer on the wall!
