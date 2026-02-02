@@ -6,17 +6,14 @@ title: Function Types
 In the previous section we described how to write function literals and function types, but we glossed over how exactly function types are implemented. Scala has 23 built-in generic classes for functions of 0 to 22 arguments. Here's what they look like:
 
 ```scala mdoc:reset:silent
-trait Function0[+R] {
+trait Function0[+R]:
   def apply: R
-}
 
-trait Function1[-A, +B] {
+trait Function1[-A, +B]:
   def apply(a: A): B
-}
 
-trait Function2[-A, -B, +C] {
+trait Function2[-A, -B, +C]:
   def apply(a: A, b: B): C
-}
 
 // and so on...
 ```
@@ -42,11 +39,10 @@ A type `Foo[-T]` is **contravariant** in terms of `T`, meaning that `Foo[A]` is 
 Functions are contravariant in terms of their arguments and covariant in terms of their return type. This seems counterintuitive but it makes sense if we look at it from the point of view of function arguments. Consider some code that expects a `Function1[A, B]`:
 
 ```scala mdoc:reset:silent
-case class Box[A](value: A) {
+case class Box[A](value: A):
   /** Apply `func` to `value`, returning a `Box` of the result. */
   def map[B](func: Function1[A, B]): Box[B] =
     Box(func(value))
-}
 ```
 
 To understand variance, consider what functions can we safely pass to this `map` method:
@@ -116,10 +112,9 @@ Using the notation `A <: B` to indicate `A` is a subtype of `B` and assuming:
 if I have a method
 
 ```scala mdoc:silent
-def groom(groomer: Cat => CatSound): CatSound = {
+def groom(groomer: Cat => CatSound): CatSound =
   val oswald = Cat("Black", "Cat food")
   groomer(oswald)
-}
 ```
 
 which of the following can I pass to `groom`?

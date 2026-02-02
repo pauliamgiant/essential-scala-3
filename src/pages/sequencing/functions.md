@@ -5,33 +5,32 @@ Functions allow us to *abstract over methods*, turning methods into values that 
 Let's look at three methods we wrote that manipulate `IntList`.
 
 ```scala mdoc:silent
-object wrapper {
-  sealed trait IntList {
+object wrapper:
+  sealed trait IntList:
     def length: Int =
-      this match {
+      this match
         case End => 0
         case Pair(hd, tl) => 1 + tl.length
-      }
+
     def double: IntList =
-      this match {
+      this match
         case End => End
         case Pair(hd, tl) => Pair(hd * 2, tl.double)
-      }
+
     def product: Int =
-      this match {
+      this match
         case End => 1
         case Pair(hd, tl) => hd * tl.product
-      }
+
     def sum: Int =
-      this match {
+      this match
         case End => 0
         case Pair(hd, tl) => hd + tl.sum
-      }
-  }
 
   case object End extends IntList
   case class Pair(hd: Int, tl: IntList) extends IntList
-}; import wrapper._
+
+import wrapper._
 ```
 
 All of these methods have the same general pattern, which is not surprising as they all use structural recursion. It would be nice to be able to remove the duplication.
@@ -54,9 +53,8 @@ A function is like a method: we can call it with parameters and it evaluates to 
 Much earlier in this course we introduced the `apply` method, which lets us treat objects as functions in a syntactic sense:
 
 ```scala mdoc:reset:silent
-object add1 {
+object add1:
   def apply(in: Int) = in + 1
-}
 ```
 
 ```scala mdoc
@@ -159,19 +157,19 @@ Rename this function to `fold`, which is the name it is usually known as, and fi
 Your `fold` method should look like this:
 
 ```scala mdoc:reset:silent
-object wrapper {
-  sealed trait IntList {
+object wrapper:
+  sealed trait IntList:
     def fold(end: Int, f: (Int, Int) => Int): Int =
-      this match {
+      this match
         case End => end
         case Pair(hd, tl) => f(hd, tl.fold(end, f))
-      }
 
     // other methods...
-  }
+
   case object End extends IntList
   final case class Pair(head: Int, tail: IntList) extends IntList
-}; import wrapper._
+
+import wrapper._
 ```
 </div>
 
@@ -179,23 +177,24 @@ Now reimplement `sum`, `length`, and `product` in terms of `fold`.
 
 <div class="solution">
 ```scala mdoc:reset:silent
-object wrapper {
-  sealed trait IntList {
+object wrapper:
+  sealed trait IntList:
     def fold(end: Int, f: (Int, Int) => Int): Int =
-      this match {
+      this match
         case End => end
         case Pair(hd, tl) => f(hd, tl.fold(end, f))
-      }
+
     def length: Int =
       fold(0, (_, tl) => 1 + tl)
     def product: Int =
       fold(1, (hd, tl) => hd * tl)
     def sum: Int =
       fold(0, (hd, tl) => hd + tl)
-  }
+
   case object End extends IntList
   final case class Pair(head: Int, tail: IntList) extends IntList
-}; import wrapper._
+
+import wrapper._
 ```
 </div>
 
@@ -247,13 +246,13 @@ def fold[A](end: A, f: (Int, A) => A): A
 where we've used a generic type on the method to capture the changing return type. With this we can implement `double`. When we try to do so we'll see that type inference fails, so we have to give it a bit of help.
 
 ```scala mdoc:reset:silent
-object wrapper {
-  sealed trait IntList {
+object wrapper:
+  sealed trait IntList:
     def fold[A](end: A, f: (Int, A) => A): A =
-      this match {
+      this match
         case End => end
         case Pair(hd, tl) => f(hd, tl.fold(end, f))
-      }
+
     def length: Int =
       fold[Int](0, (_, tl) => 1 + tl)
     def product: Int =
@@ -262,9 +261,10 @@ object wrapper {
       fold[Int](0, (hd, tl) => hd + tl)
     def double: IntList =
       fold[IntList](End, (hd, tl) => Pair(hd * 2, tl))
-  }
+
   case object End extends IntList
   final case class Pair(head: Int, tail: IntList) extends IntList
-}; import wrapper._
+
+import wrapper._
 ```
 </div>
