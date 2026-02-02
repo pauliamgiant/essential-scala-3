@@ -29,10 +29,9 @@ case class A(b: B, c: C)
 or
 
 ```scala
-trait A {
+trait A:
   def b: B
   def c: C
-}
 ```
 </div>
 
@@ -90,9 +89,9 @@ In Scala a trait can extend as many traits as we like using the `with` keyword l
 The "has-a or" patterns means that `A` has a `B` or `C`. There are two ways we can implement this. We can say that `A` has a `d` of type `D`, where `D` is a `B` or `C`. We can mechanically apply our two patterns to implement this:
 
 ```scala
-trait A {
+trait A:
   def d: D
-}
+
 sealed trait D
 final case class B() extends D
 final case class C() extends D

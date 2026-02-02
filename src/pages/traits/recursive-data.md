@@ -70,30 +70,27 @@ Now we apply our structural recursion pattern to fill out the body of the method
 
 ```tut:book:silent
 def sum(list: IntList): Int =
-  list match {
+  list match
     case End => ???
     case Pair(hd, tl) => ???
-  }
 ```
 
 Finally we have to decide on the bodies of our cases. We have already decided that `0` is answer for `End`. For `Pair` we have two bits of information to guide us. We know we need to return an `Int` and we know that we need to make a recursive call on `tl`. Let's fill in what we have.
 
 ```scala
 def sum(list: IntList): Int =
-  list match {
+  list match
     case End => 0
     case Pair(hd, tl) => ??? sum(tl)
-  }
 ```
 
 The recursive call will return the sum of the tail of the list, by definition. Thus the correct thing to do is to add `hd` to this result. This gives us our final result:
 
 ```tut:book:silent
 def sum(list: IntList): Int =
-  list match {
+  list match
     case End => 0
     case Pair(hd, tl) => hd + sum(tl)
-  }
 ```
 
 ### Understanding the Base Case and Recursive Case
@@ -157,19 +154,17 @@ import scala.annotation.tailrec
 ```tut:book:fail
 @tailrec
 def sum(list: IntList): Int =
-  list match {
+  list match
     case End => 0
     case Pair(hd, tl) => hd + sum(tl)
-  }
 ```
 
 ```tut:book
 @tailrec
 def sum(list: IntList, total: Int = 0): Int =
-  list match {
+  list match
     case End => total
     case Pair(hd, tl) => sum(tl, total + hd)
-  }
 ```
 
 Any non-tail recursion function can be transformed into a tail recursive version by adding an accumulator as we have done with `sum` above. This transforms stack allocation into heap allocation, which sometimes is a win, and other times is not.
@@ -200,17 +195,16 @@ assert(End.length == 0)
 
 <div class="solution">
 ```tut:book:silent
-object wrapper {
-  sealed trait IntList {
+object wrapper:
+  sealed trait IntList:
     def length: Int =
-      this match {
+      this match
         case End => 0
         case Pair(hd, tl) => 1 + tl.length
-      }
-  }
+
   case object End extends IntList
   final case class Pair(head: Int, tail: IntList) extends IntList
-}; import wrapper._
+; import wrapper._
 ```
 </div>
 
@@ -224,17 +218,16 @@ assert(End.product == 1)
 
 <div class="solution">
 ```tut:book:silent
-object wrapper {
-  sealed trait IntList {
+object wrapper:
+  sealed trait IntList:
     def product: Int =
-      this match {
+      this match
         case End => 1
         case Pair(hd, tl) => hd * tl.product
-      }
-  }
+
   case object End extends IntList
   final case class Pair(head: Int, tail: IntList) extends IntList
-}; import wrapper._
+; import wrapper._
 ```
 </div>
 
@@ -248,17 +241,16 @@ assert(End.double == End)
 
 <div class="solution">
 ```tut:book:silent
-object wrapper {
-  sealed trait IntList {
+object wrapper:
+  sealed trait IntList:
     def double: IntList =
-      this match {
+      this match
         case End => End
         case Pair(hd, tl) => Pair(hd * 2, tl.double)
-      }
-  }
+
   case object End extends IntList
   final case class Pair(head: Int, tail: IntList) extends IntList
-}; import wrapper._
+; import wrapper._
 ```
 </div>
 
@@ -282,37 +274,33 @@ Implement `sum` and `double` on `Tree` using polymorphism and pattern matching.
 
 <div class="solution">
 ```tut:book:silent
-object TreeOps {
+object TreeOps:
   def sum(tree: Tree): Int =
-    tree match {
+    tree match
       case Leaf(elt) => elt
       case Node(l, r) => sum(l) + sum(r)
-    }
 
   def double(tree: Tree): Tree =
-    tree match {
+    tree match
       case Leaf(elt) => Leaf(elt * 2)
       case Node(l, r) => Node(double(l), double(r))
-    }
-}
 
-sealed trait Tree {
+sealed trait Tree:
   def sum: Int
   def double: Tree
-}
-final case class Node(l: Tree, r: Tree) extends Tree {
+
+final case class Node(l: Tree, r: Tree) extends Tree:
   def sum: Int =
     l.sum + r.sum
 
   def double: Tree =
     Node(l.double, r.double)
-}
-final case class Leaf(elt: Int) extends Tree {
+
+final case class Leaf(elt: Int) extends Tree:
   def sum: Int =
     elt
 
   def double: Tree =
     Leaf(elt * 2)
-}
 ```
 </div>

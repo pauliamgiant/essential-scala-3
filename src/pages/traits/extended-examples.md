@@ -34,14 +34,13 @@ Now implement a method `eval` that converts an `Expression` to a `Double`. Use p
 I used pattern matching as it's more compact and I feel this makes the code easier to read.
 
 ```scala
-sealed trait Expression {
+sealed trait Expression:
   def eval: Double =
-    this match {
+    this match
       case Addition(l, r) => l.eval + r.eval
       case Subtraction(l, r) => l.eval - r.eval
       case Number(v) => v
-    }
-}
+
 final case class Addition(left: Expression, right: Expression) extends Expression
 final case class Subtraction(left: Expression, right: Expression) extends Expression
 final case class Number(value: Int) extends Expression
@@ -86,52 +85,44 @@ assert(Division(Number(4), Number(0)).eval == Failure("Division by zero"))
 All this repeated pattern matching gets very tedious, doesn't it! We're going to see how we can abstract this in the next section.
 
 ```scala
-sealed trait Expression {
+sealed trait Expression:
   def eval: Calculation =
-    this match {
+    this match
       case Addition(l, r) =>
-          l.eval match {
+          l.eval match
             case Failure(reason) => Failure(reason)
             case Success(r1) =>
-              r.eval match {
+              r.eval match
                 case Failure(reason) => Failure(reason)
                 case Success(r2) => Success(r1 + r2)
-              }
-          }
       case Subtraction(l, r) =>
-          l.eval match {
+          l.eval match
             case Failure(reason) => Failure(reason)
             case Success(r1) =>
-              r.eval match {
+              r.eval match
                 case Failure(reason) => Failure(reason)
                 case Success(r2) => Success(r1 - r2)
-              }
-          }
       case Division(l, r) =>
-        l.eval match {
+        l.eval match
           case Failure(reason) => Failure(reason)
           case Success(r1) =>
-            r.eval match {
+            r.eval match
               case Failure(reason) => Failure(reason)
               case Success(r2) =>
-                if(r2 == 0)
+                if r2 == 0 then
                   Failure("Division by zero")
                 else
                   Success(r1 / r2)
-            }
-        }
       case SquareRoot(v) =>
-        v.eval match {
+        v.eval match
           case Success(r) =>
-            if(r < 0)
+            if r < 0 then
               Failure("Square root of negative number")
             else
               Success(Math.sqrt(r))
           case Failure(reason) => Failure(reason)
-        }
       case Number(v) => Success(v)
-    }
-}
+
 final case class Addition(left: Expression, right: Expression) extends Expression
 final case class Subtraction(left: Expression, right: Expression) extends Expression
 final case class Division(left: Expression, right: Expression) extends Expression
@@ -213,27 +204,25 @@ Now add a method to convert your JSON representation to a `String`. Make sure yo
 This is an application of structural recursion, as all transformations on algebraic data types are, with the wrinkle that we have to treat the sequence types specially. Here is my solution.
 
 ```scala mdoc:reset:silent
-object json {
-  sealed trait Json {
-    def print: String = {
+object json:
+  sealed trait Json:
+    def print: String =
       def quote(s: String): String =
         '"'.toString ++ s ++ '"'.toString
       def seqToJson(seq: SeqCell): String =
-        seq match {
+        seq match
           case SeqCell(h, t @ SeqCell(_, _)) =>
             s"${h.print}, ${seqToJson(t)}"
           case SeqCell(h, SeqEnd) => h.print
-        }
 
       def objectToJson(obj: ObjectCell): String =
-        obj match {
+        obj match
           case ObjectCell(k, v, t @ ObjectCell(_, _, _)) =>
             s"${quote(k)}: ${v.print}, ${objectToJson(t)}"
           case ObjectCell(k, v, ObjectEnd) =>
             s"${quote(k)}: ${v.print}"
-        }
 
-      this match {
+      this match
         case JsNumber(v) => v.toString
         case JsString(v) => quote(v)
         case JsBoolean(v) => v.toString
@@ -242,9 +231,8 @@ object json {
         case SeqEnd => "[]"
         case o @ ObjectCell(_, _, _) => "{" ++ objectToJson(o) ++ "}"
         case ObjectEnd => "{}"
-      }
-    }
-  }
+  end Json
+  
   final case class JsNumber(value: Double) extends Json
   final case class JsString(value: String) extends Json
   final case class JsBoolean(value: Boolean) extends Json
@@ -255,7 +243,6 @@ object json {
   sealed trait JsObject extends Json
   final case class ObjectCell(key: String, value: Json, tail: JsObject) extends JsObject
   case object ObjectEnd extends JsObject
-}
 ```
 </div>
 
