@@ -26,17 +26,17 @@ def fold[A](end: A, f: (Int, A) => A): A =
 It's reasonably straightforward to extend this to `LinkedList[A]`. We merely have to account for the head element of a `Pair` being of type `A` not `Int`.
 
 ```scala mdoc:reset:silent
-object wrapper {
-  sealed trait LinkedList[A] {
+object wrapper:
+  sealed trait LinkedList[A]:
     def fold[B](end: B, f: (A, B) => B): B =
-      this match {
+      this match
         case End() => end
         case Pair(hd, tl) => f(hd, tl.fold(end, f))
-      }
-  }
+
   final case class Pair[A](head: A, tail: LinkedList[A]) extends LinkedList[A]
   final case class End[A]() extends LinkedList[A]
-}; import wrapper._
+
+import wrapper._
 ```
 
 Fold is just an adaptation of structural recursion where we allow the user to pass in the functions we apply at each case. As structural recursion is the generic pattern for writing any function that transforms an algebraic datatype, fold is the concrete realisation of this generic pattern. That is, fold is the generic transformation or iteration method. *Any function* you care to write on an algebraic datatype can be written in terms of fold.
@@ -56,13 +56,11 @@ The right-hand side of pattern matching cases, or the polymorphic methods as app
 Let's apply the pattern to derive the `fold` method above. We start with our basic template:
 
 ```scala
-sealed trait LinkedList[A] {
+sealed trait LinkedList[A]:
   def fold[B](???): B =
-    this match {
+    this match
       case End() => ???
       case Pair(hd, tl) => ???
-    }
-}
 final case class Pair[A](head: A, tail: LinkedList[A]) extends LinkedList[A]
 final case class End[A]() extends LinkedList[A]
 ```
@@ -73,10 +71,9 @@ Now we add one function for each of the two classes in `LinkedList`.
 
 ```scala
 def fold[B](end: ???, pair: ???): B =
-  this match {
+  this match
     case End() => ???
     case Pair(hd, tl) => ???
-  }
 ```
 
 From the rules for the function types:
@@ -88,10 +85,9 @@ Substituting in we get
 
 ```scala
 def fold[B](end: B, pair: (A, B) => B): B =
-  this match {
+  this match
     case End() => end
     case Pair(hd, tl) => pair(hd, tl.fold(end, pair))
-  }
 ```
 
 ### Working With Functions
@@ -127,13 +123,12 @@ Placeholder syntax, while wonderfully terse, can be confusing for large expressi
 
 Scala contains another feature that is directly relevant to this section---the ability to convert method calls to functions. This is closely related to placeholder syntax---simply follow a method with an underscore:
 
-```scala mdoc:reset:silent
-object Sum {
+```scala mdoc:nest:silent
+object Sum:
   def sum(x: Int, y: Int) = x + y
-}
 ```
 
-```scala mdoc:fail
+```scala mdoc
 Sum.sum
 ```
 
@@ -143,16 +138,14 @@ Sum.sum
 
 In situations where Scala can infer that we need a function, we can even drop the underscore and simply write the method name---the compiler will promote the method to a function automatically:
 
-```scala mdoc:reset:silent
-object MathStuff {
+```scala mdoc:nest:silent
+object MathStuff:
   def add1(num: Int) = num + 1
-}
 ```
 
 ```scala mdoc:invisible
-case class Counter(value: Int) {
+case class Counter(value: Int):
   def adjust(f: Int => Int): Counter = Counter(f(value))
-}
 ```
 
 ```scala mdoc
@@ -222,17 +215,16 @@ Implement this algebraic data type along with a fold method.
 This is another recursive data type just like list. Follow the patterns and you should be ok.
 
 ```scala mdoc:reset:silent
-sealed trait Tree[A] {
+sealed trait Tree[A]:
   def fold[B](node: (B, B) => B, leaf: A => B): B
-}
-final case class Node[A](left: Tree[A], right: Tree[A]) extends Tree[A] {
+
+final case class Node[A](left: Tree[A], right: Tree[A]) extends Tree[A]:
   def fold[B](node: (B, B) => B, leaf: A => B): B =
     node(left.fold(node, leaf), right.fold(node, leaf))
-}
-final case class Leaf[A](value: A) extends Tree[A] {
+
+final case class Leaf[A](value: A) extends Tree[A]:
   def fold[B](node: (B, B) => B, leaf: A => B): B =
     leaf(value)
-}
 ```
 </div>
 

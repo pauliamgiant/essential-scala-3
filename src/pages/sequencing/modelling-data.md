@@ -93,9 +93,8 @@ tuplized(("a", 1))
 We can also pattern match on tuples as follows:
 
 ```scala mdoc
-(1, "a") match {
+(1, "a") match
   case (a, b) => a + b
-}
 ```
 
 Although pattern matching is the natural way to deconstruct a tuple, each class also has a complement of fields named `_1`, `_2` and so on:
@@ -116,7 +115,7 @@ Consider a method that, depending on the value of its parameters, returns one of
 
 ```scala mdoc
 def intOrString(input: Boolean) =
-  if(input == true) 123 else "abc"
+  if input == true then 123 else "abc"
 ```
 
 We can't simply write this method as shown above because the compiler infers the result type as `Any`. Instead we have to introduce a new type to explicitly represent the disjunction:
@@ -132,11 +131,10 @@ import sum._
 
 ```scala
 def intOrString(input: Boolean): Sum[Int, String] =
-  if(input == true) {
+  if input == true then
     Left[Int, String](123)
-  } else {
+  else
     Right[Int, String]("abc")
-  }
 ```
 
 How do we implement `Sum`? We just have to use the patterns we've already seen, with the addition of generic types.
@@ -154,10 +152,9 @@ Right[Int, String]("foo").value
 
 val sum: Sum[Int, String] = Right("foo")
 
-sum match {
+sum match
   case Left(x) => x.toString
   case Right(x) => x
-}
 ```
 
 <div class="solution">
@@ -235,17 +232,17 @@ Implement fold for this type.
 The code is very similar to the implementation for `LinkedList`. I choose pattern matching in the base trait for my solution.
 
 ```scala mdoc:reset:silent
-object wrapper {
-  sealed trait Maybe[A] {
+object wrapper:
+  sealed trait Maybe[A]:
     def fold[B](full: A => B, empty: B): B =
-      this match {
+      this match
         case Full(v) => full(v)
         case Empty() => empty
-      }
-  }
+
   final case class Full[A](value: A) extends Maybe[A]
   final case class Empty[A]() extends Maybe[A]
-}; import wrapper._
+
+import wrapper._
 ```
 </div>
 
@@ -263,16 +260,16 @@ Implement `fold` for `Sum`.
 
 <div class="solution">
 ```scala mdoc:reset:silent
-object wrapper {
-  sealed trait Sum[A, B] {
+object wrapper:
+  sealed trait Sum[A, B]:
     def fold[C](left: A => C, right: B => C): C =
-      this match {
+      this match
         case Left(a) => left(a)
         case Right(b) => right(b)
-      }
-  }
+
   final case class Left[A, B](value: A) extends Sum[A, B]
   final case class Right[A, B](value: B) extends Sum[A, B]
-}; import wrapper._
+
+import wrapper._
 ```
 </div>

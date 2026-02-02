@@ -54,17 +54,14 @@ A type `Foo[-T]` is *contravariant* in terms of `T`, meaning that `Foo[A]` is a 
 When we discussed function types we glossed over how exactly they are implemented. Scala has 23 built-in generic classes for functions of 0 to 22 arguments. Here's what they look like:
 
 ```scala mdoc:reset:silent
-trait Function0[+R] {
+trait Function0[+R]:
   def apply: R
-}
 
-trait Function1[-A, +B] {
+trait Function1[-A, +B]:
   def apply(a: A): B
-}
 
-trait Function2[-A, -B, +C] {
+trait Function2[-A, -B, +C]:
   def apply(a: A, b: B): C
-}
 
 // and so on...
 ```
@@ -72,11 +69,10 @@ trait Function2[-A, -B, +C] {
 Functions are contravariant in terms of their arguments and covariant in terms of their return type. This seems counterintuitive but it makes sense if we look at it from the point of view of function arguments. Consider some code that expects a `Function1[A, B]`:
 
 ```scala mdoc:reset:silent
-case class Box[A](value: A) {
+case class Box[A](value: A):
   /** Apply `func` to `value`, returning a `Box` of the result. */
   def map[B](func: Function1[A, B]): Box[B] =
     Box(func(value))
-}
 ```
 
 To understand variance, consider what functions can we safely pass to this `map` method:
@@ -157,26 +153,25 @@ error: covariant type A occurs in contravariant position in type B => Sum[A,C] o
 
 <div class="solution">
 ```scala mdoc:fail:silent
-object wrapper {
-  sealed trait Sum[+A, +B] {
+object wrapper:
+  sealed trait Sum[+A, +B]:
     def flatMap[C](f: B => Sum[A, C]): Sum[A, C] =
-      this match {
+      this match
         case Failure(v) => Failure(v)
         case Success(v) => f(v)
-      }
-  }
+
   final case class Failure[A](value: A) extends Sum[A, Nothing]
   final case class Success[B](value: B) extends Sum[Nothing, B]
-}; import wrapper._
+
+import wrapper._
 ```
 </div>
 
 What is going on here? Let's momentarily switch to a simpler example that illustrates the problem.
 
 ```scala mdoc:fail:silent
-case class Box[+A](value: A) {
+case class Box[+A](value: A):
   def set(a: A): Box[A] = Box(a)
-}
 ```
 
 which causes the error
@@ -192,9 +187,8 @@ Remember that functions, and hence methods, which are just like functions, are c
 The solution is introduce a new type that is a supertype of `A`. We can do this with the notation `[AA >: A]` like so:
 
 ```scala mdoc:reset:silent
-case class Box[+A](value: A) {
+case class Box[+A](value: A):
   def set[AA >: A](a: AA): Box[AA] = Box(a)
-}
 ```
 
 This successfully compiles.
@@ -202,17 +196,17 @@ This successfully compiles.
 Back to `flatMap`, the function `f` is a parameter, and thus in a contravariant position. This means we accept *supertypes* of `f`. It is declared with type `B => Sum[A, C]` and thus a supertype is *covariant* in `B` and *contravariant* in `A` and `C`. `B` is declared as covariant, so that is fine. `C` is invariant, so that is fine as well. `A` on the other hand is covariant but in a contravariant position. Thus we have to apply the same solution we did for `Box` above.
 
 ```scala mdoc:reset:silent
-object wrapper {
-  sealed trait Sum[+A, +B] {
+object wrapper:
+  sealed trait Sum[+A, +B]:
     def flatMap[AA >: A, C](f: B => Sum[AA, C]): Sum[AA, C] =
-      this match {
+      this match
         case Failure(v) => Failure(v)
         case Success(v) => f(v)
-      }
-  }
+
   final case class Failure[A](value: A) extends Sum[A, Nothing]
   final case class Success[B](value: B) extends Sum[Nothing, B]
-}; import wrapper._
+
+import wrapper._
 ```
 
 <div class="callout callout-info">
@@ -277,10 +271,9 @@ Using the notation `A <: B` to indicate `A` is a subtype of `B` and assuming:
 if I have a method
 
 ```scala mdoc:silent
-def groom(groomer: Cat => CatSound): CatSound = {
+def groom(groomer: Cat => CatSound): CatSound =
   val oswald = Cat("Black", "Cat food")
   groomer(oswald)
-}
 ```
 
 which of the following can I pass to `groom`?
@@ -302,27 +295,27 @@ We're going to represent calculations as `Sum[String, Double]`, where the `Strin
 
 <div class="solution">
 ```scala mdoc:reset:silent
-object wrapper {
-  sealed trait Sum[+A, +B] {
+object wrapper:
+  sealed trait Sum[+A, +B]:
     def fold[C](error: A => C, success: B => C): C =
-      this match {
+      this match
         case Failure(v) => error(v)
         case Success(v) => success(v)
-      }
+
     def map[C](f: B => C): Sum[A, C] =
-      this match {
+      this match
         case Failure(v) => Failure(v)
         case Success(v) => Success(f(v))
-      }
+
     def flatMap[AA >: A, C](f: B => Sum[AA, C]): Sum[AA, C] =
-      this match {
+      this match
         case Failure(v) => Failure(v)
         case Success(v) => f(v)
-      }
-  }
+
   final case class Failure[A](value: A) extends Sum[A, Nothing]
   final case class Success[B](value: B) extends Sum[Nothing, B]
-}; import wrapper._
+
+import wrapper._
 ```
 </div>
 
@@ -351,51 +344,50 @@ Here's my solution. I used a helper method `lift2` to "lift" a function into the
 
 ```scala mdoc:invisible
 // must re-paste the Sum definition...
-object wrapper {
-  sealed trait Sum[+A, +B] {
+object wrapper:
+  sealed trait Sum[+A, +B]:
     def fold[C](error: A => C, success: B => C): C =
-      this match {
+      this match
         case Failure(v) => error(v)
         case Success(v) => success(v)
-      }
+
     def map[C](f: B => C): Sum[A, C] =
-      this match {
+      this match
         case Failure(v) => Failure(v)
         case Success(v) => Success(f(v))
-      }
+
     def flatMap[AA >: A, C](f: B => Sum[AA, C]): Sum[AA, C] =
-      this match {
+      this match
         case Failure(v) => Failure(v)
         case Success(v) => f(v)
-      }
-  }
+
   final case class Failure[A](value: A) extends Sum[A, Nothing]
   final case class Success[B](value: B) extends Sum[Nothing, B]
-}; import wrapper._
+
+import wrapper._
 ```
 
 ```scala mdoc:nest:silent
-object wrapper {
-  sealed trait Expression {
+object wrapper:
+  sealed trait Expression:
     def eval: Sum[String, Double] =
-      this match {
+      this match
         case Addition(l, r) => lift2(l, r, (left, right) => Success(left + right))
         case Subtraction(l, r) => lift2(l, r, (left, right) => Success(left - right))
         case Division(l, r) => lift2(l, r, (left, right) =>
-          if(right == 0)
+          if right == 0 then
             Failure("Division by zero")
           else
             Success(left / right)
         )
         case SquareRoot(v) =>
           v.eval flatMap { value =>
-            if(value < 0)
+            if value < 0 then
               Failure("Square root of negative number")
             else
               Success(Math.sqrt(value))
           }
         case Number(v) => Success(v)
-      }
 
     def lift2(l: Expression, r: Expression, f: (Double, Double) => Sum[String, Double]) =
       l.eval.flatMap { left =>
@@ -403,12 +395,13 @@ object wrapper {
           f(left, right)
         }
       }
-  }
+
   final case class Addition(left: Expression, right: Expression) extends Expression
   final case class Subtraction(left: Expression, right: Expression) extends Expression
   final case class Division(left: Expression, right: Expression) extends Expression
   final case class SquareRoot(value: Expression) extends Expression
   final case class Number(value: Int) extends Expression
-}; import wrapper._
+
+import wrapper._
 ```
 </div>

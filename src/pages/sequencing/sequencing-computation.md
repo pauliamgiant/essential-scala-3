@@ -15,17 +15,17 @@ What these all have in common is we have a type `F[A]` and a function `A => B`, 
 Let's implement `map` for `LinkedList`. We start by outlining the types and adding the general structural recursion skeleton:
 
 ```scala mdoc:silent
-object wrapper {
-  sealed trait LinkedList[A] {
+object wrapper:
+  sealed trait LinkedList[A]:
     def map[B](fn: A => B): LinkedList[B] =
-      this match {
+      this match
         case Pair(hd, tl) => ???
         case End() => ???
-      }
-  }
+
   final case class Pair[A](head: A, tail: LinkedList[A]) extends LinkedList[A]
   final case class End[A]() extends LinkedList[A]
-}; import wrapper._
+
+import wrapper._
 ```
 
 We know we can use the structural recursion pattern as we know that `fold` (which is just the structural recursion pattern abstracted) is the universal iterator for an algebraic data type. Thus:
@@ -50,17 +50,17 @@ case Pair(hd, tl) => Pair(fn(hd), tl.map(fn))
 Therefore the complete solution is
 
 ```scala mdoc:reset:silent
-object wrapper {
-  sealed trait LinkedList[A] {
+object wrapper:
+  sealed trait LinkedList[A]:
     def map[B](fn: A => B): LinkedList[B] =
-      this match {
+      this match
         case Pair(hd, tl) => Pair(fn(hd), tl.map(fn))
         case End() => End[B]()
-      }
-  }
+
   case class Pair[A](hd: A, tl: LinkedList[A]) extends LinkedList[A]
   case class End[A]() extends LinkedList[A]
-}; import wrapper._
+
+import wrapper._
 ```
 
 Notice how using the types and patterns guided us to a solution.
@@ -80,9 +80,9 @@ What these all have in common is we have a type `F[A]` and a function `A => F[B]
 Let's implement `flatMap` for `Maybe` (we need an append method to implement `flatMap` for `LinkedList`). We start by outlining the types:
 
 ```scala mdoc:reset:silent
-sealed trait Maybe[A] {
+sealed trait Maybe[A]:
   def flatMap[B](fn: A => Maybe[B]): Maybe[B] = ???
-}
+
 final case class Full[A](value: A) extends Maybe[A]
 final case class Empty[A]() extends Maybe[A]
 ```
@@ -90,33 +90,33 @@ final case class Empty[A]() extends Maybe[A]
 We use the same pattern as before: it's a structural recursion and our types guide us in filling in the method bodies.
 
 ```scala mdoc:reset:silent
-object wrapper {
-  sealed trait Maybe[A] {
+object wrapper:
+  sealed trait Maybe[A]:
     def flatMap[B](fn: A => Maybe[B]): Maybe[B] =
-      this match {
+      this match
         case Full(v) => fn(v)
         case Empty() => Empty[B]()
-      }
-  }
+
   final case class Full[A](value: A) extends Maybe[A]
   final case class Empty[A]() extends Maybe[A]
-}; import wrapper._
+
+import wrapper._
 ```
 
 ### Functors and Monads
 
 ```scala mdoc:reset:invisible
-object wrapper {
-  sealed trait Maybe[A] {
+object wrapper:
+  sealed trait Maybe[A]:
     def flatMap[B](fn: A => Maybe[B]): Maybe[B] =
-      this match {
+      this match
         case Full(v) => fn(v)
         case Empty() => Empty[B]()
-      }
-  }
+
   final case class Full[A](value: A) extends Maybe[A]
   final case class Empty[A]() extends Maybe[A]
-}; import wrapper._
+
+import wrapper._
 ```
 
 A type like `F[A]` with a `map` method is called a *functor*. If a functor also has a `flatMap` method it is called a *monad*[^monads].
@@ -139,23 +139,18 @@ def mightFail3: Maybe[Int] =
 We want to run these computations one after another. If any one of them fails the whole computation fails. Otherwise we'll add up all the numbers we get. We can do this with `flatMap` as follows.
 
 ```scala mdoc:silent
-mightFail1 flatMap { x =>
-  mightFail2 flatMap { y =>
-    mightFail3 flatMap { z =>
+mightFail1.flatMap: x =>
+  mightFail2.flatMap: y =>
+    mightFail3.flatMap: z =>
       Full(x + y + z)
-    }
-  }
-}
 ```
 
 The result of this is `Empty`. If we drop `mightFail3`, leaving just
 
 ```scala mdoc:silent
-mightFail1 flatMap { x =>
-  mightFail2 flatMap { y =>
+mightFail1.flatMap: x =>
+  mightFail2.flatMap: y =>
     Full(x + y)
-  }
-}
 ```
 
 the computation succeeds and we get `Full(3)`.
@@ -175,17 +170,17 @@ We use `map` when we want to transform the value within the context to a new val
 Given the following list
 
 ```scala mdoc:reset:invisible
-object wrapper {
-  sealed trait LinkedList[A] {
+object wrapper:
+  sealed trait LinkedList[A]:
     def map[B](fn: A => B): LinkedList[B] =
-      this match {
+      this match
         case Pair(hd, tl) => Pair(fn(hd), tl.map(fn))
         case End() => End[B]()
-      }
-  }
+
   case class Pair[A](hd: A, tl: LinkedList[A]) extends LinkedList[A]
   case class End[A]() extends LinkedList[A]
-}; import wrapper._
+
+import wrapper._
 ```
 
 ```scala mdoc:silent
@@ -212,22 +207,22 @@ Implement `map` for `Maybe`.
 
 <div class="solution">
 ```scala mdoc:reset:silent
-object wrapper {
-  sealed trait Maybe[A] {
+object wrapper:
+  sealed trait Maybe[A]:
     def flatMap[B](fn: A => Maybe[B]): Maybe[B] =
-      this match {
+      this match
         case Full(v) => fn(v)
         case Empty() => Empty[B]()
-      }
+
     def map[B](fn: A => B): Maybe[B] =
-      this match {
+      this match
         case Full(v) => Full(fn(v))
         case Empty() => Empty[B]()
-      }
-  }
+
   final case class Full[A](value: A) extends Maybe[A]
   final case class Empty[A]() extends Maybe[A]
-}; import wrapper._
+
+import wrapper._
 ```
 </div>
 
@@ -235,19 +230,20 @@ For bonus points, implement `map` in terms of `flatMap`.
 
 <div class="solution">
 ```scala mdoc:reset:silent
-object wrapper {
-  sealed trait Maybe[A] {
+object wrapper:
+  sealed trait Maybe[A]:
     def flatMap[B](fn: A => Maybe[B]): Maybe[B] =
-      this match {
+      this match
         case Full(v) => fn(v)
         case Empty() => Empty[B]()
-      }
+
     def map[B](fn: A => B): Maybe[B] =
       flatMap[B](v => Full(fn(v)))
-  }
+
   final case class Full[A](value: A) extends Maybe[A]
   final case class Empty[A]() extends Maybe[A]
-}; import wrapper._
+
+import wrapper._
 ```
 </div>
 
@@ -255,19 +251,20 @@ object wrapper {
 #### Sequencing Computations
 
 ```scala mdoc:reset:invisible
-object wrapper {
-  sealed trait Maybe[A] {
+object wrapper:
+  sealed trait Maybe[A]:
     def flatMap[B](fn: A => Maybe[B]): Maybe[B] =
-      this match {
+      this match
         case Full(v) => fn(v)
         case Empty() => Empty[B]()
-      }
+
     def map[B](fn: A => B): Maybe[B] =
       flatMap[B](v => Full(fn(v)))
-  }
+
   final case class Full[A](value: A) extends Maybe[A]
   final case class Empty[A]() extends Maybe[A]
-}; import wrapper._
+
+import wrapper._
 ```
 
 We're going to use Scala's builtin `List` class for this exercise as it has a `flatMap` method.
@@ -296,7 +293,7 @@ return a `List[Maybe[Int]]` containing `None` for the odd elements. Hint: If `x 
 
 <div class="solution">
 ```scala mdoc:silent
-list.map(maybe => maybe.flatMap[Int] { x => if (x % 2 == 0) Full(x) else Empty() })
+list.map(maybe => maybe.flatMap[Int] { x => if x % 2 == 0 then Full(x) else Empty() })
 ```
 </div>
 
@@ -305,34 +302,34 @@ list.map(maybe => maybe.flatMap[Int] { x => if (x % 2 == 0) Full(x) else Empty()
 Recall our `Sum` type.
 
 ```scala mdoc:reset:silent
-object wrapper {
-  sealed trait Sum[A, B] {
+object wrapper:
+  sealed trait Sum[A, B]:
     def fold[C](left: A => C, right: B => C): C =
-      this match {
+      this match
         case Left(a) => left(a)
         case Right(b) => right(b)
-      }
-  }
+
   final case class Left[A, B](value: A) extends Sum[A, B]
   final case class Right[A, B](value: B) extends Sum[A, B]
-}; import wrapper._
+
+import wrapper._
 ```
 
 To prevent a name collision between the built-in `Either`, rename the `Left` and `Right` cases to `Failure` and `Success` respectively.
 
 <div class="solution">
 ```scala mdoc:reset:silent
-object wrapper {
-  sealed trait Sum[A, B] {
+object wrapper:
+  sealed trait Sum[A, B]:
     def fold[C](error: A => C, success: B => C): C =
-      this match {
+      this match
         case Failure(v) => error(v)
         case Success(v) => success(v)
-      }
-  }
+
   final case class Failure[A, B](value: A) extends Sum[A, B]
   final case class Success[A, B](value: B) extends Sum[A, B]
-}; import wrapper._
+
+import wrapper._
 ```
 </div>
 
@@ -346,22 +343,22 @@ def map[C](f: B => C): Sum[A, C]
 
 <div class="solution">
 ```scala mdoc:reset:silent
-object wrapper {
-  sealed trait Sum[A, B] {
+object wrapper:
+  sealed trait Sum[A, B]:
     def fold[C](error: A => C, success: B => C): C =
-      this match {
+      this match
         case Failure(v) => error(v)
         case Success(v) => success(v)
-      }
+
     def map[C](f: B => C): Sum[A, C] =
-      this match {
+      this match
         case Failure(v) => Failure(v)
         case Success(v) => Success(f(v))
-      }
-  }
+
   final case class Failure[A, B](value: A) extends Sum[A, B]
   final case class Success[A, B](value: B) extends Sum[A, B]
-}; import wrapper._
+
+import wrapper._
 ```
 </div>
 
@@ -369,26 +366,26 @@ Now implement `flatMap` using the same logic as `map`.
 
 <div class="solution">
 ```scala mdoc:reset:silent
-object wrapper {
-  sealed trait Sum[A, B] {
+object wrapper:
+  sealed trait Sum[A, B]:
     def fold[C](error: A => C, success: B => C): C =
-      this match {
+      this match
         case Failure(v) => error(v)
         case Success(v) => success(v)
-      }
+
     def map[C](f: B => C): Sum[A, C] =
-      this match {
+      this match
         case Failure(v) => Failure(v)
         case Success(v) => Success(f(v))
-      }
+
     def flatMap[C](f: B => Sum[A, C]) =
-      this match {
+      this match
         case Failure(v) => Failure(v)
         case Success(v) => f(v)
-      }
-  }
+
   final case class Failure[A, B](value: A) extends Sum[A, B]
   final case class Success[A, B](value: B) extends Sum[A, B]
-}; import wrapper._
+
+import wrapper._
 ```
 </div>
