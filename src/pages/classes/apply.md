@@ -3,9 +3,8 @@
 In the final exercise of the previous section, we defined a class called `Adder`:
 
 ```scala mdoc:silent
-class Adder(amount: Int) {
+class Adder(amount: Int):
   def add(in: Int): Int = in + amount
-}
 ```
 
 In the discussion we described an `Adder` as an object representing a computation---a bit like having a method that we can pass around as a value.
@@ -21,13 +20,12 @@ In Scala, by convention, an object can be "called" like a function if it has a m
 For example, let's rename the `add` method in `Adder` to `apply`:
 
 ```scala mdoc:reset:silent
-class Adder(amount: Int) {
+class Adder(amount: Int):
   def apply(in: Int): Int = in + amount
-}
 ```
 
 ```scala mdoc
-val add3 = new Adder(3)
+val add3 = Adder(3)
 add3.apply(2)
 add3(4) // shorthand for add3.apply(4)
 ```

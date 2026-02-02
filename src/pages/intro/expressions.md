@@ -7,19 +7,19 @@ We have almost finished our basic introduction to Scala. In this section we are 
 A conditional allows us to choose an expression to evaluate based on some condition. For example, we can choose a string based on which of two numbers is the smallest.
 
 ```scala mdoc
-if(1 < 2) "Yes" else "No"
+if 1 < 2 then "Yes" else "No"
 ```
 
 <div class="callout callout-info">
 #### Conditionals are Expressions {-}
 
-Scala's `if` statement has the same syntax as Java's. One important difference is that *Scala's conditional is an expression*---it has a type and returns a value.
+In Scala 3, conditionals require the `then` keyword. The key feature is that *Scala's conditional is an expression*---it has a type and returns a value, unlike Java's `if` statement.
 </div>
 
 The expression that is not selected does not get evaluated. This is apparent if we use an expression with a side-effect.
 
 ```scala mdoc
-if(1 < 2) println("Yes") else println("No")
+if 1 < 2 then println("Yes") else println("No")
 ```
 
 We can tell the expression `println("No")` is not evaluated because `No` is not output to the console.
@@ -27,10 +27,10 @@ We can tell the expression `println("No")` is not evaluated because `No` is not 
 <div class="callout callout-info">
 #### Conditional Expression Syntax {-}
 
-The syntax for a conditional expression is
+The syntax for a conditional expression in Scala 3 is
 
 ```scala
-if(condition)
+if condition then
   trueExpression
 else
   falseExpression
@@ -41,12 +41,14 @@ where
 - `condition` is an expression with `Boolean` type;
 - `trueExpression` is the expression evaluated if `condition` evaluates to `true`; and
 - `falseExpression` is the expression evaluated if `condition` evaluates to `false`.
+
+Note: In Scala 3, the `then` keyword is required, and parentheses around the condition are optional.
 </div>
 
 
 ### Blocks
 
-Blocks are expressions that allow us to sequence computations together. They are written as a pair of braces containing sub-expressions separated by semicolons or newlines.
+Blocks are expressions that allow us to sequence computations together. In Scala 3, blocks can be written using braces or indentation-based syntax.
 
 ```scala mdoc
 { 1; 2; 3 }
@@ -54,11 +56,11 @@ Blocks are expressions that allow us to sequence computations together. They are
 
 As you can see, executing this code causes the console to raise a number of warnings and return the `Int` value `3`.
 
-A block is a sequence of expressions or declarations surrounded by braces. A block is also an expression: it executes each of its sub-expressions in order and returns the value of the last expression.
+A block is a sequence of expressions or declarations. A block is also an expression: it executes each of its sub-expressions in order and returns the value of the last expression.
 
 Why execute `1` and `2` if we're going to throw their values away? This is a good question, and is the reason the Scala compiler raised those warnings above.
 
-One reason to use a block is to use code that produces side-effects before calculating a final value:
+One reason to use a block is to use code that produces side-effects before calculating a final value. Here we use the brace-based syntax:
 
 ```scala mdoc
 {
@@ -68,14 +70,13 @@ One reason to use a block is to use code that produces side-effects before calcu
 }
 ```
 
-We can also use a block when we want to name intermediate results, such as
+In Scala 3, we can also write this using indentation without braces. We can also use a block when we want to name intermediate results, such as
 
 ```scala mdoc:silent
-def name: String = {
+def name: String =
   val title = "Professor"
   val name = "Funkenstein"
   title + " " + name
-}
 ```
 
 ```scala mdoc
@@ -86,8 +87,9 @@ name
 
 #### Block Expression Syntax {-}
 
-The syntax of a block expression is
+In Scala 3, blocks can use either brace-based or indentation-based syntax:
 
+**Brace-based syntax:**
 ```scala
 {
    declarationOrExpression ...
@@ -95,18 +97,27 @@ The syntax of a block expression is
 }
 ```
 
+**Indentation-based syntax:**
+```scala
+:
+  declarationOrExpression ...
+  expression
+```
+
 where
 
-- the optional `declarationOrExpression`s are declarations or expression; and
+- the optional `declarationOrExpression`s are declarations or expressions; and
 - `expression` is an expression determining the type and value of the block expression.
+
+In Scala 3, indentation-based syntax is preferred for better readability, though braces are still fully supported.
 </div>
 
 ### Take home points
 
-Conditional expressions allow us to choose an expression to evaluate based on a `Boolean` condition. The syntax is
+Conditional expressions allow us to choose an expression to evaluate based on a `Boolean` condition. The syntax in Scala 3 is
 
 ```scala
-if(condition)
+if condition then
   trueExpression
 else
   falseExpression
@@ -115,13 +126,19 @@ else
 A conditional, being an expression, has a type and evaluates to an object.
 
 
-A block allows us to sequence expressions and declarations. It is commonly used when we want to sequence expressions with side-effects, or name intermediate results in a computation. The syntax is
+A block allows us to sequence expressions and declarations. It is commonly used when we want to sequence expressions with side-effects, or name intermediate results in a computation. In Scala 3, blocks can use braces or indentation:
 
 ```scala
+// Brace-based
 {
    declarationOrExpression ...
    expression
 }
+
+// Indentation-based  
+:
+  declarationOrExpression ...
+  expression
 ```
 
 The type and value of a block is that of the last expression in the block.
@@ -134,14 +151,14 @@ The type and value of a block is that of the last expression in the block.
 What is the type and value of the following conditional?
 
 ```scala mdoc:silent
-if(1 > 2) "alien" else "predator"
+if 1 > 2 then "alien" else "predator"
 ```
 
 <div class="solution">
 It's a `String` with value `"predator"`. Predators are clearly best:
 
 ```scala mdoc
-if(1 > 2) "alien" else "predator"
+if 1 > 2 then "alien" else "predator"
 ```
 
 The type is determined by the upper bound of the types in the *then* and *else* expressions. In this case both expressions are `Strings` so the result is also a `String`.
@@ -154,14 +171,14 @@ The value is determined at runtime. `2` is greater than `1` so the conditional e
 What about this conditional?
 
 ```scala mdoc:silent
-if(1 > 2) "alien" else 2001
+if 1 > 2 then "alien" else 2001
 ```
 
 <div class="solution">
 It's a value of type `Any` with value `2001`:
 
 ```scala mdoc
-if(1 > 2) "alien" else 2001
+if 1 > 2 then "alien" else 2001
 ```
 
 This is similar to the previous exercise---the difference is the type of the result. We saw earlier that the type is the *upper bound* of the positive and negative arms of the expression. `"alien"` and `2001` are completely different types - their closest common ancestor is `Any`, which is the grand supertype of all Scala types.
@@ -176,14 +193,14 @@ We'll learn more about `Any` in the following sections. Java programmers shouldn
 What about this conditional?
 
 ```scala mdoc:silent
-if(false) "hello"
+if false then "hello"
 ```
 
 <div class="solution">
 The result type and value are `Any` and `()` respectively:
 
 ```scala mdoc
-if(false) "hello"
+if false then "hello"
 ```
 
 All code being equal, conditionals without `else` expressions only evaluate to a value half of the time. Scala works around this by returning the `Unit` value if the `else` branch should be evaluated. We would usually only use these expressions for their side-effects.

@@ -7,11 +7,12 @@ One common use case is auxiliary constructors. Although Scala does have syntax t
 ```scala mdoc:silent
 class Timestamp(val seconds: Long)
 
-object Timestamp {
+object Timestamp:
   def apply(hours: Int, minutes: Int, seconds: Int): Timestamp =
     new Timestamp(hours*60*60 + minutes*60 + seconds)
-}
 ```
+
+Note the use of the `new` keyword in the `apply` method. This is to distinguish the constructor from the `apply` method.
 
 ```scala mdoc
 Timestamp(1, 1, 1).seconds
@@ -39,13 +40,11 @@ Timestamp // note that the type is `Timestamp.type`, not `Timestamp`
 To define a companion object for a class, in the *same file* as the class define an object with the same name.
 
 ```scala
-class Name {
+class Name:
   ...
-}
 
-object Name {
+object Name:
   ...
-}
 ```
 </div>
 
@@ -76,17 +75,14 @@ parts(0)
 Here is the code:
 
 ```scala mdoc:silent
-class Person(val firstName: String, val lastName: String) {
+class Person(val firstName: String, val lastName: String):
   def name: String =
     s"$firstName $lastName"
-}
 
-object Person {
-  def apply(name: String): Person = {
+object Person:
+  def apply(name: String): Person =
     val parts = name.split(" ")
     new Person(parts(0), parts(1))
-  }
-}
 ```
 
 And here it is in use:
@@ -123,7 +119,7 @@ This exercise is inteded to provide more practice writing code. The model soluti
 class Director(
   val firstName: String,
   val lastName: String,
-  val yearOfBirth: Int) {
+  val yearOfBirth: Int):
 
   def name: String =
     s"$firstName $lastName"
@@ -133,21 +129,19 @@ class Director(
     lastName: String = this.lastName,
     yearOfBirth: Int = this.yearOfBirth) =
     new Director(firstName, lastName, yearOfBirth)
-}
 
-object Director {
+object Director:
   def apply(firstName: String, lastName: String, yearOfBirth: Int): Director =
     new Director(firstName, lastName, yearOfBirth)
 
   def older(director1: Director, director2: Director): Director =
-    if (director1.yearOfBirth < director2.yearOfBirth) director1 else director2
-}
+    if director1.yearOfBirth < director2.yearOfBirth then director1 else director2
 
 class Film(
   val name: String,
   val yearOfRelease: Int,
   val imdbRating: Double,
-  val director: Director) {
+  val director: Director):
 
   def directorsAge =
     yearOfRelease - director.yearOfBirth
@@ -161,9 +155,8 @@ class Film(
     imdbRating: Double = this.imdbRating,
     director: Director = this.director) =
     new Film(name, yearOfRelease, imdbRating, director)
-}
 
-object Film {
+object Film:
   def apply(
     name: String,
     yearOfRelease: Int,
@@ -172,17 +165,15 @@ object Film {
     new Film(name, yearOfRelease, imdbRating, director)
 
   def newer(film1: Film, film2: Film): Film =
-    if (film1.yearOfRelease < film2.yearOfRelease) film1 else film2
+    if film1.yearOfRelease < film2.yearOfRelease then film1 else film2
 
-  def highestRating(film1: Film, film2: Film): Double = {
+  def highestRating(film1: Film, film2: Film): Double =
     val rating1 = film1.imdbRating
     val rating2 = film2.imdbRating
-    if (rating1 > rating2) rating1 else rating2
-  }
+    if rating1 > rating2 then rating1 else rating2
 
   def oldestDirectorAtTheTime(film1: Film, film2: Film): Director =
-    if (film1.directorsAge > film2.directorsAge) film1.director else film2.director
-}
+    if film1.directorsAge > film2.directorsAge then film1.director else film2.director
 ```
 
 </div>

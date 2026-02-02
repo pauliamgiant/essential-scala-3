@@ -157,20 +157,19 @@ A project is no good without code to run! Let's create our first simple Scala ap
 
 The content of the file should read as follows:
 
-```scala mdoc:silent
-object HelloWorld {
+```scala
+object HelloWorld: 
 
-}
+
 ```
 
 Replace this text with the following minimalist application:
 
 ```scala mdoc:reset:silent
-object HelloWorld {
-  def main(args: Array[String]): Unit = {
+object HelloWorld:
+  def main(args: Array[String]): Unit =
     println("Hello world!")
-  }
-}
+  
 ```
 
 Select the **Run Menu** and choose **Run**. This should execute the code in your application, resulting in the words `Hello world!` appearing in the *Console* pane at the bottom of the window. Congratulations - you just ran your first Scala application!
@@ -224,7 +223,7 @@ Welcome to the Scala worksheet
 Any expression you add to the left of the editor is evaluated and printed on the right. To demonstrate this, change the text in the editor to the following:
 
 ```scala
-object FirstSteps {
+object FirstSteps:
   println("Welcome to the Scala worksheet")
 
   1 + 1
@@ -232,13 +231,12 @@ object FirstSteps {
   if(20 > 10) "left" else "right"
 
   println("The ultimate answer is " + 42)
-}
 ```
 
 Save your work by selecting the **File Menu** and choosing **Save** (or better still by pressing **Ctrl+S**). Eclipse should automatically evaluate each line of code and print the results on the right of the editor:
 
 ```scala
-object FirstSteps {
+object FirstSteps:
   println("Welcome to the Scala worksheet")   //> Welcome to the Scala worksheet
 
   1 + 1                                       //> res0: Int(2) = 2
@@ -246,7 +244,6 @@ object FirstSteps {
   if(20 > 10) "left" else "right"             //> res1: String = left
 
   println("The ultimate answer is " + 42)     //> The ultimate answer is 42
-}
 ```
 
 <!-- Trailing slash and double newline are REQUIRED to prevent LaTeX repositioning this -->

@@ -86,7 +86,8 @@ Any Scala expression written `a.b(c)` can also be written `a b c`.
 Note that `a b c d e` is equivalent to `a.b(c).d(e)`, not `a.b(c, d, e)`.
 </div>
 
-We can use *infix operator notation* with any method that takes one parameter, regardless of whether it has a symbolic or alphanumeric name:
+We can use *infix operator notation* with any method that takes one parameter, regardless of whether it has a symbolic or alphanumeric name.
+Scala 3 does not forbid infix notation for alphanumeric methods, but style guidelines increasingly prefer dot-notation for non-DSL code.
 
 ```scala mdoc:silent
 "the quick brown fox" split " "
