@@ -17,9 +17,9 @@ Seq(1, 2, 3).map(_ * 2)
 The equivalent program written with a for comprehension is:
 
 ```scala mdoc
-for {
+for
   x <- Seq(1, 2, 3)
-} yield x * 2
+yield x * 2
 ```
 
 We call the expression containing the `<-` a *generator*, with a *pattern* on the left hand side and a *generator expression* on the right. A for comprehension iterates over the elements in the generator, binding each element to the pattern and calling the `yield` expression. It combines the yielded results into a sequence of the same type as the original generator.
@@ -35,10 +35,10 @@ data.flatMap(_.map(_ * 2))
 This is getting complicated. The equivalent for comprehension is much more ... comprehensible.
 
 ```scala mdoc
-for {
+for
   subseq  <- data
   element <- subseq
-} yield element * 2
+yield element * 2
 ```
 
 This gives us an idea of what the for comprehensions does. A general for comprehension:
@@ -51,11 +51,11 @@ val e: Int = 0
 ```
 
 ```scala mdoc:silent
-for {
+for
   x <- a
   y <- b
   z <- c
-} yield e
+yield e
 ```
 
 translates to:
@@ -69,10 +69,10 @@ The intuitive understanding of the code is to iterate through all of the sequenc
 Note that if we omit the `yield` keyword before the final expression, the overall type of the `for` comprehension becomes `Unit`. This version of the `for` comprehension is executed purely for its side-effects, and any result is ignored. Revisiting the doubling example from earlier, we can print the results instead of returning them:
 
 ```scala mdoc:silent
-for {
+for
   seq <- Seq(Seq(1), Seq(2, 3))
   elt <- seq
-} println(elt * 2) // Note: no 'yield' keyword
+do println(elt * 2) // Note: using 'do' instead of 'yield'
 // 2
 // 4
 // 6
@@ -84,7 +84,7 @@ The equivalent method calls use `flatMap` as usual and `foreach` in place of the
 a.flatMap(x => b.flatMap(y => c.foreach(z => e)))
 ```
 
-We can use parentheses instead of braces to delimit the generators in a for loop. However, we must use semicolons to separate the generators if we do. Thus:
+In Scala 3, the idiomatic style is to use optional braces syntax as shown above. However, you can also use parentheses with semicolons to separate generators if you prefer:
 
 ```scala mdoc:silent
 for (
@@ -94,7 +94,7 @@ for (
 ) yield e
 ```
 
-is equivalent to:
+Or the older curly braces style:
 
 ```scala mdoc:silent
 for {
@@ -104,20 +104,18 @@ for {
 } yield e
 ```
 
-Some developers prefer to use parentheses when there is only one generator and braces otherwise:
+Some developers prefer to use parentheses when there is only one generator:
 
 ```scala mdoc:silent
-for(x <- Seq(1, 2, 3)) yield {
-  x * 2
-}
+for(x <- Seq(1, 2, 3)) yield x * 2
 ```
 
-We can also use braces to wrap the yield expression and convert it to a *block* as usual:
+You can also use braces to wrap the yield expression and convert it to a *block* as usual:
 
 ```scala
-for {
+for
   // ...
-} yield {
+yield {
   // ...
 }
 ```
@@ -141,9 +139,9 @@ val directors: Seq[Director] = Seq(nolan)
 ```
 
 ```scala mdoc:silent
-for {
+for
   film <- nolan.films
-} yield film.name
+yield film.name
 ```
 </div>
 
@@ -153,10 +151,10 @@ List the names of all films by all directors.
 
 <div class="solution">
 ```scala mdoc:silent
-for {
+for
   director <- directors
   film     <- director.films
-} yield film.name
+yield film.name
 ```
 </div>
 
@@ -168,23 +166,21 @@ Find all films sorted by descending IMDB rating:
 This one's a little trickier. We have to calculate the complete list of films first before sorting them with `sortWith`. Precedence rules require us to wrap the whole `for / yield` expression in parentheses to achieve this in one expression:
 
 ```scala mdoc:silent
-(for {
+(for
   director <- directors
   film     <- director.films
-} yield film).sortWith((a, b) => a.imdbRating > b.imdbRating)
+yield film).sortWith((a, b) => a.imdbRating > b.imdbRating)
 ```
 
 Many developers prefer to use a temporary variable to make this code tidier:
 
 ```scala mdoc:silent
-val films = for {
+val films = for
   director <- directors
   film     <- director.films
-} yield film
+yield film
 
-films sortWith { (a, b) =>
-  a.imdbRating > b.imdbRating
-}
+films.sortWith((a, b) => a.imdbRating > b.imdbRating)
 ```
 </div>
 
@@ -193,12 +189,12 @@ films sortWith { (a, b) =>
 Print the following for every film: `"Tonight only! FILM NAME by DIRECTOR!"`
 
 <div class="solution">
-We can drop the `yield` keyword from the `for` expression to achieve `foreach`-like semantics:
+We can use `do` instead of `yield` in the `for` expression to achieve `foreach`-like semantics:
 
 ```scala mdoc:silent
-for {
+for
   director <- directors
   film     <- director.films
-} println(s"Tonight! ${film.name} by ${director.name}!")
+do println(s"Tonight! ${film.name} by ${director.name}!")
 ```
 </div>

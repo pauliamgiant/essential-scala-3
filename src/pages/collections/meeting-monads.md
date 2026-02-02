@@ -24,10 +24,10 @@ def getSecondNumbers: Seq[Int] = Seq(5, 6)
 ```
 
 ```scala mdoc:silent
-for {
+for
   a <- getFirstNumber  // getFirstNumber  returns Option[Int]
   b <- getSecondNumber // getSecondNumber returns Option[Int]
-} yield a + b
+yield a + b
 
 // The final result is an Option[Int]---the result of
 // applying `+` to `a` and `b` if both values are present
@@ -36,10 +36,10 @@ for {
 This second example calculate the sums of all possible pairs of numbers from two sequences:
 
 ```scala mdoc:silent
-for {
+for
   a <- getFirstNumbers  // getFirstNumbers  returns Seq[Int]
   b <- getSecondNumbers // getSecondNumbers returns Seq[Int]
-} yield a + b
+yield a + b
 
 // The final result is a Seq[Int]---the results of
 // applying `+` to all combinations of `a` and `b`
@@ -48,10 +48,10 @@ for {
 This third example asynchronously calculates the sum of two numbers that can only be obtained asynchronously (all without blocking):
 
 ```scala mdoc:silent
-for {
+for
   a <- getFirstNumber   // getFirstNumber  returns Future[Int]
   b <- getSecondNumber  // getSecondNumber returns Future[Int]
-} yield a + b
+yield a + b
 
 // The final result is a Future[Int]---a data structure
 // that will eventually allow us to access the result of
@@ -88,23 +88,23 @@ Add together all the options to create a new option. Add together all the sequen
 
 <div class="solution">
 ```scala mdoc:silent
-for {
+for
   x <- opt1
   y <- opt2
   z <- opt3
-} yield x + y + z
+yield x + y + z
 
-for {
+for
   x <- seq1
   y <- seq2
   z <- seq3
-} yield x + y + z
+yield x + y + z
 
-for {
+for
   x <- try1
   y <- try2
   z <- try3
-} yield x + y + z
+yield x + y + z
 ```
 
 How's that for a cut-and-paste job?

@@ -140,7 +140,7 @@ Scala's separation of interface and implementation means that the methods on ord
 
 #### map and flatMap
 
-Maps, like sequences, extend the `Traversable` trait, which means they inherit the standard `map` and `flatMap` methods. In fact, a `Map[A,B]` is a `Traversable[Tuple2[A,B]]`, which means that `map` and `flatMap` operate on instances of `Tuple2`.
+Maps, like sequences, extend the `Iterable` trait, which means they inherit the standard `map` and `flatMap` methods. In fact, a `Map[A,B]` is an `Iterable[Tuple2[A,B]]`, which means that `map` and `flatMap` operate on instances of `Tuple2`.
 
 Here is an example of `map`:
 
@@ -170,19 +170,19 @@ example.flatMap {
 and the same example written using `for` syntax:
 
 ```scala mdoc
-for{
-         (str, num) <- example
-          x         <- 1 to 3
-       } yield (str + x) -> (num * x)
+for
+  (str, num) <- example
+  x         <- 1 to 3
+yield (str + x) -> (num * x)
 ```
 
 Note that the result is a `Map` again. The argument to `flatMap` returns a sequence of pairs, so in the end we are able to make a new `Map` from them. If our function returns a sequence of non-pairs, we get back a more generic data type.
 
 ```scala mdoc
-for{
-         (str, num) <- example
-          x         <- 1 to 3
-       } yield (x + str) + "=" + (x * num)
+for
+  (str, num) <- example
+  x         <- 1 to 3
+yield (x + str) + "=" + (x * num)
 ```
 
 #### In summary
@@ -336,17 +336,18 @@ Write a method `printColors` that prints everyone's favorite color!
 We can write this one using `foreach` or a for comprehension:
 
 ```scala mdoc:silent
-def printColors() = for {
-  person <- people
-} println(s"${person}'s favorite color is ${favoriteColor(person)}!")
+def printColors() = 
+  for
+    person <- people
+  do println(s"${person}'s favorite color is ${favoriteColor(person)}!")
 ```
 
 or:
 
 ```scala mdoc:nest:silent
-def printColors() = people foreach { person =>
-  println(s"${person}'s favorite color is ${favoriteColor(person)}!")
-}
+def printColors() = people.foreach:
+  person =>
+    println(s"$person's favorite color is ${favoriteColor(person)}!")
 ```
 </div>
 
@@ -368,19 +369,16 @@ First we find the oldest person, then we look up the answer:
 
 ```scala mdoc:silent
 val oldest: Option[String] =
-  people.foldLeft(Option.empty[String]) { (older, person) =>
-    if(ages.getOrElse(person, 0) > older.flatMap(ages.get).getOrElse(0)) {
-      Some(person)
-    } else {
-      older
-    }
-  }
+  people.foldLeft(Option.empty[String]): (older, person) =>
+    if ages.getOrElse(person, 0) > older.flatMap(ages.get).getOrElse(0) 
+    then Some(person)
+    else older
 
 val favorite: Option[String] =
-  for {
+  for
     oldest <- oldest
     color  <- favoriteColors.get(oldest)
-  } yield color
+  yield color
 ```
 </div>
 
@@ -396,17 +394,16 @@ Write a method that takes two sets and returns a set containing the union of the
 As always, start by writing out the types and then follow the types to fill-in the details.
 
 ```scala mdoc:silent
-def union[A](set1: Set[A], set2: Set[A]): Set[A] = {
+def union[A](set1: Set[A], set2: Set[A]): Set[A] = 
   ???
-}
 ```
 
 We need to think of an algorithm for computing the union. We can start with one of the sets and add the elements from the other set to it. The result will be the union. What types does this result in? Our result has type `Set[A]` and we need to add every `A` from the two sets to our result, which is an operation with type `(Set[A], A) => Set[A]`. This means we need a fold. Since order is not important any fold will do.
 
 ```scala mdoc:nest:silent
-def union[A](set1: Set[A], set2: Set[A]): Set[A] = {
+def union[A](set1: Set[A], set2: Set[A]): Set[A] = 
   set1.foldLeft(set2){ (set, elt) => (set + elt) }
-}
+
 ```
 </div>
 
@@ -418,14 +415,12 @@ Now let's write union for maps. Assume we have two `Map[A, Int]` and add corresp
 The solution follows the same pattern as the union for sets, but here we have to handle adding the values as well.
 
 ```scala mdoc:nest:silent
-def union[A](map1: Map[A, Int], map2: Map[A, Int]): Map[A, Int] = {
-  map1.foldLeft(map2){ (map, elt) =>
+def union[A](map1: Map[A, Int], map2: Map[A, Int]): Map[A, Int] = 
+  map1.foldLeft(map2): (map, elt) =>
     val (key, value1) = elt
     val value2 = map.get(key)
     val total = value1 + value2.getOrElse(0)
     map + (key -> total)
-  }
-}
 ```
 </div>
 
@@ -437,13 +432,11 @@ There are many things that can be added, such as strings (string concatenation),
 With the tools we've seen far, we could add another function parameter like so:
 
 ```scala mdoc:nest:silent
-def union[A, B](map1: Map[A, B], map2: Map[A, B], add: (B, B) => B): Map[A, B] = {
-  map1.foldLeft(map2){ (map, elt) =>
+def union[A, B](map1: Map[A, B], map2: Map[A, B], add: (B, B) => B): Map[A, B] =
+  map1.foldLeft(map2): (map, elt) =>
     val (k, v) = elt
     val newV = map.get(k).map(v2 => add(v, v2)).getOrElse(v)
     map + (k -> newV)
-  }
-}
 ```
 
 Later we'll see a nicer way to do this using type classes.

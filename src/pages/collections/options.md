@@ -9,37 +9,34 @@ Let's look into Scala's built-in `Option` type in more detail.
 `Option` is a generic sealed trait with two subtypes---`Some` and `None`. Here is an abbreviated version of the code---we will fill in more methods as we go on:
 
 ```scala mdoc:silent
-sealed trait Option[+A] {
+sealed trait Option[+A]:
   def getOrElse[B >: A](default: B): B
 
   def isEmpty: Boolean
   def isDefined: Boolean = !isEmpty
 
   // other methods...
-}
 
-final case class Some[A](x: A) extends Option[A] {
+final case class Some[A](x: A) extends Option[A]:
   def getOrElse[B >: A](default: B) = x
 
   def isEmpty: Boolean = false
 
   // other methods...
-}
 
-case object None extends Option[Nothing] {
+case object None extends Option[Nothing]:
   def getOrElse[B >: Nothing](default: B) = default
 
   def isEmpty: Boolean = true
 
   // other methods...
-}
 ```
 
 Here is a typical example of code for generating an option---reading an integer from the user:
 
 ```scala mdoc:nest:silent
 def readInt(str: String): Option[Int] =
-  if(str matches "-?\\d+") Some(str.toInt) else None
+  if str matches "-?\\d+" then Some(str.toInt) else None
 ```
 
 The `toInt` method of `String` throws a `NumberFormatException` if the string isn't a valid series of digits, so we guard its use with a regular expression. If the number is correctly formatted we return `Some` of the `Int` result. Otherwise we return `None`. Example usage:
@@ -63,10 +60,9 @@ readInt("abc").getOrElse(0)
 **Alternative 2: pattern matching**---`Some` and `None` both have associated patterns that we can use in a `match` expression:
 
 ```scala mdoc
-readInt("123") match {
+readInt("123") match
   case Some(number) => number + 1
   case None         => 0
-}
 ```
 
 **Alternative 3: `map` and `flatMap`**---`Option` supports both of these methods, enabling us to chain off of the value within producing a new `Option`. This bears a more thorough explanation---let's look at it in a little more detail.
@@ -76,7 +72,7 @@ readInt("123") match {
 One way of thinking about an `Option` is as a sequence of 0 or 1 elements. In fact, `Option` supports many of the sequence operations we have seen so far:
 
 ```scala mdoc:nest:silent
-sealed trait Option[+A] {
+sealed trait Option[+A]:
   def getOrElse[B >: A](default: B): B
 
   def isEmpty: Boolean
@@ -91,7 +87,6 @@ sealed trait Option[+A] {
 
   def foldLeft[B](initial: B)(func: (B, A) => B): B
   def foldRight[B](initial: B)(func: (A, B) => B): B
-}
 ```
 
 ```scala mdoc:invisible:reset
@@ -148,10 +143,10 @@ Because `Option` supports `map` and `flatMap`, it also works with for comprehens
 val optionA = readInt("123")
 val optionB = readInt("234")
 
-for {
+for   
   a <- optionA
   b <- optionB
-} yield a + b
+yield a + b
 ```
 
 In this code snippet `a` and `b` are both `Ints`---we can add them together directly using `+` in the `yield` block.
@@ -195,11 +190,9 @@ The pattern is to use `flatMap` for all clauses except the innermost, which beco
 
 ```scala mdoc:silent
 def addOptions2(opt1: Option[Int], opt2: Option[Int]) =
-  opt1 flatMap { a =>
-    opt2 map { b =>
+  opt1.flatMap: a =>
+    opt2.map: b =>
       a + b
-    }
-  }
 ```
 </div>
 
@@ -212,11 +205,11 @@ For comprehensions can have as many clauses as we want so all we need to do is a
 
 ```scala mdoc:nest:silent
 def addOptions(opt1: Option[Int], opt2: Option[Int], opt3: Option[Int]) =
-  for {
+  for
     a <- opt1
     b <- opt2
     c <- opt3
-  } yield a + b + c
+  yield a + b + c
 ```
 </div>
 
@@ -227,13 +220,10 @@ Here we can start to see the simplicity of for comprehensions:
 
 ```scala mdoc:silent
 def addOptions2(opt1: Option[Int], opt2: Option[Int], opt3: Option[Int]) =
-  opt1 flatMap { a =>
-    opt2 flatMap { b =>
-      opt3 map { c =>
+  opt1.flatMap: a =>
+    opt2.flatMap: b =>
+      opt3.map: c =>
         a + b + c
-      }
-    }
-  }
 ```
 </div>
 
@@ -246,7 +236,7 @@ We saw this code in the [Traits](/traits/) chapter when we wrote the `DivisionRe
 
 ```scala mdoc:silent
 def divide(numerator: Int, denominator: Int) =
-  if(denominator == 0) None else Some(numerator / denominator)
+  if denominator == 0 then None else Some(numerator / denominator)
 ```
 </div>
 
@@ -257,11 +247,11 @@ In this example the `divide` operation returns an `Option[Int]` instead of an `I
 
 ```scala mdoc:silent
 def divideOptions(numerator: Option[Int], denominator: Option[Int]) =
-  for {
+  for
     a <- numerator
     b <- denominator
     c <- divide(a, b)
-  } yield c
+  yield c
 ```
 </div>
 
@@ -290,50 +280,44 @@ and behaves as follows:
 The trick to this one is realising that each clause in the *for* comprehension can contain an entire block of Scala code:
 
 ```scala mdoc:nest:silent
-def calculator(operand1: String, operator: String, operand2: String): Unit = {
-  val result = for {
+def calculator(operand1: String, operator: String, operand2: String): Unit =
+  val result = for
     a   <- readInt(operand1)
     b   <- readInt(operand2)
-    ans <- operator match {
+    ans <- operator match
              case "+" => Some(a + b)
              case "-" => Some(a - b)
              case "*" => Some(a * b)
              case "/" => divide(a, b)
              case _   => None
-           }
-  } yield ans
+  yield ans
 
-  result match {
+  result match
     case Some(number) => println(s"The answer is $number!")
     case None         => println(s"Error calculating $operand1 $operator $operand2")
-  }
-}
 ```
 
 Another approach involves factoring the calculation part out into its own private function:
 
 ```scala mdoc:nest:silent
-def calculator(operand1: String, operator: String, operand2: String): Unit = {
+def calculator(operand1: String, operator: String, operand2: String): Unit =
   def calcInternal(a: Int, b: Int) =
-    operator match {
+    operator match
       case "+" => Some(a + b)
       case "-" => Some(a - b)
       case "*" => Some(a * b)
       case "/" => divide(a, b)
       case _   => None
-    }
 
-  val result = for {
+  val result = for
     a   <- readInt(operand1)
     b   <- readInt(operand2)
     ans <- calcInternal(a, b)
-  } yield ans
+  yield ans
 
-  result match {
+  result match
     case Some(number) => println(s"The answer is $number!")
     case None         => println(s"Error calculating $operand1 $operator $operand2")
-  }
-}
 ```
 </div>
 
@@ -343,29 +327,23 @@ For the enthusiastic only, write a second version of your code using `flatMap` a
 This version of the code is much clearer if we factor out the calculation part into its own function. Without this it would be very hard to read:
 
 ```scala mdoc:nest:silent
-def calculator(operand1: String, operator: String, operand2: String): Unit = {
+def calculator(operand1: String, operator: String, operand2: String): Unit =
   def calcInternal(a: Int, b: Int) =
-    operator match {
+    operator match
       case "+" => Some(a + b)
       case "-" => Some(a - b)
       case "*" => Some(a * b)
       case "/" => divide(a, b)
       case _   => None
-    }
 
   val result =
-    readInt(operand1) flatMap { a =>
-      readInt(operand2) flatMap { b =>
-        calcInternal(a, b) map { result =>
+    readInt(operand1).flatMap: a =>
+      readInt(operand2).flatMap: b =>
+        calcInternal(a, b).map: result =>
           result
-        }
-      }
-    }
 
-  result match {
+  result match
     case Some(number) => println(s"The answer is $number!")
     case None         => println(s"Error calculating $operand1 $operator $operand2")
-  }
-}
 ```
 </div>
