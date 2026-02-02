@@ -11,17 +11,16 @@ Just as we have two patterns for building algebraic data types, we will have two
 Polymorphic dispatch, or just polymorphism for short, is a fundamental object-oriented technique. If we define a method in a trait, and have different implementations in classes extending that trait, when we call that method the implementation on the actual concrete instance will be used. Here's a very simple example. We start with a simple definition using the familiar sum type (or) pattern.
 
 ```scala mdoc:silent
-sealed trait A {
+sealed trait A:
   def foo: String
-}
-final case class B() extends A {
+
+final case class B() extends A:
   def foo: String =
     "It's B!"
-}
-final case class C() extends A {
+
+final case class C() extends A:
   def foo: String =
     "It's C!"
-}
 ```
 
 We declare a value with type `A` but we see the concrete implementation on `B` or `C` is used.
@@ -39,18 +38,17 @@ anA.foo
 We can define an implementation in a trait, and change the implementation in an extending class using the `override` keyword.
 
 ```scala mdoc:reset:silent
-sealed trait A {
+sealed trait A:
   def foo: String =
     "It's A!"
-}
-final case class B() extends A {
+
+final case class B() extends A:
   override def foo: String =
     "It's B!"
-}
-final case class C() extends A {
+
+final case class C() extends A:
   override def foo: String =
     "It's C!"
-}
 ```
 
 The behaviour is as before; the implementation on the concrete class is selected.
@@ -75,9 +73,8 @@ type F = Any
 ```
 
 ```scala
-case class A(b: B, c: C) {
+case class A(b: B, c: C):
   def f: F = ???
-}
 ```
 
 In the body of the method we must use `b`, `c`, and any method parameters to construct the result of type `F`.
@@ -90,17 +87,16 @@ In the body of the method we must use `b`, `c`, and any method parameters to con
 If `A` is a `B` or `C`, and we want to write a method `f` returning an `F`, define `f` as an abstract method on `A` and provide concrete implementations in `B` and `C`.
 
 ```scala mdoc:silent
-sealed trait A {
+sealed trait A:
   def f: F
-}
-final case class B() extends A {
+
+final case class B() extends A:
   def f: F =
     ???
-}
-final case class C() extends A {
+
+final case class C() extends A:
   def f: F =
     ???
-}
 ```
 </div>
 
@@ -116,9 +112,8 @@ If `A` has a `b` (with type `B`) and a `c` (with type `C`), and we want to write
 
 ```scala
 def f(a: A): F =
-  a match {
+  a match
     case A(b, c) => ???
-  }
 ```
 
 In the body of the method we use `b` and `c` to construct the result of type `F`.
@@ -132,10 +127,9 @@ If `A` is a `B` or `C`, and we want to write a method `f` accepting an `A` and r
 
 ```scala mdoc:silent
 def f(a: A): F =
-  a match {
+  a match
     case B() => ???
     case C() => ???
-  }
 ```
 </div>
 
@@ -168,49 +162,44 @@ final case class CatFood(food: String) extends Food
 Now we can implement `dinner` as a method returning `Food`. First using polymorphism:
 
 ```scala mdoc:silent
-sealed trait Feline {
+sealed trait Feline:
   def dinner: Food
-}
-final case class Lion() extends Feline {
+
+final case class Lion() extends Feline:
   def dinner: Food =
     Antelope
-}
-final case class Tiger() extends Feline {
+
+final case class Tiger() extends Feline:
   def dinner: Food =
     TigerFood
-}
-final case class Panther() extends Feline {
+
+final case class Panther() extends Feline:
   def dinner: Food =
     Licorice
-}
-final case class Cat(favouriteFood: String) extends Feline {
+
+final case class Cat(favouriteFood: String) extends Feline:
   def dinner: Food =
     CatFood(favouriteFood)
-}
 ```
 
 Now using pattern matching. We actually have two choices when using pattern matching. We can implement our code in a single method on `Feline` or we can implement it in a method on another object. Let's see both.
 
 ```scala
-sealed trait Feline {
+sealed trait Feline:
   def dinner: Food =
-    this match {
+    this match
       case Lion() => Antelope
       case Tiger() => TigerFood
       case Panther() => Licorice
       case Cat(favouriteFood) => CatFood(favouriteFood)
-    }
-}
 
-object Diner {
+object Diner:
   def dinner(feline: Feline): Food =
-    feline match {
+    feline match
       case Lion() => Antelope
       case Tiger() => TigerFood
       case Panther() => Licorice
       case Cat(food) => CatFood(food)
-    }
-}
 ```
 
 Note how we can directly apply the patterns, and the code falls out. This is the main point we want to make with structural recursion: the code follows the shape of the data, and can be produced in an almost mechanical way.
@@ -271,41 +260,39 @@ Using polymorphism and then using pattern matching implement a method called `ne
 First with polymorphism:
 
 ```scala mdoc:silent
-object wrapper {
-  sealed trait TrafficLight {
+object wrapper:
+  sealed trait TrafficLight:
     def next: TrafficLight
-  }
-  case object Red extends TrafficLight {
+
+  case object Red extends TrafficLight:
     def next: TrafficLight =
       Green
-  }
-  case object Green extends TrafficLight {
+
+  case object Green extends TrafficLight:
     def next: TrafficLight =
       Yellow
-  }
-  case object Yellow extends TrafficLight {
+
+  case object Yellow extends TrafficLight:
     def next: TrafficLight =
       Red
-  }
-}; import wrapper._
+; import wrapper._
 ```
 
 Now with pattern matching:
 
 ```scala mdoc:reset:silent
-object wrapper {
-  sealed trait TrafficLight {
+object wrapper:
+  sealed trait TrafficLight:
     def next: TrafficLight =
-      this match {
+      this match
         case Red => Green
         case Green => Yellow
         case Yellow => Red
-      }
-  }
+
   case object Red extends TrafficLight
   case object Green extends TrafficLight
   case object Yellow extends TrafficLight
-}; import wrapper._
+; import wrapper._
 ```
 
 In this case I think implementing inside the class using pattern matching is best. `Next` doesn't depend on any external data and we probably only want one implementation of it. Pattern matching makes the structure of the state machine clearer than polymorphism.
@@ -337,44 +324,39 @@ assert(Calculator.+(Failure("Badness"), 1) == Failure("Badness"))
 Start by implementing the framework the exercise calls for:
 
 ```scala
-object Calculator {
+object Calculator:
   def +(calc: Calculation, operand: Int): Calculation = ???
   def -(calc: Calculation, operand: Int): Calculation = ???
-}
 ```
 
 Now apply the structural recursion pattern:
 
 ```scala
-object Calculator {
+object Calculator:
   def +(calc: Calculation, operand: Int): Calculation =
-    calc match {
+    calc match
         case Success(result) => ???
         case Failure(reason) => ???
-    }
+
   def -(calc: Calculation, operand: Int): Calculation =
-    calc match {
+    calc match
       case Success(result) => ???
       case Failure(reason) => ???
-    }
-}
 ```
 
 To write the remaining bodies of the methods we can no longer rely on the patterns. However, a bit of thought quickly leads us to the correct answer. We know that `+` and `-` are binary operations; we need two integers to use them. We also know we need to return a `Calculation`. Looking at the `Failure` cases, we don't have two `Int`s available. The only result that makes sense to return is `Failure`. On the `Success` side, we *do* have two `Int`s and thus we should return `Success`. This gives us:
 
 ```scala mdoc:silent
-object Calculator {
+object Calculator:
   def +(calc: Calculation, operand: Int): Calculation =
-    calc match {
+    calc match
         case Success(result) => Success(result + operand)
         case Failure(reason) => Failure(reason)
-    }
+
   def -(calc: Calculation, operand: Int): Calculation =
-    calc match {
+    calc match
       case Success(result) => Success(result - operand)
       case Failure(reason) => Failure(reason)
-    }
-}
 ```
 </div>
 
@@ -394,14 +376,12 @@ The important points here are:
 
 ```scala mdoc:silent
 def /(calc: Calculation, operand: Int): Calculation =
-  calc match {
+  calc match
     case Success(result) =>
-      operand match {
+      operand match
         case 0 => Failure("Division by zero")
         case _ => Success(result / operand)
-      }
     case Failure(reason) => Failure(reason)
-  }
 ```
 </div>
 

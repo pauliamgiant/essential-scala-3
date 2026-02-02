@@ -32,23 +32,22 @@ There is obvious duplication here, and it would be nice to not have to write the
 ```scala mdoc:reset:silent
 import java.util.Date
 
-trait Visitor {
+trait Visitor:
   def id: String      // Unique id assigned to each user
   def createdAt: Date // Date this user first visited the site
 
   // How long has this visitor been around?
-  def age: Long = new Date().getTime - createdAt.getTime
-}
+  def age: Long = Date().getTime - createdAt.getTime
 
 case class Anonymous(
   id: String,
-  createdAt: Date = new Date()
+  createdAt: Date = Date()
 ) extends Visitor
 
 case class User(
   id: String,
   email: String,
-  createdAt: Date = new Date()
+  createdAt: Date = Date()
 ) extends Visitor
 ```
 
@@ -78,25 +77,22 @@ Here the method `older` can be called with either an `Anonymous` or a `User` as 
 To declare a trait we write
 
 ```scala
-trait TraitName {
+trait TraitName:
   declarationOrExpression ...
-}
 ```
 
 To declare that a class is a subtype of a trait we write
 
 ```scala
-class Name(...) extends TraitName {
+class Name(...) extends TraitName:
   ...
-}
 ```
 
 More commonly we'll use case classes, but the syntax is the same
 
 ```scala
-case class Name(...) extends TraitName {
+case class Name(...) extends TraitName:
  ...
-}
 ```
 </div>
 
@@ -113,13 +109,12 @@ Let's return to the `Visitor` trait to further explore abstract definitions. Rec
 ```scala
 import java.util.Date
 
-trait Visitor {
+trait Visitor:
   def id: String      // Unique id assigned to each user
   def createdAt: Date // Date this user first visited the site
 
   // How long has this visitor been around?
-  def age: Long = new Date().getTime - createdAt.getTime
-}
+  def age: Long = Date().getTime - createdAt.getTime
 ```
 
 `Visitor` prescribes two abstract methods. That is, methods which do not have an implementation but must be implemented by extending classes. These are `id` and `createdAt`. It also defines a concrete method, `age`, that is defined in terms of one of the abstract methods.
@@ -143,17 +138,15 @@ Traits are a way of *abstracting over classes* that have similar properties, jus
 Using a traits has two parts. Declaring the trait
 
 ```scala
-trait TraitName {
+trait TraitName:
   declarationOrExpression ...
-}
 ```
 
 and extending the trait from a class (usually a case class)
 
 ```scala
-case class Name(...) extends TraitName {
+case class Name(...) extends TraitName:
   ...
-}
 ```
 
 ### Exercises
@@ -171,35 +164,29 @@ Demand for Cat Simulator 1.0 is exploding! For v2 we're going to go beyond the d
 This is mostly a finger exercise to get you used to trait syntax but there are a few interesting things in the solution.
 
 ```scala mdoc:silent
-trait Feline {
+trait Feline:
   def colour: String
   def sound: String
-}
 
-case class Lion(colour: String, maneSize: Int) extends Feline {
+case class Lion(colour: String, maneSize: Int) extends Feline:
   val sound = "roar"
-}
 
-case class Tiger(colour: String) extends Feline {
+case class Tiger(colour: String) extends Feline:
   val sound = "roar"
-}
 
-case class Panther(colour: String) extends Feline {
+case class Panther(colour: String) extends Feline:
   val sound = "roar"
-}
 
-case class Cat(colour: String, food: String) extends Feline {
+case class Cat(colour: String, food: String) extends Feline:
   val sound = "meow"
-}
 ```
 
 Notice that `sound` is not defined as a constructor argument. Since it is a constant, it doesn't make sense to give users a chance to modify it. There is a lot of duplication in the definition of `sound`. We could define a default value in `Feline` like so
 
 ```scala
-trait Feline {
+trait Feline:
   def colour: String
   def sound: String = "roar"
-}
 ```
 
 This is generally a bad practice. If we define a default implementation it should be an implementation that is suitable for all subtypes.
@@ -207,9 +194,8 @@ This is generally a bad practice. If we define a default implementation it shoul
 Another alternative to define an intermediate type, perhaps called `BigCat` that defines sound as `"roar"`. This is a better solution.
 
 ```scala mdoc:silent
-trait BigCat extends Feline {
+trait BigCat extends Feline:
   override val sound = "roar"
-}
 ```
 
 ```scala
@@ -233,32 +219,28 @@ Implement `Shape` with three classes: `Circle`, `Rectangle`, and `Square`. In ea
 
 <div class="solution">
 ```scala mdoc:silent
-trait Shape {
+trait Shape:
   def sides: Int
   def perimeter: Double
   def area: Double
-}
 
-case class Circle(radius: Double) extends Shape {
+case class Circle(radius: Double) extends Shape:
   val sides = 1
   val perimeter = 2 * math.Pi * radius
   val area = math.Pi * radius * radius
-}
 
 case class Rectangle(
   width: Double,
   height: Double
-) extends Shape {
+) extends Shape:
   val sides = 4
   val perimeter = 2 * width + 2 * height
   val area = width * height
-}
 
-case class Square(size: Double) extends Shape {
+case class Square(size: Double) extends Shape:
   val sides = 4
   val perimeter = 4 * size
   val area = size * size
-}
 ```
 </div>
 
@@ -278,18 +260,16 @@ The new code looks like this:
 
 // case class Circle ...
 
-sealed trait Rectangular extends Shape {
+sealed trait Rectangular extends Shape:
   def width: Double
   def height: Double
   val sides = 4
   override val perimeter = 2*width + 2*height
   override val area = width*height
-}
 
-case class Square(size: Double) extends Rectangular {
+case class Square(size: Double) extends Rectangular:
   val width = size
   val height = size
-}
 
 case class Rectangle(
   val width: Double,

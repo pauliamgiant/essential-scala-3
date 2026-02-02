@@ -7,11 +7,10 @@ We create a sealed trait by simply writing `sealed` in front of our trait declar
 ```scala mdoc:silent
 import java.util.Date
 
-sealed trait Visitor {
+sealed trait Visitor:
   def id: String
   def createdAt: Date
-  def age: Long = new Date().getTime() - createdAt.getTime()
-}
+  def age: Long = Date().getTime() - createdAt.getTime()
 ```
 
 When we mark a trait as `sealed` we *must* define all of its subtypes in the same file. Once the trait is sealed, the compiler knows the complete set of subtypes and will warn us if a pattern matching expression is missing a case:
@@ -23,9 +22,8 @@ final case class Anonymous(id: String, createdAt: Date) extends Visitor
 
 ```scala mdoc
 def missingCase(v: Visitor) =
-  v match {
+  v match
     case User(_, _, _) => "Got a user"
-  }
 ```
 
 We will *not* get a similar warning from an unsealed trait.
@@ -33,7 +31,7 @@ We will *not* get a similar warning from an unsealed trait.
 We can still extend the subtypes of a sealed trait outside of the file where they are defined. For example, we could extend `User` or `Anonymous` further elsewhere. If we want to prevent this possibility we should declare them as `sealed` (if we want to allow extensions within the file) or `final` if we want to disallow all extensions. For the visitors example it probably doesn't make sense to allow any extension to `User` or `Anonymous`, so the simplified code should look like this:
 
 ```scala
-sealed trait Visitor { /* ... */ }
+sealed trait Visitor: /* ... */
 final case class User(/* ... */) extends Visitor
 final case class Anonymous(/* ... */) extends Visitor
 ```
@@ -46,17 +44,15 @@ This is a very powerful pattern and one we will use frequently.
 If all the subtypes of a trait are known, seal the trait
 
 ```scala
-sealed trait TraitName {
+sealed trait TraitName:
   ...
-}
 ```
 
 Consider making subtypes `final` if there is no case for extending them
 
 ```scala
-final case class Name(...) extends TraitName {
+final case class Name(...) extends TraitName:
   ...
-}
 ```
 
 Remember subtypes must be defined in the same file as a sealed trait.
@@ -67,7 +63,7 @@ Remember subtypes must be defined in the same file as a sealed trait.
 Sealed traits and final (case) classes allow us to control extensibility of types. *The majority of cases* should use the sealed trait / final case class pattern.
 
 ```scala
-sealed trait TraitName { ... }
+sealed trait TraitName: ...
 final case class Name(...) extends TraitName
 ```
 
@@ -87,38 +83,34 @@ Let's revisit the `Shapes` example from Section [@sec:traits:shaping-up-2].
 First make `Shape` a sealed trait. Then write a singleton object called `Draw` with an `apply` method that takes a `Shape` as an argument and returns a description of it on the console. For example:
 
 ```scala mdoc:invisible
-trait Shape {
+trait Shape:
   def sides: Int
   def perimeter: Double
   def area: Double
-}
 
-case class Circle(radius: Double) extends Shape {
+case class Circle(radius: Double) extends Shape:
   val sides = 1
   val perimeter = 2 * math.Pi * radius
   val area = math.Pi * radius * radius
-}
 
-sealed trait Rectangular extends Shape {
+sealed trait Rectangular extends Shape:
   def width: Double
   def height: Double
   val sides = 4
   override val perimeter = 2*width + 2*height
   override val area = width*height
-}
 
 case class Rectangle(
   width: Double,
   height: Double
 ) extends Rectangular
 
-case class Square(size: Double) extends Rectangular {
+case class Square(size: Double) extends Rectangular:
   def width = size
   def height = size
-}
 
-object Draw {
-  def apply(shape: Shape): String = shape match {
+object Draw:
+  def apply(shape: Shape): String = shape match
     case Rectangle(width, height) =>
       s"A rectangle of width ${width}cm and height ${height}cm"
 
@@ -127,8 +119,6 @@ object Draw {
 
     case Circle(radius) =>
       s"A circle of radius ${radius}cm"
-  }
-}
 ```
 
 ```scala mdoc
@@ -140,8 +130,8 @@ Finally, verify that the compiler complains when you comment out a `case` clause
 
 <div class="solution">
 ```scala
-object Draw {
-  def apply(shape: Shape): String = shape match {
+object Draw:
+  def apply(shape: Shape): String = shape match
     case Rectangle(width, height) =>
       s"A rectangle of width ${width}cm and height ${height}cm"
 
@@ -150,8 +140,6 @@ object Draw {
 
     case Circle(radius) =>
       s"A circle of radius ${radius}cm"
-  }
-}
 ```
 </div>
 
@@ -159,7 +147,7 @@ object Draw {
 
 ```scala mdoc:reset:invisible
 // Shape uses Color so we define Color first:
-sealed trait Color {
+sealed trait Color:
   // We decided to store RGB values as doubles between 0.0 and 1.0.
   //
   // It is always good practice to define abstract members as `defs`
@@ -172,31 +160,27 @@ sealed trait Color {
   // an average RGB of more than 0.5:
   def isLight = (red + green + blue) / 3.0 > 0.5
   def isDark = !isLight
-}
 
-case object Red extends Color {
+case object Red extends Color:
   // Here we have implemented the RGB values as `vals`
   // because the values cannot change:
   val red = 1.0
   val green = 0.0
   val blue = 0.0
- }
 
-case object Yellow extends Color {
+case object Yellow extends Color:
   // Here we have implemented the RGB values as `vals`
   // because the values cannot change:
   val red = 1.0
   val green = 1.0
   val blue = 0.0
-}
 
-case object Pink extends Color {
+case object Pink extends Color:
   // Here we have implemented the RGB values as `vals`
   // because the values cannot change:
   val red = 1.0
   val green = 0.0
   val blue = 1.0
-}
 
 // The arguments to the case class here generate `val` declarations
 // that implement the RGB methods from `Color`:
@@ -207,31 +191,27 @@ final case class CustomColor(
 
 // The code from the previous exercise comes across almost verbatim,
 // except that we add a `color` field to `Shape` and its subtypes:
-sealed trait Shape {
+sealed trait Shape:
   def sides: Int
   def perimeter: Double
   def area: Double
   def color: Color
-}
 
-final case class Circle(radius: Double, color: Color) extends Shape {
+final case class Circle(radius: Double, color: Color) extends Shape:
   val sides = 1
   val perimeter = 2 * math.Pi * radius
   val area = math.Pi * radius * radius
-}
 
-sealed trait Rectangular extends Shape {
+sealed trait Rectangular extends Shape:
   def width: Double
   def height: Double
   val sides = 4
   val perimeter = 2 * width + 2 * height
   val area = width * height
-}
 
-final case class Square(size: Double, color: Color) extends Rectangular {
+final case class Square(size: Double, color: Color) extends Rectangular:
   val width = size
   val height = size
-}
 
 final case class Rectangle(
   width: Double,
@@ -239,8 +219,8 @@ final case class Rectangle(
   color: Color
 ) extends Rectangular
 
-object Draw {
-  def apply(shape: Shape): String = shape match {
+object Draw:
+  def apply(shape: Shape): String = shape match
     case Circle(radius, color) =>
       s"A ${Draw(color)} circle of radius ${radius}cm"
 
@@ -249,15 +229,12 @@ object Draw {
 
     case Rectangle(width, height, color) =>
       s"A ${Draw(color)} rectangle of width ${width}cm and height ${height}cm"
-  }
 
-  def apply(color: Color): String = color match {
+  def apply(color: Color): String = color match
     case Red    => "red"
     case Yellow => "yellow"
     case Pink   => "pink"
-    case color  => if(color.isLight) "light" else "dark"
-  }
-}
+    case color  => if color.isLight then "light" else "dark"
 ```
 
 Write a sealed trait `Color` to make our shapes more interesting.
@@ -317,7 +294,7 @@ One solution to this exercise is presented below. Remember that a lot of the imp
 
 ```scala mdoc:reset:silent
 // Shape uses Color so we define Color first:
-sealed trait Color {
+sealed trait Color:
   // We decided to store RGB values as doubles between 0.0 and 1.0.
   //
   // It is always good practice to define abstract members as `defs`
@@ -330,31 +307,27 @@ sealed trait Color {
   // an average RGB of more than 0.5:
   def isLight = (red + green + blue) / 3.0 > 0.5
   def isDark = !isLight
-}
 
-case object Red extends Color {
+case object Red extends Color:
   // Here we have implemented the RGB values as `vals`
   // because the values cannot change:
   val red = 1.0
   val green = 0.0
   val blue = 0.0
- }
 
-case object Yellow extends Color {
+case object Yellow extends Color:
   // Here we have implemented the RGB values as `vals`
   // because the values cannot change:
   val red = 1.0
   val green = 1.0
   val blue = 0.0
-}
 
-case object Pink extends Color {
+case object Pink extends Color:
   // Here we have implemented the RGB values as `vals`
   // because the values cannot change:
   val red = 1.0
   val green = 0.0
   val blue = 1.0
-}
 
 // The arguments to the case class here generate `val` declarations
 // that implement the RGB methods from `Color`:
@@ -365,31 +338,27 @@ final case class CustomColor(
 
 // The code from the previous exercise comes across almost verbatim,
 // except that we add a `color` field to `Shape` and its subtypes:
-sealed trait Shape {
+sealed trait Shape:
   def sides: Int
   def perimeter: Double
   def area: Double
   def color: Color
-}
 
-final case class Circle(radius: Double, color: Color) extends Shape {
+final case class Circle(radius: Double, color: Color) extends Shape:
   val sides = 1
   val perimeter = 2 * math.Pi * radius
   val area = math.Pi * radius * radius
-}
 
-sealed trait Rectangular extends Shape {
+sealed trait Rectangular extends Shape:
   def width: Double
   def height: Double
   val sides = 4
   val perimeter = 2 * width + 2 * height
   val area = width * height
-}
 
-final case class Square(size: Double, color: Color) extends Rectangular {
+final case class Square(size: Double, color: Color) extends Rectangular:
   val width = size
   val height = size
-}
 
 final case class Rectangle(
   width: Double,
@@ -400,8 +369,8 @@ final case class Rectangle(
 // We decided to overload the `Draw.apply` method for `Shape` and
 // `Color` on the basis that we may want to reuse the `Color` code
 // directly elsewhere:
-object Draw {
-  def apply(shape: Shape): String = shape match {
+object Draw:
+  def apply(shape: Shape): String = shape match
     case Circle(radius, color) =>
       s"A ${Draw(color)} circle of radius ${radius}cm"
 
@@ -410,16 +379,13 @@ object Draw {
 
     case Rectangle(width, height, color) =>
       s"A ${Draw(color)} rectangle of width ${width}cm and height ${height}cm"
-  }
 
-  def apply(color: Color): String = color match {
+  def apply(color: Color): String = color match
     // We deal with each of the predefined Colors with special cases:
     case Red    => "red"
     case Yellow => "yellow"
     case Pink   => "pink"
-    case color  => if(color.isLight) "light" else "dark"
-  }
-}
+    case color  => if color.isLight then "light" else "dark"
 ```
 
 ```scala mdoc
@@ -470,17 +436,15 @@ sealed trait DivisionResult
 final case class Finite(value: Int) extends DivisionResult
 case object Infinite extends DivisionResult
 
-object divide {
+object divide:
   def apply(num: Int, den: Int): DivisionResult =
-    if(den == 0) Infinite else Finite(num / den)
-}
+    if den == 0 then Infinite else Finite(num / den)
 ```
 
 ```scala mdoc
-divide(1, 0) match {
+divide(1, 0) match
   case Finite(value) => s"It's finite: ${value}"
   case Infinite      => s"It's infinite"
-}
 ```
 
 The result of `divide.apply` is a `DivisionResult`, which is a `sealed trait` with two subtypes. The subtype `Finite` is a `case class` encapsulting the result, but the subtype `Infinite` can simply be an object. We've used a `case object` for parity with `Finite`.
