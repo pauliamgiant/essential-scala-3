@@ -22,12 +22,11 @@ This is a method that we use all the time. It would be great if `numberOfVowels`
 Let's build up implicit classes piece by piece. We can wrap `String` in a class that adds our `numberOfVowels`:
 
 ```scala mdoc:silent
-class ExtraStringMethods(str: String) {
+class ExtraStringMethods(str: String):
   val vowels = Seq('a', 'e', 'i', 'o', 'u')
 
   def numberOfVowels =
-    str.toList.filter(vowels contains _).length
-}
+    str.toList.filter(vowels.contains(_)).length
 ```
 
 We can use this to wrap up our `String` and gain access to our new method:
@@ -43,12 +42,11 @@ implicit class ExtraStringMethods(str: String) { /* ... */ }
 ```
 
 ```scala mdoc:reset:invisible
-implicit class ExtraStringMethods(str: String) {
+implicit class ExtraStringMethods(str: String):
   val vowels = Seq('a', 'e', 'i', 'o', 'u')
 
   def numberOfVowels =
-    str.toList.filter(vowels contains _).length
-}
+    str.toList.filter(vowels.contains(_)).length
 ```
 
 ```scala mdoc
@@ -66,21 +64,19 @@ There is one additional restriction for implicit classes: only a single implicit
 Implicit classes can be used on their own but we most often combine them with type classes to create a more natural style of interface. We keep the type class (`HtmlWriter`) and adapters (`PersonWriter`, `DateWriter` and so on) from our type class example, and add an implicit class with methods that themselves take implicit parameters. For example:
 
 ```scala mdoc:invisible
-trait HtmlWriter[A] {
+trait HtmlWriter[A]:
   def toHtml(a: A): String
-}
+
 case class Person(name: String, email: String)
-implicit object PersonWriter extends HtmlWriter[Person] {
+implicit object PersonWriter extends HtmlWriter[Person]:
   def toHtml(person: Person) =
     s"${person.name} (${person.email})"
-}
 ```
 
 ```scala mdoc:silent
-implicit class HtmlOps[T](data: T) {
+implicit class HtmlOps[T](data: T):
   def toHtml(implicit writer: HtmlWriter[T]) =
     writer.toHtml(data)
-}
 ```
 
 This allows us to invoke our type-class pattern on any type for which we have an adapter *as if it were a built-in feature of the class*:
@@ -118,11 +114,9 @@ When you have written your implicit class, package it in an `IntImplicits` objec
 
 <div class="solution">
 ```scala mdoc:silent
-object IntImplicits {
-  implicit class IntOps(n: Int) {
-    def yeah() = for{ _ <- 0 until n } println("Oh yeah!")
-  }
-}
+object IntImplicits:
+  implicit class IntOps(n: Int):
+    def yeah() = for _ <- 0 until n do println("Oh yeah!")
 
 import IntImplicits._
 ```
@@ -148,15 +142,13 @@ For bonus points, re-implement `yeah` in terms of `times`.
 
 <div class="solution">
 ```scala mdoc:nest:silent
-object IntImplicits {
-  implicit class IntOps(n: Int) {
+object IntImplicits:
+  implicit class IntOps(n: Int):
     def yeah() =
       times(_ => println("Oh yeah!"))
 
     def times(func: Int => Unit) =
-      for(i <- 0 until n) func(i)
-  }
-}
+      for i <- 0 until n do func(i)
 ```
 </div>
 
@@ -165,9 +157,8 @@ object IntImplicits {
 Recall our `Equal` type class from a previous section.
 
 ```scala mdoc:silent
-trait Equal[A] {
+trait Equal[A]:
   def equal(v1: A, v2: A): Boolean
-}
 ```
 
 Implement an enrichment so we can use this type class via a triple equal (`===`) method. For example, if the correct implicits are in scope the following should work.
@@ -180,27 +171,24 @@ Implement an enrichment so we can use this type class via a triple equal (`===`)
 We just need to define an implicit class, which I have here placed in the companion object of `Equal`.
 
 ```scala mdoc:nest:silent
-trait Equal[A] {
+trait Equal[A]:
   def equal(v1: A, v2: A): Boolean
-}
-object Equal {
+
+object Equal:
   def apply[A](implicit instance: Equal[A]): Equal[A] =
     instance
 
-  implicit class ToEqual[A](in: A) {
+  implicit class ToEqual[A](in: A):
     def ===(other: A)(implicit equal: Equal[A]): Boolean =
       equal.equal(in, other)
-  }
-}
 ```
 
 Here is an example of use.
 
 ```scala mdoc:silent
-implicit val caseInsensitiveEquals = new Equal[String] {
+implicit val caseInsensitiveEquals = new Equal[String]:
   def equal(s1: String, s2: String) =
     s1.toLowerCase == s2.toLowerCase
-}
 
 import Equal._
 

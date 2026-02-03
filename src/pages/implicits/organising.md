@@ -28,16 +28,14 @@ First let's define the ordering in the local scope.
 ```scala mdoc:silent
 final case class Rational(numerator: Int, denominator: Int)
 
-object Example {
-  def example() = {
+object Example:
+  def example() =
     implicit val ordering: Ordering[Rational] = Ordering.fromLessThan[Rational]((x, y) =>
       (x.numerator.toDouble / x.denominator.toDouble) <
       (y.numerator.toDouble / y.denominator.toDouble)
     )
     assert(List(Rational(1, 2), Rational(3, 4), Rational(1, 3)).sorted ==
            List(Rational(1, 3), Rational(1, 2), Rational(3, 4)))
-  }
-}
 ```
 
 This works as we expect.
@@ -47,20 +45,18 @@ Now let's shift the type class instance out of the local scope and see that it d
 ```scala mdoc:nest:silent
 final case class Rational(numerator: Int, denominator: Int)
 
-object Instance {
+object Instance:
   implicit val ordering: Ordering[Rational] = Ordering.fromLessThan[Rational]((x, y) =>
     (x.numerator.toDouble / x.denominator.toDouble) <
     (y.numerator.toDouble / y.denominator.toDouble)
   )
-}
 ```
 
 ```scala mdoc:fail
-object Example {
+object Example:
   def example =
     assert(List(Rational(1, 2), Rational(3, 4), Rational(1, 3)).sorted ==
            List(Rational(1, 3), Rational(1, 2), Rational(3, 4)))
-}
 ```
 
 Here I get an error at compilation time
@@ -78,24 +74,22 @@ Finally let's move the type class instance into the companion object of `Rationa
 ```
 
 ```scala mdoc:silent
-object wrapper {
+object wrapper:
   final case class Rational(numerator: Int, denominator: Int)
 
-  object Rational {
+  object Rational:
     implicit val ordering: Ordering[Rational] = Ordering.fromLessThan[Rational]((x, y) =>
       (x.numerator.toDouble / x.denominator.toDouble) <
       (y.numerator.toDouble / y.denominator.toDouble)
     )
-  }
-}; import wrapper._
+import wrapper._
 ```
 
 ```scala mdoc:silent
-object Example {
+object Example:
   def example() =
     assert(List(Rational(1, 2), Rational(3, 4), Rational(1, 3)).sorted ==
            List(Rational(1, 3), Rational(1, 2), Rational(3, 4)))
-}
 ```
 
 This leads us to our first pattern for packaging type class instances.
@@ -126,20 +120,19 @@ Let's see this in practice, by defining an `Ordering` for `Rational` within the 
 ```
 
 ```scala mdoc:silent
-object wrapper {
+object wrapper:
   final case class Rational(numerator: Int, denominator: Int)
 
-  object Rational {
+  object Rational:
     implicit val ordering: Ordering[Rational] = Ordering.fromLessThan[Rational]((x, y) =>
       (x.numerator.toDouble / x.denominator.toDouble) <
       (y.numerator.toDouble / y.denominator.toDouble)
     )
-  }
-}; import wrapper._
+import wrapper._
 ```
 
 ```scala mdoc:silent
-object Example {
+object Example:
   implicit val higherPriorityImplicit: Ordering[Rational] = Ordering.fromLessThan[Rational]((x, y) =>
       (x.numerator.toDouble / x.denominator.toDouble) >
       (y.numerator.toDouble / y.denominator.toDouble)
@@ -148,7 +141,6 @@ object Example {
   def example() =
     assert(List(Rational(1, 2), Rational(3, 4), Rational(1, 3)).sorted ==
            List(Rational(3, 4), Rational(1, 2), Rational(1, 3)))
-}
 ```
 
 Notice that `higherPriorityImplicit` defines a different ordering to the one defined in the companion object for `Rational`. We've also changed the expected ordering in `example` to match this new ordering. This code both compiles and runs correctly, illustrating the effect of the priority rules.
@@ -173,19 +165,17 @@ In this case, one simple way to package instances is to place each in its own ob
 ```scala mdoc:nest:silent
 final case class Rational(numerator: Int, denominator: Int)
 
-object RationalLessThanOrdering {
+object RationalLessThanOrdering:
   implicit val ordering: Ordering[Rational] = Ordering.fromLessThan[Rational]((x, y) =>
     (x.numerator.toDouble / x.denominator.toDouble) <
     (y.numerator.toDouble / y.denominator.toDouble)
   )
-}
 
-object RationalGreaterThanOrdering {
+object RationalGreaterThanOrdering:
   implicit val ordering: Ordering[Rational] = Ordering.fromLessThan[Rational]((x, y) =>
     (x.numerator.toDouble / x.denominator.toDouble) >
     (y.numerator.toDouble / y.denominator.toDouble)
   )
-}
 ```
 
 In use the user would `import RationalLessThanOrdering._` or `import RationalGreaterThanOrdering._` as appropriate.
@@ -208,9 +198,8 @@ When packaging type class instances, if there is a single instance or a single g
 Here is a case class to store orders of some arbitrary item.
 
 ```scala mdoc:silent
-final case class Order(units: Int, unitPrice: Double) {
+final case class Order(units: Int, unitPrice: Double):
   val totalPrice: Double = units * unitPrice
-}
 ```
 
 We have a requirement to order `Order`s in three different ways:
@@ -225,26 +214,19 @@ Implement and package implicits to provide these orderings, and justify your pac
 My implementation is below. I decided that ordering by `totalPrice` is likely to be the most common choice, and therefore should be the default. Thus I placed it in the companion object for `Order`. The other two orderings I placed in objects so the user could explicitly import them.
 
 ```scala mdoc:nest:silent
-final case class Order(units: Int, unitPrice: Double) {
+final case class Order(units: Int, unitPrice: Double):
   val totalPrice: Double = units * unitPrice
-}
 
-object Order {
-  implicit val lessThanOrdering: Ordering[Order] = Ordering.fromLessThan[Order]{ (x, y) =>
+object Order:
+  implicit val lessThanOrdering: Ordering[Order] = Ordering.fromLessThan[Order]: (x, y) =>
     x.totalPrice < y.totalPrice
-  }
-}
 
-object OrderUnitPriceOrdering {
-  implicit val unitPriceOrdering: Ordering[Order] = Ordering.fromLessThan[Order]{ (x, y) =>
+object OrderUnitPriceOrdering:
+  implicit val unitPriceOrdering: Ordering[Order] = Ordering.fromLessThan[Order]: (x, y) =>
     x.unitPrice < y.unitPrice
-  }
-}
 
-object OrderUnitsOrdering {
-  implicit val unitsOrdering: Ordering[Order] = Ordering.fromLessThan[Order]{ (x, y) =>
+object OrderUnitsOrdering:
+  implicit val unitsOrdering: Ordering[Order] = Ordering.fromLessThan[Order]: (x, y) =>
     x.units < y.units
-  }
-}
 ```
 </div>

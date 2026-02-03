@@ -7,21 +7,19 @@ We have seen how to define type classes. In this section we'll see some convenie
 When we use type classes we often end up requiring implicit parameters that we pass onward to a type class interface. For example, using our `HtmlWriter` example we might want to define some kind of page template that accepts content rendered by a writer.
 
 ```scala mdoc:invisible
-trait HtmlWriter[A] {
+trait HtmlWriter[A]:
   def write(in: A): String
-}
-implicit class HtmlUtil[A](value: A) {
+
+implicit class HtmlUtil[A](value: A):
   def toHtml(implicit writer: HtmlWriter[A]) =
-    writer write value
-}
+    writer.write(value)
 ```
 
 ```scala mdoc:silent
-def pageTemplate[A](body: A)(implicit writer: HtmlWriter[A]): String = {
+def pageTemplate[A](body: A)(implicit writer: HtmlWriter[A]): String =
   val renderedBody = body.toHtml
 
   s"<html><head>...</head><body>${renderedBody}</body></html>"
-}
 ```
 
 We don't explicitly use the implicit `writer` in our code, but we need it in scope so the compiler can insert it for the `toHtml` enrichment.
@@ -29,11 +27,10 @@ We don't explicitly use the implicit `writer` in our code, but we need it in sco
 Context bounds allow us to write this more compactly, with a notation that is reminiscent of a type bound.
 
 ```scala mdoc:nest:silent
-def pageTemplate[A : HtmlWriter](body: A): String = {
+def pageTemplate[A : HtmlWriter](body: A): String =
   val renderedBody = body.toHtml
 
   s"<html><head>...</head><body>${renderedBody}</body></html>"
-}
 ```
 
 The context bound is the notation `[A : HtmlWriter]` and it expands into the equivalent implicit parameter list in the prior example.

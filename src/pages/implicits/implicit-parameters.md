@@ -7,13 +7,11 @@ case class Person(name: String, email: String)
 ```
 
 ```scala mdoc:silent
-trait HtmlWriter[A] {
+trait HtmlWriter[A]:
   def write(in: A): String
-}
 
-object PersonWriter extends HtmlWriter[Person] {
+object PersonWriter extends HtmlWriter[Person]:
   def write(person: Person) = s"<span>${person.name} &lt;${person.email}&gt;</span>"
-}
 ```
 
 This issue with this code is that we need manage a lot of `HtmlWriter` instances when we render any complex data. We have already seen that we can manage this complexity using implicit values and have mentioned *implicit parameters* in passing. In this section we go in depth on implicit parameters.
@@ -23,11 +21,9 @@ This issue with this code is that we need manage a lot of `HtmlWriter` instances
 Here is an example of an implicit parameter list:
 
 ```scala mdoc:silent
-object HtmlUtil {
-  def htmlify[A](data: A)(implicit writer: HtmlWriter[A]): String = {
+object HtmlUtil:
+  def htmlify[A](data: A)(implicit writer: HtmlWriter[A]): String =
     writer.write(data)
-  }
-}
 ```
 
 The `htmlify` method accepts two arguments: some `data` to convert to HTML and a `writer` to do the conversion. The `writer` is an implicit parameter.
@@ -41,10 +37,9 @@ HtmlUtil.htmlify(Person("John", "john@example.com"))(PersonWriter)
 or we can omit the implicit parameters. If we omit the implicit parameters, the compiler searches for implicit values of the correct type it can use to fill in the missing arguments. We have already learned about implicit values, but let's see a quick example to refresh our memory. First we define an implicit value.
 
 ```scala mdoc:silent
-implicit object ApproximationWriter extends HtmlWriter[Int] {
+implicit object ApproximationWriter extends HtmlWriter[Int]:
   def write(in: Int): String =
     s"It's definitely less than ${((in / 10) + 1) * 10}"
-}
 ```
 
 When we use `HtmlUtil` we don't have to specify the implicit parameter if an implicit value can be found.
@@ -60,27 +55,24 @@ A complete use of the type class pattern requires an interface using implicit pa
 In many case the interface defined by the type class is the same interface we want to use. This is the case for `HtmlWriter` -- the only method of interest is `write`. We could write something like
 
 ```scala mdoc:silent
-object HtmlWriter {
+object HtmlWriter:
   def write[A](in: A)(implicit writer: HtmlWriter[A]): String =
     writer.write(in)
-}
 ```
 
 We can avoid this indirection (which becomes more painful to write as our interfaces become larger) with the following construction:
 
 ```scala mdoc:nest:silent
-object HtmlWriter {
+object HtmlWriter:
   def apply[A](implicit writer: HtmlWriter[A]): HtmlWriter[A] =
     writer
-}
 ```
 
 In use it looks like
 
 ```scala mdoc:invisible
-implicit object PersonWriter extends HtmlWriter[Person] {
+implicit object PersonWriter extends HtmlWriter[Person]:
   def write(person: Person) = s"<span>${person.name} &lt;${person.email}&gt;</span>"
-}
 ```
 
 ```scala mdoc:silent
@@ -99,10 +91,9 @@ trait TypeClass[A]
 ```
 
 ```scala mdoc:silent
-object TypeClass {
+object TypeClass:
   def apply[A](implicit instance: TypeClass[A]): TypeClass[A] =
     instance
-}
 ```
 </div>
 
@@ -119,10 +110,9 @@ If we call a method and do not explicitly supply its implicit parameter list, th
 Using implicit parameters we can make more convenient interfaces using type class instances. If the desired interface to a type class is exactly the methods defined on the type class we can create a convenient interface using the pattern
 
 ```scala mdoc:nest:silent
-object TypeClass {
+object TypeClass:
   def apply[A](implicit instance: TypeClass[A]): TypeClass[A] =
     instance
-}
 ```
 
 ### Exercises
@@ -134,19 +124,16 @@ In the previous section we defined a trait `Equal` along with some implementatio
 ```scala mdoc:nest:silent
 case class Person(name: String, email: String)
 
-trait Equal[A] {
+trait Equal[A]:
   def equal(v1: A, v2: A): Boolean
-}
 
-object EmailEqual extends Equal[Person] {
+object EmailEqual extends Equal[Person]:
   def equal(v1: Person, v2: Person): Boolean =
     v1.email == v2.email
-}
 
-object NameEmailEqual extends Equal[Person] {
+object NameEmailEqual extends Equal[Person]:
   def equal(v1: Person, v2: Person): Boolean =
     v1.email == v2.email && v1.name == v2.name
-}
 ```
 
 Implement an object called `Eq` with an `apply` method. This method should accept two explicit parameters of type `A` and an implicit `Equal[A]`. It should perform the equality checking using the provided `Equal`. With appropriate implicits in scope, the following code should work
@@ -157,10 +144,9 @@ Eq(Person("Noel", "noel@example.com"), Person("Noel", "noel@example.com"))
 
 <div class="solution">
 ```scala mdoc:silent
-object Eq {
+object Eq:
   def apply[A](v1: A, v2: A)(implicit equal: Equal[A]): Boolean =
     equal.equal(v1, v2)
-}
 ```
 </div>
 
@@ -168,31 +154,24 @@ Package up the different `Equal` implementations as implicit values in their own
 
 <div class="solution">
 ```scala mdoc:silent
-object NameAndEmailImplicit {
-  implicit object NameEmailEqual extends Equal[Person] {
+object NameAndEmailImplicit:
+  implicit object NameEmailEqual extends Equal[Person]:
     def equal(v1: Person, v2: Person): Boolean =
       v1.email == v2.email && v1.name == v2.name
-  }
-}
 
-object EmailImplicit {
-  implicit object EmailEqual extends Equal[Person] {
+object EmailImplicit:
+  implicit object EmailEqual extends Equal[Person]:
     def equal(v1: Person, v2: Person): Boolean =
       v1.email == v2.email
-  }
-}
 
-object Examples {
-  def byNameAndEmail = {
+object Examples:
+  def byNameAndEmail =
     import NameAndEmailImplicit._
     Eq(Person("Noel", "noel@example.com"), Person("Noel", "noel@example.com"))
-  }
 
-  def byEmail = {
+  def byEmail =
     import EmailImplicit._
     Eq(Person("Noel", "noel@example.com"), Person("Dave", "noel@example.com"))
-  }
-}
 ```
 </div>
 
@@ -209,10 +188,9 @@ Which interface style do you prefer?
 The following code is what we're looking for:
 
 ```scala mdoc:silent
-object Equal {
+object Equal:
   def apply[A](implicit instance: Equal[A]): Equal[A] =
     instance
-}
 ```
 
 In this case the `Eq` interface is slightly easier to use, as it requires less typing. For most complicated interfaces, with more than a single method, the companion object pattern would be preferred. In the next section we'll see how we can make interfaces that appear to be methods defined on the objects of interest.
