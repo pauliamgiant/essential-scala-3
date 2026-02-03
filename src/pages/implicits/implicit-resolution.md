@@ -28,13 +28,11 @@ The *scope rule* of implicit resolution uses a special set of scoping rules that
 Implicits **cannot be defined at the top level** (except in the Scala console). They must be wrapped in an outer trait, class, or singleton object. The typical way of packaging an implicit value is to define it inside a trait called `SomethingImplicits` and extend that trait to create a singleton of the same name:
 
 ```scala mdoc:silent
-trait VowelImplicits {
-  implicit class VowelOps(str: String) {
+trait VowelImplicits:
+  implicit class VowelOps(str: String):
     val vowels = Seq('a', 'e', 'i', 'o', 'u')
-     def numberOfVowels =
-       str.toList.filter(vowels contains _).length
-  }
-}
+    def numberOfVowels =
+      str.toList.filter(vowels.contains(_)).length
 
 object VowelImplicits extends VowelImplicits
 ```
@@ -90,36 +88,32 @@ The same resolution rules apply for implicit values as for implicit classes. If 
 Let's redefine our adapters for `HtmlWriter` so we can bring them all into scope. Note that outside the REPL implicit values are subject to the same packaging restrictions as implicit classes---they have to be defined inside another class, object, or trait. We'll use the packaging convention we discussed in the previous section:
 
 ```scala mdoc:invisible
-trait HtmlWriter[A] {
+trait HtmlWriter[A]:
   def write(a: A): String
-}
+  
 case class Person(name: String, email: String)
 import java.util.Date
 ```
 
 ```scala mdoc:silent
-object wrapper {
-  trait HtmlImplicits {
-    implicit object PersonWriter extends HtmlWriter[Person] {
+object wrapper:
+  trait HtmlImplicits:
+    implicit object PersonWriter extends HtmlWriter[Person]:
       def write(person: Person) =
         s"<span>${person.name} &lt;${person.email}&gt;</span>"
-    }
 
-    implicit object DateWriter extends HtmlWriter[Date] {
+    implicit object DateWriter extends HtmlWriter[Date]:
       def write(in: Date) = s"<span>${in.toString}</span>"
-    }
-  }
 
   object HtmlImplicits extends HtmlImplicits
-}; import wrapper._
+end wrapper
+import wrapper._
 ```
 
 ```scala mdoc:invisible
-object HtmlUtil {
-  def htmlify[A](data: A)(implicit writer: HtmlWriter[A]): String = {
+object HtmlUtil:
+  def htmlify[A](data: A)(implicit writer: HtmlWriter[A]): String =
     writer.write(data)
-  }
-}
 ```
 
 We can now use our adapters with `htmlify`:

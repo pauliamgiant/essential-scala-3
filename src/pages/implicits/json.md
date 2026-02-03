@@ -5,19 +5,16 @@ In this section we have an extended example involving serializing Scala data to 
 Here is a suitable case class representation of a subset of the JSON language. We have a `sealed trait JsValue` that defines a `stringify` method, and a set of subtypes for two of the main JSON data types---objects and strings:
 
 ```scala mdoc:silent
-sealed trait JsValue {
+sealed trait JsValue:
   def stringify: String
-}
 
-final case class JsObject(values: Map[String, JsValue]) extends JsValue {
+final case class JsObject(values: Map[String, JsValue]) extends JsValue:
   def stringify = values
-    .map { case (name, value) => "\"" + name + "\":" + value.stringify }
+    .map((name, value) => "\"" + name + "\":" + value.stringify)
     .mkString("{", ",", "}")
-}
 
-final case class JsString(value: String) extends JsValue {
+final case class JsString(value: String) extends JsValue:
   def stringify = "\"" + value.replaceAll("\\|\"", "\\\\$1") + "\""
-}
 ```
 
 You should recognise this as the algebraic data type pattern.
@@ -38,9 +35,8 @@ Let's create a type class for converting Scala data to JSON. Implement a `JsWrit
 The *type class* is generic in a type `A`. The `write` method converts a value of type `A` to some kind of `JsValue`.
 
 ```scala mdoc:silent
-trait JsWriter[A] {
+trait JsWriter[A]:
   def write(value: A): JsValue
-}
 ```
 </div>
 
@@ -50,10 +46,9 @@ Tip: your method will have to accept an implicit `JsWriter` to do the actual con
 
 <div class="solution">
 ```scala mdoc:silent
-object JsUtil {
+object JsUtil:
   def toJson[A](value: A)(implicit writer: JsWriter[A]) =
-    writer write value
-}
+    writer.write(value)
 ```
 </div>
 
@@ -62,11 +57,10 @@ Now, let's revisit our data types from the web site visitors example in the [Sea
 ```scala mdoc:silent
 import java.util.Date
 
-sealed trait Visitor {
+sealed trait Visitor:
   def id: String
   def createdAt: Date
   def age: Long = new Date().getTime() - createdAt.getTime()
-}
 
 final case class Anonymous(
   id: String,
@@ -84,32 +78,28 @@ Write `JsWriter` instances for `Anonymous` and `User`.
 
 <div class="solution">
 ```scala mdoc:silent
-implicit object AnonymousWriter extends JsWriter[Anonymous] {
+implicit object AnonymousWriter extends JsWriter[Anonymous]:
   def write(value: Anonymous) = JsObject(Map(
     "id"           -> JsString(value.id),
     "createdAt"    -> JsString(value.createdAt.toString)
   ))
-}
 
-implicit object UserWriter extends JsWriter[User] {
+implicit object UserWriter extends JsWriter[User]:
   def write(value: User) = JsObject(Map(
     "id"           -> JsString(value.id),
     "email"        -> JsString(value.email),
     "createdAt"    -> JsString(value.createdAt.toString)
   ))
-}
 ```
 </div>
 
 Given these two definitions we can implement a `JsWriter` for `Visitor` as follows. This uses a new type of pattern -- `a: B` -- which matches any value of type `B` and binds it to a variable `a`:
 
 ```scala mdoc:silent
-implicit object VisitorWriter extends JsWriter[Visitor] {
-  def write(value: Visitor) = value match {
+implicit object VisitorWriter extends JsWriter[Visitor]:
+  def write(value: Visitor) = value match
     case anon: Anonymous => JsUtil.toJson(anon)
     case user: User      => JsUtil.toJson(user)
-  }
-}
 ```
 
 Finally, verify that your code works by converting the following list of users to JSON:
@@ -134,55 +124,47 @@ Anonymous("001", new Date).toJson
 
 <div class="solution">
 ```scala mdoc:silent
-implicit class JsUtil[A](value: A) {
+implicit class JsUtil[A](value: A):
   def toJson(implicit writer: JsWriter[A]) =
-    writer write value
-}
+    writer.write(value)
 ```
 
 In the previous exercise we only defined `JsWriters` for our main case classes. With this convenient syntax, it makes sense for us to have an complete set of `JsWriters` for all the serializable types in our codebase, including `Strings` and `Dates`:
 
 ```scala mdoc:silent
-implicit object StringWriter extends JsWriter[String] {
+implicit object StringWriter extends JsWriter[String]:
   def write(value: String) = JsString(value)
-}
 
-implicit object DateWriter extends JsWriter[Date] {
+implicit object DateWriter extends JsWriter[Date]:
   def write(value: Date) = JsString(value.toString)
-}
 ```
 
 With these definitions we can simplify our existing `JsWriters` for `Anonymous`, `User`, and `Visitor`:
 
 ```scala mdoc:nest:invisible
 // I must repeat this here for some reason or the implicit resolution in the block below fails
-implicit class JsUtil[A](value: A) {
+implicit class JsUtil[A](value: A):
   def toJson(implicit writer: JsWriter[A]) =
-    writer write value
-}
+    writer.write(value)
 ```
 
 ```scala mdoc:silent
-implicit object AnonymousWriter extends JsWriter[Anonymous] {
+implicit object AnonymousWriter extends JsWriter[Anonymous]:
   def write(value: Anonymous) = JsObject(Map(
     "id"        -> value.id.toJson,
     "createdAt" -> value.createdAt.toJson
   ))
-}
 
-implicit object UserWriter extends JsWriter[User] {
+implicit object UserWriter extends JsWriter[User]:
   def write(value: User) = JsObject(Map(
     "id"        -> value.id.toJson,
     "email"     -> value.email.toJson,
     "createdAt" -> value.createdAt.toJson
   ))
-}
 
-implicit object VisitorWriter extends JsWriter[Visitor] {
-  def write(value: Visitor) = value match {
+implicit object VisitorWriter extends JsWriter[Visitor]:
+  def write(value: Visitor) = value match
     case anon: Anonymous => anon.toJson
     case user: User      => user.toJson
-  }
-}
 ```
 </div>

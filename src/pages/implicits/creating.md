@@ -20,13 +20,11 @@ Let's start with an example---converting data to HTML. This is a fundamental ope
 One implementation strategy is to create a trait we `extend` wherever we want this functionality:
 
 ```scala mdoc:silent
-trait HtmlWriteable {
+trait HtmlWriteable:
   def toHtml: String
-}
 
-final case class Person(name: String, email: String) extends HtmlWriteable {
+final case class Person(name: String, email: String) extends HtmlWriteable:
   def toHtml = s"<span>$name &lt;$email&gt;</span>"
-}
 ```
 
 ```scala mdoc
@@ -42,14 +40,12 @@ import java.util.Date
 ```
 
 ```scala mdoc:silent
-object HtmlWriter {
+object HtmlWriter:
   def write(in: Any): String =
-    in match {
+    in match
       case Person(name, email) => ???
       case d: Date => ???
       case _ => throw new Exception(s"Can't render ${in} to HTML")
-    }
-}
 ```
 
 This implementation has its own issues. We have lost type safety because there is no useful supertype that covers just the elements we want to render and no more. We can't have more than one implementation of rendering for a given type. We also have to modify this code whenever we want to render a new type.
@@ -57,13 +53,11 @@ This implementation has its own issues. We have lost type safety because there i
 We can overcome all of these problems by moving our HTML rendering to an adapter class:
 
 ```scala mdoc:silent
-trait HtmlWriter[A] {
+trait HtmlWriter[A]:
   def write(in: A): String
-}
 
-object PersonWriter extends HtmlWriter[Person] {
+object PersonWriter extends HtmlWriter[Person]:
   def write(person: Person) = s"<span>${person.name} &lt;${person.email}&gt;</span>"
-}
 ```
 
 ```scala mdoc
@@ -75,9 +69,8 @@ This is better. We can now define `HtmlWriter` functionality for other types, in
 ```scala mdoc:silent
 import java.util.Date
 
-object DateWriter extends HtmlWriter[Date] {
+object DateWriter extends HtmlWriter[Date]:
   def write(in: Date) = s"<span>${in.toString}</span>"
-}
 ```
 
 ```scala mdoc
@@ -87,10 +80,9 @@ DateWriter.write(new Date)
 We can also write another `HtmlWriter` for writing `People` on our homepage:
 
 ```scala mdoc:silent
-object ObfuscatedPersonWriter extends HtmlWriter[Person] {
+object ObfuscatedPersonWriter extends HtmlWriter[Person]:
   def write(person: Person) =
     s"<span>${person.name} (${person.email.replaceAll("@", " at ")})</span>"
-}
 ```
 
 ```scala mdoc
@@ -111,9 +103,8 @@ trait Foo
 ```
 
 ```scala mdoc:silent
-trait ExampleTypeClass[A] {
+trait ExampleTypeClass[A]:
   def doSomething(in: A): Foo
-}
 ```
 </div>
 
@@ -126,23 +117,20 @@ We have seen the basic pattern for implementing type classes.
 - We declare some interface for the functionality we want
 
 ```scala mdoc:nest:silent
-trait HtmlWriter[A] {
+trait HtmlWriter[A]:
   def toHtml(in: A): String
-}
 ```
 
 - We write type class instances for each concrete class we want to use and for each different situation we want to use it in
 
 ```scala mdoc:silent
-object PersonWriter extends HtmlWriter[Person] {
+object PersonWriter extends HtmlWriter[Person]:
   def toHtml(person: Person) =
     s"${person.name} (${person.email})"
-}
 
-object ObfuscatedPersonWriter extends HtmlWriter[Person] {
+object ObfuscatedPersonWriter extends HtmlWriter[Person]:
   def toHtml(person: Person) =
     s"${person.name} (${person.email.replaceAll("@", " at ")})"
-}
 ```
 - This allows us to implement the functionality for any type, and to provide different implementations for the same type.
 
@@ -156,9 +144,8 @@ Implement a trait `Equal` of some type `A`, with a method `equal` that compares 
 
 <div class="solution">
 ```scala mdoc:silent
-trait Equal[A] {
+trait Equal[A]:
   def equal(v1: A, v2: A): Boolean
-}
 ```
 </div>
 
@@ -172,14 +159,12 @@ Implement instances of `Equal` that compare for equality by email address only, 
 
 <div class="solution">
 ```scala mdoc:silent
-object EmailEqual extends Equal[Person] {
+object EmailEqual extends Equal[Person]:
   def equal(v1: Person, v2: Person): Boolean =
     v1.email == v2.email
-}
 
-object NameEmailEqual extends Equal[Person] {
+object NameEmailEqual extends Equal[Person]:
   def equal(v1: Person, v2: Person): Boolean =
     v1.email == v2.email && v1.name == v2.name
-}
 ```
 </div>

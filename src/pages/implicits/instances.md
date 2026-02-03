@@ -109,9 +109,8 @@ assert(List(-4, -3, -2, -1).sorted(absOrdering) == List(-1, -2, -3, -4))
 
 <div class="solution">
 ```scala mdoc:silent
-val absOrdering = Ordering.fromLessThan[Int]{ (x, y) =>
+val absOrdering = Ordering.fromLessThan[Int]: (x, y) =>
   Math.abs(x) < Math.abs(y)
-}
 ```
 </div>
 
@@ -126,9 +125,8 @@ assert(List(-4, -3, -2, -1).sorted == List(-1, -2, -3, -4))
 Simply mark the value as implicit (and make sure it is in scope)
 
 ```scala mdoc:nest:silent
-implicit val absOrdering: Ordering[Int] = Ordering.fromLessThan[Int]{ (x, y) =>
+implicit val absOrdering: Ordering[Int] = Ordering.fromLessThan[Int]: (x, y) =>
   Math.abs(x) < Math.abs(y)
-}
 ```
 </div>
 
