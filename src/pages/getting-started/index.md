@@ -4,19 +4,18 @@ Throughout this book we will be working with short examples of Scala code. There
 
  1. Using the *Scala console* (better for people who like command lines)
 
- 2. Using *Worksheets* feature of *Scala IDE* (better for people who like IDEs)
+ 2. Using *Worksheets* in *VS Code with Metals* (better for people who like IDEs)
 
 We'll walk through the setup for each process here.
 
 ## Setting up the Scala Console
 
-Follow the instructions on [http://scala-lang.org](http://scala-lang.org) to set Scala up on your computer. Once Scala is installed, you should be able to run an interactive console by typing `scala` at your command line prompt. Here's an example from OS X:
+Follow the instructions on [http://scala-lang.org](https://docs.scala-lang.org/getting-started/install-scala.html) to set Scala up on your computer. Once Scala is installed, you should be able to run an interactive console by typing `scala` at your command line prompt. Here's an example from OS X:
 
 ```bash
-dave@Jade ~> scala
-Welcome to Scala version 2.11.4 (Java HotSpot(TM) 64-Bit Server VM, Java 1.7.0_45).
-Type in expressions to have them evaluated.
-Type :help for more information.
+dave@daves-computer ~> scala
+Welcome to Scala 3.7.4 (21, Java OpenJDK 64-Bit Server VM).
+Type in expressions for evaluation. Or try :help.
 
 scala>
 ```
@@ -62,34 +61,66 @@ Here, the output `"Hello world!"` is from our `println` statement---the expressi
 We can split long expressions across multiple lines quite simply. If we press enter before the end of an expression, the console will print a `|` character to indicate that we can continue on the next line:
 
 ```scala mdoc
-for(i <- 1 to 3) {
+for i <- 1 to 3 do
   println(i)
-}
+
 ```
 
-Sometimes we want to enter multiple expressions at once. In these cases we can use the `:paste` command. We simply type `:paste`, press Enter, and write (or copy-and-paste) our code. When we're done we press `Ctrl+D` to compile and execute the code as normal. The console prints output for every expression in one big block at the end of the input:
+The Scala 3 REPL has improved multi-line editing capabilities. You can simply continue typing across multiple lines, and the REPL will intelligently detect when your expression is complete. For example:
+
+There are two ways we can enter this multi-line expression. First is to use braces to create a block expression:
 
 ```scala
-scala> :paste
-// Entering paste mode (ctrl-D to finish)
+scala> val result = {
+     |   val x = 1
+     |   val y = 2
+     |   x + y
+     | }
+val result: Int = 3
+```
 
+The second way is to use indentation which is the preferred way in Scala 3:
+
+```scala
+scala> val result =
+     |   val x = 1
+     |   val y = 2
+     |   x + y
+     |
+val result: Int = 3
+```
+
+If you have Scala code in a file, you can use the `:load` command to load the contents of the file into the console. This is much more convenient than re-entering expressions. For example, with a file named `example.scala` containing `1 + 2 + 3` we can use `:load` like so:
+
+```scala
+scala> :load example.scala
+val res0: Int = 6
+```
+
+To create a file very easily, in a separate terminal window, you can use the `touch` command:
+
+```bash
+touch example.scala
+```
+
+This will create a new file called `example.scala` in the current directory.
+You can then open the file in a text editor and add the code below. You can also run 'nano' or 'vim' from the terminal to edit the file.
+
+```scala
 val x = 1
 val y = 2
-x + y
-
-// Exiting paste mode, now interpreting.
-
-x: Int = 1
-y: Int = 2
-res6: Int = 3
+println("Example file evaluates and prints:")
+println(x + y)
 ```
 
-If we have Scala code in a file, we can use `:paste` to paste the contents of the file into the console. This is much more convenient than re-entering expressions in the console. For example, with a file named `example.scala` containing `1 + 2 + 3` we can use `:paste` like so:
+Then, back in the Scala REPL, you can load the file into the console using the `:load` command:
 
 ```scala
-scala> :paste example.scala
-Pasting file example.scala...
-res0: Int = 6
+scala> :load example.scala
+"Example file evaluates and prints:"
+3
+val x: Int = 1
+val y: Int = 2"
 ```
 
 ### Printing the Type of an Expression
@@ -105,80 +136,85 @@ Notice that the console doesn't execute our `println` statement in this expressi
 
 `Unit` is Scala's equivalent of `void` from Java and C. Read Chapter 1 to find out more.
 
-## Setting up Scala IDE
+## Setting up VS Code with Metals
 
-*Scala IDE* is a plugin that adds Scala language support to [Eclipse](http://eclipse.org). A complete version of Scala IDE with Eclipse is also available as a standalone bundle from [http://scala-ide.org](). This is the easiest way to install the software so we recommend you install the standalone bundle for this course.
+*Metals* is the Scala language server that provides IDE features for Scala 3. It works with several editors, and we recommend using it with *Visual Studio Code* (VS Code), which is a free, open-source editor with excellent Scala support.
 
-Go to [http://scala-ide.org](http://scala-ide.org) now, click the **Get the Bundle** button, and follow the on-screen instructions to download Scala IDE for your operating system:
+### Installing VS Code
 
-<!-- Trailing slash and double newline are REQUIRED to prevent LaTeX repositioning this -->
-![Scala IDE: Main website](src/pages/getting-started/scala-ide-website.png)\
+If you don't already have VS Code installed:
 
+1. Go to [https://code.visualstudio.com](https://code.visualstudio.com)
+2. Download the installer for your operating system
+3. Run the installer and follow the on-screen instructions
+4. Launch VS Code
 
-Once you have downloaded and uncompressed the bundle you should find an application called **Eclipse**. Launch this. You will be asked to choose a folder for your *workspace*:
+### Installing the Metals Extension
 
-<!-- Trailing slash and double newline are REQUIRED to prevent LaTeX repositioning this -->
-![Scala IDE: Choose a workspace location](src/pages/getting-started/scala-ide-workspace-chooser.png)\
+Once you have VS Code installed, you need to install the Metals extension:
 
+1. Open VS Code
+2. Click on the Extensions icon in the left sidebar (or press `Ctrl+Shift+X` / `Cmd+Shift+X` on Mac)
+3. Search for "Scala (Metals)"
+4. Click **Install** on the "Scala (Metals)" extension by Scalameta
+5. Wait for the installation to complete
 
-Accept the default location and you will see an empty main Eclipse window:
-
-<!-- Trailing slash and double newline are REQUIRED to prevent LaTeX repositioning this -->
-![Scala IDE: Empty workspace](src/pages/getting-started/scala-ide-empty-workspace.png)\
-
+Metals will automatically download and configure the Scala tooling when you open a Scala project.
 
 ### Creating your First Application
 
-Your *Eclipse workspace* is two things: a folder containing files and settings, and a main window where you will be doing most of your Scala programming. In your workspace you can find *projects* for each Scala application you work on.
+Now let's create your first Scala project. We'll use sbt (the Scala Build Tool) to create a new project:
 
-Let's create a project for the book exercises now. Select the **File menu** and choose **New > Scala Project**:
+1. Open a terminal/command prompt - you can use the terminal in VS Code (Mac: cmd+j, Windows: ctrl+j) or a separate terminal window
+2. Navigate to the directory where you want to create your project
+3. Run the following command:
 
-<!-- Trailing slash and double newline are REQUIRED to prevent LaTeX repositioning this -->
-![Scala IDE: Create a new Scala project](src/pages/getting-started/scala-ide-new-project.png)\
+```bash
+sbt new scala/scala3.g8
+```
 
+4. When prompted, enter a name for your project (e.g., `essential-scala`)
+5. Open the project folder in VS Code: **File > Open Folder**
 
-Enter a **Project name** of `essential-scala` and click **Finish**. The tree view on the left of your workspace should now contain an empty project:
+When you open the Scala project, Metals will automatically:
+- Detect the project
+- Import the build
+- Index your code
+- Enable IDE features like syntax highlighting, code completion, and error checking
 
-<!-- Trailing slash and double newline are REQUIRED to prevent LaTeX repositioning this -->
-![Scala IDE: Empty project](src/pages/getting-started/scala-ide-empty-project.png)\
+### Your First Scala Application
 
-
-A project is no good without code to run! Let's create our first simple Scala application - the obligatory *Hello World* app. Select the **File Menu** and choose **New > Scala Object**:
-
-<!-- Trailing slash and double newline are REQUIRED to prevent LaTeX repositioning this -->
-![Scala IDE: Create a Scala object](src/pages/getting-started/scala-ide-new-object.png)\
-
-
-**Name** your object `HelloWorld` and click **Finish**. A new file called `HelloWorld.scala` should appear in the tree view on the left of the main window. Eclipse should open the new file in the main editor ready for you to start coding:
-
-<!-- Trailing slash and double newline are REQUIRED to prevent LaTeX repositioning this -->
-![Scala IDE: Single Scala file](src/pages/getting-started/scala-ide-single-file.png)\
-
-
-The content of the file should read as follows:
+The Scala 3 template creates a simple "Hello World" application for you. In your project, navigate to `src/main/scala` and you'll find a file called `Main.scala` with the following content:
 
 ```scala
-object HelloWorld: 
+@main def hello(): Unit =
+  println("Hello world!")
+  println(msg)
 
-
+def msg = "I was compiled by Scala 3. :)"
 ```
 
-Replace this text with the following minimalist application:
+Notice the `@main` annotation - this is the Scala 3 way to define a program entry point. 
 
-```scala mdoc:reset:silent
-object HelloWorld:
-  def main(args: Array[String]): Unit =
-    println("Hello world!")
-  
+To run your application, open the terminal in VS Code and run:
+
+```bash
+sbt run
 ```
 
-Select the **Run Menu** and choose **Run**. This should execute the code in your application, resulting in the words `Hello world!` appearing in the *Console* pane at the bottom of the window. Congratulations - you just ran your first Scala application!
+You should see the output:
 
-<!-- Trailing slash and double newline are REQUIRED to prevent LaTeX repositioning this -->
-![Scala IDE: Hello World](src/pages/getting-started/scala-ide-hello-world.png)\
+```
+[info] running hello 
+Hello world!
+I was compiled by Scala 3. :)
+[success] Total time: 1 s, completed 3 Feb 2026, 06:12:41
+```
+
+Congratulations - you just ran your first Scala application!
 
 
-Developers with Java experience will notice the resemblance of the code above to the Java hello world app:
+Developers with Java experience will notice that Scala 3's `@main` annotation is much simpler than the traditional Java hello world app:
 
 ```java
 public class HelloWorld {
@@ -188,66 +224,37 @@ public class HelloWorld {
 }
 ```
 
-The resemblance is, of course, no coincidence. These two applications compile to more or less the same bytecode and have exactly the same semantics. We will learn much more about the similarities and differences between Scala and Java as the course continues.
+The resemblance is, of course, no coincidence. These two applications compile to more or less the same bytecode and have exactly the same semantics. We will learn more about the similarities and differences between Scala and Java as the course continues.
 
 ### Creating your First Worksheet
 
 Compiling and running code whenever you make a change is a time consuming process that isn't particularly suitable to a learning environment.
 
-Fortunately, Scala IDE allows us to create special files called *Scala Worksheets* that are specifically designed for training and experimentation. Every time you save a Worksheet, Eclipse automatically compiles and runs your code and displays the output on the right-hand side of your editor. This provides instant feedback, which is exactly what we need when investigating new concepts!
+Fortunately, Metals supports special files called *Scala Worksheets* that are specifically designed for training and experimentation. Worksheets allow you to evaluate Scala expressions and see results inline, providing instant feedback which is exactly what we need when investigating new concepts!
 
-Create your first Scala Worksheet by selecting the **File Menu** and choosing **New > Scala Worksheet**:
+To create your first Scala Worksheet:
 
-<!-- Trailing slash and double newline are REQUIRED to prevent LaTeX repositioning this -->
-![Scala IDE: New Scala worksheet](src/pages/getting-started/scala-ide-new-worksheet.png)\
+1. In VS Code, navigate to the `src/main/scala` directory in your project
+2. Right click on the `Main.scala` file and select "New Scala file"
+3. Select "Worksheet" and enter a name for the worksheet, e.g. "FirstSteps"
+4. VS Code will recognize this as a Scala worksheet and create a new file with the `.worksheet.sc` extension
 
+Metals will automatically evaluate your worksheet. You'll see the results displayed as decorations in the editor, showing the value and type of each expression.
 
-Enter a **Worksheet name** of `FirstSteps` and click **Finish**. A new file called `FirstSteps.sc` should appear in the tree view on the left of the main window, and should open it in the main editor in the middle:
+You can also manually evaluate the worksheet by:
+- Clicking on "Evaluate worksheet" in the status bar
+- Or using the command palette (`Ctrl+Shift+P` / `Cmd+Shift+P`) and searching for "Metals: Evaluate worksheet"
 
-<!-- Trailing slash and double newline are REQUIRED to prevent LaTeX repositioning this -->
-![Scala IDE: Empty Scala worksheet](src/pages/getting-started/scala-ide-empty-worksheet.png)\
-
-
-Note that the object on the left contains a single line of Scala code:
-
-```scala mdoc:silent
-println("Welcome to the Scala worksheet")
-```
-
-for which Eclipse is displaying the corresponding output on the right:
-
-```
-Welcome to the Scala worksheet
-```
-
-Any expression you add to the left of the editor is evaluated and printed on the right. To demonstrate this, change the text in the editor to the following:
+The results will appear inline, showing something like:
 
 ```scala
-object FirstSteps:
-  println("Welcome to the Scala worksheet")
+println("Welcome to the Scala worksheet")   // Welcome to the Scala worksheet
 
-  1 + 1
+1 + 1                                       // val res0: Int = 2
 
-  if(20 > 10) "left" else "right"
+if 20 > 10 then "left" else "right"         // val res1: String = "left"
 
-  println("The ultimate answer is " + 42)
+println("The ultimate answer is " + 42)     // The ultimate answer is 42
 ```
 
-Save your work by selecting the **File Menu** and choosing **Save** (or better still by pressing **Ctrl+S**). Eclipse should automatically evaluate each line of code and print the results on the right of the editor:
-
-```scala
-object FirstSteps:
-  println("Welcome to the Scala worksheet")   //> Welcome to the Scala worksheet
-
-  1 + 1                                       //> res0: Int(2) = 2
-
-  if(20 > 10) "left" else "right"             //> res1: String = left
-
-  println("The ultimate answer is " + 42)     //> The ultimate answer is 42
-```
-
-<!-- Trailing slash and double newline are REQUIRED to prevent LaTeX repositioning this -->
-![Scala IDE: Completed Scala worksheet](src/pages/getting-started/scala-ide-completed-worksheet.png)\
-
-
-We'll dive into what all of the text on the right means as we proceed with the course ahead. For now you're all set to start honing your Scala skills!
+We'll dive into what all of this output means as we proceed with the course ahead. For now you're all set to start honing your Scala skills!

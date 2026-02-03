@@ -1,12 +1,12 @@
 # Foreword #{-}
 
-This book is aimed at programmers learning Scala for the first time. We assume you have some familiarity with an object-oriented programming language such as Java, but little or no experience with functional programming.
+This book is aimed at programmers learning Scala or programming in a functional style for the first time.
 
 Our goal is to describe how to use Scala in-the-small. To this end our focus is on the core patterns used in idiomatic Scala code, and we introduce Scala's features in the context of the patterns they enable. We are not aiming for exhaustive coverage of Scala's features, and this text is not a reference manual.
 
-Except for a few exercises we don't rely on any external libraries. You should be able to complete all the problems inside with only a text editor and Scala's REPL, or an IDE such as the [Scala IDE for Eclipse](http://scala-ide.org/) or [IntelliJ IDEA](http://www.jetbrains.com/idea/).
+Except for a few exercises, we don't rely on any external libraries. You should be able to complete all the problems inside with only a text editor and Scala's REPL, or an IDE such as the [Vs-Code](https://code.visualstudio.com/) using [Metals](https://scalameta.org/metals/) or [IntelliJ IDEA](http://www.jetbrains.com/idea/).
 
-Essential Scala was created by [Noel Welsh](http://noelwelsh.com) and [Dave Gurnell](http://davegurnell.com/) of [Underscore](http://underscore.io). It was built using [Underscore's eBook Template](https://github.com/underscoreio/underscore-ebook-template), plain text, and a deep and profound love of functional programming.
+Essential Scala was created by [Noel Welsh](http://noelwelsh.com) and [Dave Gurnell](http://davegurnell.com/). It was built using [Underscore's eBook Template](https://github.com/underscoreio/underscore-ebook-template), plain text, and a deep and profound love of functional programming.
 
 ## Conventions Used in This Book #{-}
 
