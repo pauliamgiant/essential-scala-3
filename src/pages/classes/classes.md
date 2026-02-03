@@ -327,7 +327,7 @@ invictus.isDirectedBy(nolan)
 Implement a method of `Film` called `copy`. This method should accept the same parameters as the constructor and create a new copy of the film. Give each parameter a default value so you can copy a film changing any subset of its values:
 
 
-```scala mdoc:reset
+```scala mdoc:reset:invisible
 case class Director(firstName: String, lastName: String, yearOfBirth: Int):
   def name: String = firstName + " " + lastName
 
