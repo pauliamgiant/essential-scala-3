@@ -12,8 +12,8 @@ We'll walk through the setup for each process here.
 
 Follow the instructions on [http://scala-lang.org](https://docs.scala-lang.org/getting-started/install-scala.html) to set Scala up on your computer. Once Scala is installed, you should be able to run an interactive console by typing `scala` at your command line prompt. Here's an example from OS X:
 
-```bash
-dave@daves-computer ~> scala
+```zsh
+dave@computer ~> scala
 Welcome to Scala 3.7.4 (21, Java OpenJDK 64-Bit Server VM).
 Type in expressions for evaluation. Or try :help.
 
@@ -60,9 +60,10 @@ Here, the output `"Hello world!"` is from our `println` statement---the expressi
 
 We can split long expressions across multiple lines quite simply. If we press enter before the end of an expression, the console will print a `|` character to indicate that we can continue on the next line:
 
-```scala mdoc
-for i <- 1 to 3 do
-  println(i)
+```scala
+for(i <- 1 to 3) {
+| println(i)
+| }
 
 ```
 
@@ -79,7 +80,7 @@ scala> val result = {
 val result: Int = 3
 ```
 
-The second way is to use indentation which is the preferred way in Scala 3:
+The second way is to use an indentation of 2 spaces which is the preferred way in Scala 3:
 
 ```scala
 scala> val result =

@@ -117,10 +117,9 @@ In Scala 3, indentation-based syntax is preferred for better readability, though
 Conditional expressions allow us to choose an expression to evaluate based on a `Boolean` condition. The syntax in Scala 3 is
 
 ```scala
-if condition then
-  trueExpression
-else
-  falseExpression
+if condition 
+then trueExpression
+else falseExpression
 ```
 
 A conditional, being an expression, has a type and evaluates to an object.
