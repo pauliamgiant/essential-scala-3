@@ -51,6 +51,13 @@ sealed trait A
 final case class B() extends A
 final case class C() extends A
 ```
+
+Scala 3 equivalent using enum:
+
+```scala mdoc:nest:silent
+enum A:
+  case B, C
+```
 </div>
 
 ### Algebraic Data Types
@@ -125,6 +132,13 @@ case object Green extends TrafficLight
 case object Yellow extends TrafficLight
 ```
 
+Scala 3 equivalent using enum:
+
+```scala mdoc:nest:silent
+enum TrafficLight:
+  case Red, Green, Yellow
+```
+
 As there are no fields or methods on the three cases, and thus there is no need to create more than one instance of them, I used case objects instead of case classes.
 </div>
 
@@ -137,6 +151,14 @@ A calculation may succeed (with an `Int` result) or fail (with a `String` messag
 sealed trait Calculation
 final case class Success(result: Int) extends Calculation
 final case class Failure(reason: String) extends Calculation
+```
+
+Scala 3 equivalent using enum:
+
+```scala mdoc:nest:silent
+enum Calculation:
+  case Success(result: Int)
+  case Failure(reason: String)
 ```
 </div>
 
@@ -153,5 +175,14 @@ case object Well extends Source
 case object Spring extends Source
 case object Tap extends Source
 final case class BottledWater(size: Int, source: Source, carbonated: Boolean)
+```
+
+Scala 3 equivalent using enum for the sum type, with a product type for the water:
+
+```scala mdoc:nest:silent
+enum Source:
+  case Well, Spring, Tap
+
+case class BottledWater(size: Int, source: Source, carbonated: Boolean)
 ```
 </div>

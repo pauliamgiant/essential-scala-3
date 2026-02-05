@@ -147,6 +147,14 @@ final case class Panther() extends Feline
 final case class Cat(favouriteFood: String) extends Feline
 ```
 
+Scala 3 equivalent using enum:
+
+```scala
+enum Feline:
+  case Lion, Tiger, Panther
+  case Cat(favouriteFood: String)
+```
+
 Now let's implement a method using both polymorphism and pattern matching. Our method, `dinner`, will return the appropriate food for the feline in question. For a `Cat` their dinner is their `favouriteFood`. For `Lions` it is antelope, for `Tigers` it is tiger food, and for `Panthers` it is licorice.
 
 We could represent food as a `String`, but we can do better and represent it with a type. This avoids, for example, spelling mistakes in our code. So let's define our `Food` type using the now familiar patterns.
@@ -157,6 +165,14 @@ case object Antelope extends Food
 case object TigerFood extends Food
 case object Licorice extends Food
 final case class CatFood(food: String) extends Food
+```
+
+Scala 3 equivalent using enum:
+
+```scala
+enum Food:
+  case Antelope, TigerFood, Licorice
+  case CatFood(food: String)
 ```
 
 Now we can implement `dinner` as a method returning `Food`. First using polymorphism:

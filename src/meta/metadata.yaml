@@ -1,7 +1,7 @@
 ---
 # Used by Pandoc to print covers:
-title: Essential Scala
-subtitle: "Scala 3 Edition"
+title: Essential Scala 3
+subtitle: "DRAFT - NOT FOR DISTRIBUTION"
 author: "Noel Welsh and Dave Gurnell"
 date: "Version 1.4, February 2026"
 copyright: "2014-2026"
@@ -39,6 +39,8 @@ pages:
   - traits/traits.md
   - traits/sealed-traits.md
   - traits/modelling-data-with-traits.md
+  - traits/enums.md
+  - traits/union-types.md
   - traits/working-with-data.md
   - traits/recursive-data.md
   - traits/extended-examples.md
@@ -116,6 +118,8 @@ previewPages:
   - traits/index.md
   - traits/traits.md
   - traits/sealed-traits.md
+  - traits/enums.md
+  - traits/union-types.md
   - traits/modelling-data-with-traits.md
   - traits/working-with-data.md
   - traits/recursive-data.md
