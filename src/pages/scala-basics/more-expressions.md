@@ -92,7 +92,7 @@ scala> def foo(x: Any) = x
 foo: (x: Any)Any
 ```
 
-This works but it loses type information. For example, when we pass in an `Int` the result has type `Any` and as such we can't use it in arthimetic expressions.
+This works but it loses type information. For example, when we pass in an `Int` the result has type `Any` and as such we can't use it in arithmetic expressions.
 
 ```scala
 scala> foo(1)
@@ -120,7 +120,7 @@ scala> foo("hi!")
 res36: String = hi!
 ```
 
-As we can see above, when we actually use `foo` the concrete type of it's argument is substituted for `A`.
+As we can see above, when we actually use `foo` the concrete type of its argument is substituted for `A`.
 
 ### Type Bounds
 

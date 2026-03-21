@@ -41,7 +41,7 @@ java.lang.Exception: Boom!
 
 ### Exercise: Using Try
 
-In the previous section we saw that `fold`, `map`, and `flatMap` were useful mehtods on `Maybe`. There are also useful methods on `Try`. Let's implement them.
+In the previous section we saw that `fold`, `map`, and `flatMap` were useful methods on `Maybe`. There are also useful methods on `Try`. Let's implement them.
 
 <div class="solution">
 ```scala
@@ -71,7 +71,7 @@ final case class Success[A](elt: A) extends Try[A] {
 }
 ```
 
-In this case I've implemented the auxillary functions in terms of `fold`, which saves on code duplication.
+In this case I've implemented the auxiliary functions in terms of `fold`, which saves on code duplication.
 </div>
 
 ## Try in Scala

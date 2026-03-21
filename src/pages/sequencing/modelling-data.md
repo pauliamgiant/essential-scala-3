@@ -94,7 +94,7 @@ We can also pattern match on tuples as follows:
 
 ```scala mdoc
 (1, "a") match
-  case (a, b) => a + b
+  case (a, b) => a.toString + b
 ```
 
 Although pattern matching is the natural way to deconstruct a tuple, each class also has a complement of fields named `_1`, `_2` and so on:
@@ -106,6 +106,55 @@ x._1
 
 x._3
 ```
+
+### Named Tuples
+
+Scala 3.7 introduces a special syntax to name the fields of a tuple. We can define a named tuple as follows:
+
+```scala mdoc
+val namedTuple: (name: String, age: Int) = (name = "Reginald", age = 30)
+
+namedTuple.name
+
+namedTuple.age
+```
+
+We can make use of Scala's type inference to make the named tuple less verbose:
+
+```scala mdoc:reset
+val namedTuple = (name = "Reginald", age = 30)
+```
+
+We could also create a named tuple type alias to make the syntax even more concise:
+
+```scala mdoc:reset
+type Person = (name: String, age: Int)
+
+val namedTuple: Person = (name = "Reginald", age = 30)
+```
+
+A key benefit of named tuples is that they are more readable, and provide context that   is not available with regular tuples. They also provide safer field access than regular tuples with less opportunity for mistakes.
+
+And example of the readability difference is shown below:
+
+```scala
+val x = (1, "b", true)
+
+x._1
+
+x._3
+```
+Calling `x._1` and `x._3` gives the reader no information about the meaning of the values. Even looking back at the definition of `x` it is not clear what the values are.
+
+```scala
+val namedTuple = (numberOfJobs = 1 , floorNumber = 2, isElevatorOperational = true)
+
+namedTuple.name
+
+namedTuple.age
+```
+
+You can see that by using a named tuple for the same values we can provide more context to the reader.
 
 ### Generic Sum Types
 
@@ -121,17 +170,16 @@ def intOrString(input: Boolean) =
 We can't simply write this method as shown above because the compiler infers the result type as `Any`. Instead we have to introduce a new type to explicitly represent the disjunction:
 
 ```scala mdoc:invisible
-object sum {
-  sealed trait Sum[A, B]
-  final case class Left[A, B](value: A) extends Sum[A, B]
-  final case class Right[A, B](value: B) extends Sum[A, B]
-}
-import sum._
+object sum:
+  enum Sum[A, B]:
+    case Left[A, B](value: A) extends Sum[A, B]
+    case Right[A, B](value: B) extends Sum[A, B]
+import sum.*
 ```
 
 ```scala
 def intOrString(input: Boolean): Sum[Int, String] =
-  if input == true then
+  if input then
     Left[Int, String](123)
   else
     Right[Int, String]("abc")
@@ -161,9 +209,9 @@ sum match
 The code is an adaptation of our invariant generic sum type pattern, with another type parameter:
 
 ```scala mdoc:reset:silent
-sealed trait Sum[A, B]
-final case class Left[A, B](value: A) extends Sum[A, B]
-final case class Right[A, B](value: B) extends Sum[A, B]
+enum Sum[A, B]:
+  case Left[A, B](value: A) extends Sum[A, B]
+  case Right[A, B](value: B) extends Sum[A, B]
 ```
 
 Scala's standard library has the generic sum type `Either` for two cases, but it does not have types for more cases.
@@ -190,9 +238,9 @@ val perhaps: Maybe[Int] = Full(1)
 We can apply our invariant generic sum type pattern and get
 
 ```scala mdoc:reset:silent
-sealed trait Maybe[A]
-final case class Full[A](value: A) extends Maybe[A]
-final case class Empty[A]() extends Maybe[A]
+enum Maybe[A]:
+  case Full[A](value: A) extends Maybe[A]
+  case Empty[A]() extends Maybe[A]
 ```
 </div>
 
@@ -221,9 +269,9 @@ Generic data structures---`Tuples`, `Options`, `Eithers`, and so on---are extrem
 In this section we implemented a sum type for modelling optional data:
 
 ```scala mdoc:reset:silent
-sealed trait Maybe[A]
-final case class Full[A](value: A) extends Maybe[A]
-final case class Empty[A]() extends Maybe[A]
+enum Maybe[A]:
+  case Full[A](value: A) extends Maybe[A]
+  case Empty[A]() extends Maybe[A]
 ```
 
 Implement fold for this type.
@@ -233,16 +281,16 @@ The code is very similar to the implementation for `LinkedList`. I choose patter
 
 ```scala mdoc:reset:silent
 object wrapper:
-  sealed trait Maybe[A]:
+  enum Maybe[A]:
     def fold[B](full: A => B, empty: B): B =
       this match
-        case Full(v) => full(v)
-        case Empty() => empty
+        case Full(value) => full(value)
+        case Empty()     => empty
 
-  final case class Full[A](value: A) extends Maybe[A]
-  final case class Empty[A]() extends Maybe[A]
+    case Full[A](value: A) extends Maybe[A]
+    case Empty[A]() extends Maybe[A]
 
-import wrapper._
+import wrapper.*
 ```
 </div>
 
@@ -251,9 +299,9 @@ import wrapper._
 In this section we implemented a generic sum type:
 
 ```scala mdoc:reset:silent
-sealed trait Sum[A, B]
-final case class Left[A, B](value: A) extends Sum[A, B]
-final case class Right[A, B](value: B) extends Sum[A, B]
+enum Sum[A, B]:
+  case Left[A, B](value: A) extends Sum[A, B]
+  case Right[A, B](value: B) extends Sum[A, B]
 ```
 
 Implement `fold` for `Sum`.
@@ -261,15 +309,15 @@ Implement `fold` for `Sum`.
 <div class="solution">
 ```scala mdoc:reset:silent
 object wrapper:
-  sealed trait Sum[A, B]:
+  enum Sum[A, B]:
     def fold[C](left: A => C, right: B => C): C =
       this match
-        case Left(a) => left(a)
+        case Left(a)  => left(a)
         case Right(b) => right(b)
 
-  final case class Left[A, B](value: A) extends Sum[A, B]
-  final case class Right[A, B](value: B) extends Sum[A, B]
+    case Left[A, B](value: A) extends Sum[A, B]
+    case Right[A, B](value: B) extends Sum[A, B]
 
-import wrapper._
+import wrapper.*
 ```
 </div>

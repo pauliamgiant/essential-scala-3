@@ -1,9 +1,8 @@
 ---
 # Used by Pandoc to print covers:
 title: Essential Scala 3
-subtitle: "DRAFT - NOT FOR DISTRIBUTION"
 author: "Noel Welsh and Dave Gurnell"
-date: "Version 1.4, February 2026"
+date: "**\\*DRAFT - DO NOT DISTRIBUTE\\*** - v1.4 March 2026"
 copyright: "2014-2026"
 # Used by Pandoc to generate the PDF cover...
 # see src/css/book.css for HTML/ePub covers:
@@ -53,6 +52,7 @@ pages:
   - sequencing/modelling-data.md
   - sequencing/sequencing-computation.md
   - sequencing/variance.md
+  - sequencing/opaque-types.md
   - sequencing/conclusions.md
 
   - collections/index.md
@@ -73,7 +73,6 @@ pages:
   - implicits/implicit-parameters.md
   - implicits/enrichment.md
   - implicits/using-type-classes.md
-  - implicits/conversions.md
   - implicits/json.md
 
   - conclusions.md

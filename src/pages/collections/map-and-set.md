@@ -162,9 +162,9 @@ Here is a more complicated example using `flatMap`:
 
 ```scala mdoc
 example.flatMap {
-         case (str, num) =>
-           (1 to 3).map(x => (str + x) -> (num * x))
-       }
+  case (str, num) =>
+    (1 to 3).map(x => (str + x) -> (num * x))
+}
 ```
 
 and the same example written using `for` syntax:
@@ -172,7 +172,7 @@ and the same example written using `for` syntax:
 ```scala mdoc
 for
   (str, num) <- example
-  x         <- 1 to 3
+  x <- 1 to 3
 yield (str + x) -> (num * x)
 ```
 
@@ -181,7 +181,7 @@ Note that the result is a `Map` again. The argument to `flatMap` returns a seque
 ```scala mdoc
 for
   (str, num) <- example
-  x         <- 1 to 3
+  x <- 1 to 3
 yield (x + str) + "=" + (x * num)
 ```
 
@@ -285,7 +285,8 @@ val people = Set(
   "Charlie",
   "Derek",
   "Edith",
-  "Fred")
+  "Fred",
+)
 
 val ages = Map(
   "Alice"   -> 20,
@@ -293,17 +294,20 @@ val ages = Map(
   "Charlie" -> 50,
   "Derek"   -> 40,
   "Edith"   -> 10,
-  "Fred"    -> 60)
+  "Fred"    -> 60,
+)
 
 val favoriteColors = Map(
-  "Bob"     -> "green",
-  "Derek"   -> "magenta",
-  "Fred"    -> "yellow")
+  "Bob"   -> "green",
+  "Derek" -> "magenta",
+  "Fred"  -> "yellow",
+)
 
 val favoriteLolcats = Map(
   "Alice"   -> "Long Cat",
   "Charlie" -> "Ceiling Cat",
-  "Edith"   -> "Cloud Cat")
+  "Edith"   -> "Cloud Cat",
+)
 ```
 
 Use the code as test data for the following exercises:
@@ -336,7 +340,7 @@ Write a method `printColors` that prints everyone's favorite color!
 We can write this one using `foreach` or a for comprehension:
 
 ```scala mdoc:silent
-def printColors() = 
+def printColors() =
   for
     person <- people
   do println(s"${person}'s favorite color is ${favoriteColor(person)}!")
@@ -345,8 +349,8 @@ def printColors() =
 or:
 
 ```scala mdoc:nest:silent
-def printColors() = people.foreach:
-  person =>
+def printColors() =
+  people.foreach: person =>
     println(s"$person's favorite color is ${favoriteColor(person)}!")
 ```
 </div>
@@ -370,14 +374,14 @@ First we find the oldest person, then we look up the answer:
 ```scala mdoc:silent
 val oldest: Option[String] =
   people.foldLeft(Option.empty[String]): (older, person) =>
-    if ages.getOrElse(person, 0) > older.flatMap(ages.get).getOrElse(0) 
+    if ages.getOrElse(person, 0) > older.flatMap(ages.get).getOrElse(0)
     then Some(person)
     else older
 
 val favorite: Option[String] =
   for
     oldest <- oldest
-    color  <- favoriteColors.get(oldest)
+    color <- favoriteColors.get(oldest)
   yield color
 ```
 </div>
@@ -394,15 +398,15 @@ Write a method that takes two sets and returns a set containing the union of the
 As always, start by writing out the types and then follow the types to fill-in the details.
 
 ```scala mdoc:silent
-def union[A](set1: Set[A], set2: Set[A]): Set[A] = 
+def union[A](set1: Set[A], set2: Set[A]): Set[A] =
   ???
 ```
 
 We need to think of an algorithm for computing the union. We can start with one of the sets and add the elements from the other set to it. The result will be the union. What types does this result in? Our result has type `Set[A]` and we need to add every `A` from the two sets to our result, which is an operation with type `(Set[A], A) => Set[A]`. This means we need a fold. Since order is not important any fold will do.
 
 ```scala mdoc:nest:silent
-def union[A](set1: Set[A], set2: Set[A]): Set[A] = 
-  set1.foldLeft(set2){ (set, elt) => (set + elt) }
+def union[A](set1: Set[A], set2: Set[A]): Set[A] =
+  set1.foldLeft(set2)((set, elt) => set + elt)
 
 ```
 </div>
@@ -415,11 +419,11 @@ Now let's write union for maps. Assume we have two `Map[A, Int]` and add corresp
 The solution follows the same pattern as the union for sets, but here we have to handle adding the values as well.
 
 ```scala mdoc:nest:silent
-def union[A](map1: Map[A, Int], map2: Map[A, Int]): Map[A, Int] = 
+def union[A](map1: Map[A, Int], map2: Map[A, Int]): Map[A, Int] =
   map1.foldLeft(map2): (map, elt) =>
     val (key, value1) = elt
-    val value2 = map.get(key)
-    val total = value1 + value2.getOrElse(0)
+    val value2        = map.get(key)
+    val total         = value1 + value2.getOrElse(0)
     map + (key -> total)
 ```
 </div>
@@ -435,7 +439,7 @@ With the tools we've seen far, we could add another function parameter like so:
 def union[A, B](map1: Map[A, B], map2: Map[A, B], add: (B, B) => B): Map[A, B] =
   map1.foldLeft(map2): (map, elt) =>
     val (k, v) = elt
-    val newV = map.get(k).map(v2 => add(v, v2)).getOrElse(v)
+    val newV   = map.get(k).map(v2 => add(v, v2)).getOrElse(v)
     map + (k -> newV)
 ```
 

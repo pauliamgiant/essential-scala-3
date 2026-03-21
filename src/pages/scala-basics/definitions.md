@@ -4,11 +4,11 @@ layout: page
 
 # Definitions
 
-So far we've had to type out the expression creating a value whenever we wanted to use that value. In this section we'll see how to give names to values, so we can bind a name to a value once and then use the name wherever we want to use the value. These parts of a program are called *defintions*.
+So far we've had to type out the expression creating a value whenever we wanted to use that value. In this section we'll see how to give names to values, so we can bind a name to a value once and then use the name wherever we want to use the value. These parts of a program are called *definitions*.
 
 ## val
 
-The simplest type of defintion is a `val`. It allows us to give a name to value. Let's give a name to the number `42`.
+The simplest type of definition is a `val`. It allows us to give a name to a value. Let's give a name to the number `42`.
 
 ```scala
 scala> val theAnswer = 42
@@ -245,7 +245,7 @@ scala> sumTail(10000, 0)
 res25: Int = 50005000
 ```
 
-Ensuring a function is tail recursive is an important property, as tail recursive functions are used to implement general purpose loops in Scala. To assist with this, Scala includes a `@tailrec` annotation, available in the package `scala.annotation`. If a method is annotated with `@tailrec` the compiler will raise an warning if a method is not tail recursive.
+Ensuring a function is tail recursive is an important property, as tail recursive functions are used to implement general purpose loops in Scala. To assist with this, Scala includes a `@tailrec` annotation, available in the package `scala.annotation`. If a method is annotated with `@tailrec` the compiler will raise a warning if a method is not tail recursive.
 
 ```scala
 scala> import scala.annotation.tailrec

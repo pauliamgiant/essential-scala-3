@@ -223,16 +223,16 @@ object json:
             s"${quote(k)}: ${v.print}"
 
       this match
-        case JsNumber(v) => v.toString
-        case JsString(v) => quote(v)
-        case JsBoolean(v) => v.toString
-        case JsNull => "null"
-        case s @ SeqCell(_, _) => "[" ++ seqToJson(s) ++ "]"
-        case SeqEnd => "[]"
+        case JsNumber(v)             => v.toString
+        case JsString(v)             => quote(v)
+        case JsBoolean(v)            => v.toString
+        case JsNull                  => "null"
+        case s @ SeqCell(_, _)       => "[" ++ seqToJson(s) ++ "]"
+        case SeqEnd                  => "[]"
         case o @ ObjectCell(_, _, _) => "{" ++ objectToJson(o) ++ "}"
-        case ObjectEnd => "{}"
+        case ObjectEnd               => "{}"
   end Json
-  
+
   final case class JsNumber(value: Double) extends Json
   final case class JsString(value: String) extends Json
   final case class JsBoolean(value: Boolean) extends Json
@@ -249,23 +249,32 @@ object json:
 Test your method works. Here are some examples using the representation I chose.
 
 ```scala mdoc:invisible
-import json._
+import json.*
 ```
 
 ```scala mdoc
 SeqCell(JsString("a string"), SeqCell(JsNumber(1.0), SeqCell(JsBoolean(true), SeqEnd))).print
 
 ObjectCell(
-  "a", SeqCell(JsNumber(1.0), SeqCell(JsNumber(2.0), SeqCell(JsNumber(3.0), SeqEnd))),
+  "a",
+  SeqCell(JsNumber(1.0), SeqCell(JsNumber(2.0), SeqCell(JsNumber(3.0), SeqEnd))),
   ObjectCell(
-    "b", SeqCell(JsString("a"), SeqCell(JsString("b"), SeqCell(JsString("c"), SeqEnd))),
+    "b",
+    SeqCell(JsString("a"), SeqCell(JsString("b"), SeqCell(JsString("c"), SeqEnd))),
     ObjectCell(
-      "c", ObjectCell("doh", JsBoolean(true),
-             ObjectCell("ray", JsBoolean(false),
-               ObjectCell("me", JsNumber(1.0), ObjectEnd))),
-      ObjectEnd
-    )
-  )
+      "c",
+      ObjectCell(
+        "doh",
+        JsBoolean(true),
+        ObjectCell(
+          "ray",
+          JsBoolean(false),
+          ObjectCell("me", JsNumber(1.0), ObjectEnd),
+        ),
+      ),
+      ObjectEnd,
+    ),
+  ),
 ).print
 ```
 
@@ -274,6 +283,8 @@ ObjectCell(
 In the JSON exercise there was a well defined specification to model. In this exercise we want to work on modelling skills given a rather fuzzy specification. The goal is to model music. You can choose to interpret this how you want, making your model as simple or complex as you like. The critical thing is to be able to justify the decisions you made, and to understand the limits of your model.
 
 You might find it easiest to use the BNF notation, introduced in the JSON exercise, to write down your model.
+
+An open source scala project called [sounds-of-scala](https://github.com/pauliamgiant/sounds-of-scala) was a result of this very exercise and provides examples of how music can be modelled in Scala.
 
 <div class="solution">
 My solution models a very simplified version of Western music. My fundamental "atom" is the note, which consists of a pitch and a duration.

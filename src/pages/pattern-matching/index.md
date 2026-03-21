@@ -18,7 +18,7 @@ Literal patterns match a particular value. Any Scala literals work except functi
 case class Person(name: String, surname: String)
 ```
 
-```scala mdoc
+```scala
 (1 + 1) match
   case 1 => "It's one!"
   case 2 => "It's two!"
@@ -91,7 +91,7 @@ Person("Dave", "Gurnell") match
 Person("John", "Doe") match
   case Person("Noel", _) => "It's Noel!"
   case Person("Dave", _) => "It's Dave!"
-  case _ => "It's someone else!"
+  case _                 => "It's someone else!"
 ```
 
 ### Type patterns
@@ -109,9 +109,9 @@ case class Square(side: Double) extends Shape
 val shape: Shape = Rectangle(1, 2)
 
 shape match
-  case c : Circle    => s"It's a circle: $c!"
-  case r : Rectangle => s"It's a rectangle: $r!"
-  case s : Square    => s"It's a square: $s!"
+  case c: Circle    => s"It's a circle: $c!"
+  case r: Rectangle => s"It's a rectangle: $r!"
+  case s: Square    => s"It's a square: $s!"
 ```
 
 ### Tuple patterns
@@ -130,7 +130,7 @@ This isn't so much a pattern as a feature of the overall `match` syntax. We can 
 ```scala mdoc
 123 match
   case a if a % 2 == 0 => "even"
-  case _ => "odd"
+  case _               => "odd"
 ```
 
 To reiterate, the code between the `if` and `=>` keywords is a regular Scala expression, not a pattern.

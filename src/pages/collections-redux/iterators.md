@@ -22,7 +22,7 @@ It is as if we'd written
 ```scala mdoc:silent
 val intermediate1 = Seq(1, 2, 3).map(_ * 2)
 val intermediate2 = intermediate1.map(_ + 4)
-val result = intermediate2.map(_.toString)
+val result        = intermediate2.map(_.toString)
 ```
 
 These intermediate collections are not strictly necessary. We could instead do the full sequence of transformations on an element-by-element basis. Views allows this. We create a view by calling the `view` method on any collection. Any traversals of a view are only applied when the `force` method is called.

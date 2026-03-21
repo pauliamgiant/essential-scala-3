@@ -95,7 +95,7 @@ If you have Scala code in a file, you can use the `:load` command to load the co
 
 For example, with a file named `example.scala` containing `1 + 2 + 3` we can use `:load` to load the file into the console.
 
-Lets first create the file.
+Let's first create the file.
 
 To create a file very easily, in a separate terminal window outside of the Scala REPL, you can use the `touch` command:
 
@@ -185,12 +185,13 @@ sbt new scala/scala3.g8
 5. Open the project folder in VS Code: **File > Open Folder**
 
 When you open the Scala project, Metals will automatically:
+
 - Detect the project
 - Import the build
 - Index your code
 - Enable IDE features like syntax highlighting, code completion, and error checking
 
-If a message pops up saying "New sbt workspace detected, would you like to import the build?", click "Import Build".
+If a message pops up saying *"New sbt workspace detected, would you like to import the build?"*, click **Import Build**.
 
 ### Your First Scala Application
 

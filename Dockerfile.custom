@@ -1,0 +1,10 @@
+FROM underscoreio/book:latest
+
+# Install Bitstream Vera fonts
+RUN apt-get update && \
+    apt-get install -y ttf-bitstream-vera && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Update font cache
+RUN fc-cache -f -v

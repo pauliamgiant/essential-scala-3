@@ -200,7 +200,7 @@ Vector(1, 2, 3)
 We can also use *wildcard imports* to import everything in a package:
 
 ```scala mdoc:silent
-import scala.collection.immutable._
+import scala.collection.immutable.*
 ```
 
 ```scala mdoc
@@ -222,7 +222,7 @@ We can write import statements anywhere in our code---imported identifiers are l
 ```scala mdoc:silent
 // `empty` is unbound here
 
-def someMethod = 
+def someMethod =
   import scala.collection.immutable.Vector.empty
 
   // `empty` is bound to `Vector.empty` here
@@ -308,7 +308,7 @@ The methods for retrieving the first element in a list are:
 The `mkString` method allows us to quickly display a `Seq` as a `String`:
 
 ```scala mdoc:silent
-Seq(1, 2, 3).mkString(",")               // returns "1,2,3"
+Seq(1, 2, 3).mkString(",") // returns "1,2,3"
 Seq(1, 2, 3).mkString("[ ", ", ", " ]") // returns "[ 1, 2, 3 ]"
 ```
 
@@ -316,9 +316,9 @@ Seq(1, 2, 3).mkString("[ ", ", ", " ]") // returns "[ 1, 2, 3 ]"
 
 ```scala mdoc:silent
 Some(123).isDefined // returns true
-Some(123).isEmpty   // returns false
-None.isDefined      // returns false
-None.isEmpty        // returns true
+Some(123).isEmpty // returns false
+None.isDefined // returns false
+None.isEmpty // returns true
 ```
 </div>
 
@@ -364,17 +364,19 @@ The code below is a partial rewrite of the previous sample code in which `Films`
 case class Film(
   name: String,
   yearOfRelease: Int,
-  imdbRating: Double)
+  imdbRating: Double,
+)
 
 case class Director(
   firstName: String,
   lastName: String,
   yearOfBirth: Int,
-  films: Seq[Film])
+  films: Seq[Film],
+)
 
-val memento           = Film("Memento", 2000, 8.5)
-val darkKnight        = Film("Dark Knight", 2008, 9.0)
-val inception         = Film("Inception", 2010, 8.8)
+val memento    = Film("Memento", 2000, 8.5)
+val darkKnight = Film("Dark Knight", 2008, 9.0)
+val inception  = Film("Inception", 2010, 8.8)
 
 val highPlainsDrifter = Film("High Plains Drifter", 1973, 7.7)
 val outlawJoseyWales  = Film("The Outlaw Josey Wales", 1976, 7.9)
@@ -387,17 +389,33 @@ val dieHard           = Film("Die Hard", 1988, 8.3)
 val huntForRedOctober = Film("The Hunt for Red October", 1990, 7.6)
 val thomasCrownAffair = Film("The Thomas Crown Affair", 1999, 6.8)
 
-val eastwood = Director("Clint", "Eastwood", 1930,
-  Seq(highPlainsDrifter, outlawJoseyWales, unforgiven, granTorino, invictus))
+val eastwood = Director(
+  "Clint",
+  "Eastwood",
+  1930,
+  Seq(highPlainsDrifter, outlawJoseyWales, unforgiven, granTorino, invictus),
+)
 
-val mcTiernan = Director("John", "McTiernan", 1951,
-  Seq(predator, dieHard, huntForRedOctober, thomasCrownAffair))
+val mcTiernan = Director(
+  "John",
+  "McTiernan",
+  1951,
+  Seq(predator, dieHard, huntForRedOctober, thomasCrownAffair),
+)
 
-val nolan = Director("Christopher", "Nolan", 1970,
-  Seq(memento, darkKnight, inception))
+val nolan = Director(
+  "Christopher",
+  "Nolan",
+  1970,
+  Seq(memento, darkKnight, inception),
+)
 
-val someGuy = Director("Just", "Some Guy", 1990,
-  Seq())
+val someGuy = Director(
+  "Just",
+  "Some Guy",
+  1990,
+  Seq(),
+)
 
 val directors = Seq(eastwood, mcTiernan, nolan, someGuy)
 
@@ -414,7 +432,7 @@ Using this sample code, write implementations of the following methods:
 
 ```scala mdoc:silent
 def directorsWithBackCatalogOfSize(numberOfFilms: Int): Seq[Director] =
- directors.filter(_.films.length > numberOfFilms)
+  directors.filter(_.films.length > numberOfFilms)
 ```
    </div>
 
@@ -427,7 +445,7 @@ def directorsWithBackCatalogOfSize(numberOfFilms: Int): Seq[Director] =
 
 ```scala mdoc:silent
 def directorBornBefore(year: Int): Option[Director] =
- directors.find(_.yearOfBirth < year)
+  directors.find(_.yearOfBirth < year)
 ```
 
    The `Option` type is discussed in more detail later this chapter.
@@ -442,9 +460,9 @@ def directorBornBefore(year: Int): Option[Director] =
 
 ```scala mdoc:silent
 def directorBornBeforeWithBackCatalogOfSize(year: Int, numberOfFilms: Int): Seq[Director] =
- val byAge   = directors.filter(_.yearOfBirth < year)
- val byFilms = directors.filter(_.films.length > numberOfFilms)
- byAge.filter(byFilms.contains)
+  val byAge   = directors.filter(_.yearOfBirth < year)
+  val byFilms = directors.filter(_.films.length > numberOfFilms)
+  byAge.filter(byFilms.contains)
 ```
    </div>
 
@@ -456,10 +474,9 @@ def directorBornBeforeWithBackCatalogOfSize(year: Int, numberOfFilms: Int): Seq[
 
 ```scala mdoc:silent
 def directorsSortedByAge(ascending: Boolean = true) =
-  if ascending then
-    directors.sortWith((a, b) => a.yearOfBirth > b.yearOfBirth)
-  else
-    directors.sortWith((a, b) => a.yearOfBirth < b.yearOfBirth)
+  if ascending
+  then directors.sortWith((a, b) => a.yearOfBirth > b.yearOfBirth)
+  else directors.sortWith((a, b) => a.yearOfBirth < b.yearOfBirth)
 ```
 
    Because Scala is a functional language, we can also factor our code as follows:
@@ -467,7 +484,7 @@ def directorsSortedByAge(ascending: Boolean = true) =
 ```scala mdoc:nest:silent
 def directorsSortedByAge(ascending: Boolean = true) =
   val comparator: (Director, Director) => Boolean =
-    if ascending 
+    if ascending
     then (a, b) => a.yearOfBirth > b.yearOfBirth
     else (a, b) => a.yearOfBirth < b.yearOfBirth
 
@@ -480,7 +497,7 @@ def directorsSortedByAge(ascending: Boolean = true) =
 ```scala mdoc:nest:silent
 def directorsSortedByAge(ascending: Boolean = true) =
   directors.sortWith: (a, b) =>
-    if ascending 
+    if ascending
     then a.yearOfBirth > b.yearOfBirth
     else a.yearOfBirth < b.yearOfBirth
 ```

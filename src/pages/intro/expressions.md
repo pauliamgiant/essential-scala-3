@@ -75,7 +75,7 @@ In Scala 3, we can also write this using indentation without braces. We can also
 ```scala mdoc:silent
 def name: String =
   val title = "Professor"
-  val name = "Funkenstein"
+  val name  = "Funkenstein"
   title + " " + name
 ```
 

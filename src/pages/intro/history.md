@@ -31,8 +31,8 @@ Scala has become a popular choice for building scalable, robust applications bec
 
 - Scales from small scripts to large distributed systems
 - Is the leading language for functional programming in industry
-- Runs on the JVM with excellent Java interoperability
-- Provides strong static typing with powerful type inference
+- Can interoperate with Java code seamlessly - Java being one of the most widely used languages in the world
+- Provides strong static typing with powerful type inference creating robust and reliable code
 - Has a rich ecosystem of libraries and frameworks
 - Supports multiple programming paradigms, allowing teams to adopt functional programming gradually
 

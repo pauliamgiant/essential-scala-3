@@ -9,8 +9,8 @@ Here is a declaration for a simple `Person` class:
 ```scala mdoc:silent
 class Person:
   val firstName = "Noel"
-  val lastName = "Welsh"
-  def name = firstName + " " + lastName
+  val lastName  = "Welsh"
+  def name      = firstName + " " + lastName
 ```
 
 Like an object declaration, a class declaration binds a name (in this case `Person`) and is not an expression. However, unlike an object name, we cannot use a class name in an expression. A class is not a value, and there is a different *namespace* in which classes live.
@@ -30,7 +30,7 @@ Notice the type of the object is `Person`. The printed value contains a code in 
 
 ```scala mdoc
 noel
-val newNoel = Person()
+val newNoel        = Person()
 val anotherNewNoel = Person()
 ```
 
@@ -62,8 +62,8 @@ The solution is to introduce a *constructor*, which allows us to pass parameters
 ```scala mdoc:reset:silent
 class Person(first: String, last: String):
   val firstName = first
-  val lastName = last
-  def name = firstName + " " + lastName
+  val lastName  = last
+  def name      = firstName + " " + lastName
 ```
 
 ```scala mdoc
@@ -183,10 +183,10 @@ Some of these types are simply Scala aliases for types that exist in Java: `Int`
 There are two special types at the *bottom* of the hierarchy. `Nothing` is the type of `throw` expressions, and `Null` is the type of the value `null`. These special types are subtypes of everything else, which helps us assign types to `throw` and `null` while keeping other types in our code sane. The following code illustrates this:
 
 ```scala mdoc
-def badness = throw new Exception("Error")
+def badness      = throw new Exception("Error")
 def otherbadness = null
-val bar = if true then 123 else badness
-val baz = if false then "it worked" else otherbadness
+val bar          = if true then 123 else badness
+val baz          = if false then "it worked" else otherbadness
 ```
 
 Although the types of `badness` and `res` are `Nothing` and `Null` respectively, the types of `bar` and `baz` are still sensible. This is because `Int` is the least common supertype of `Int` and `Nothing`, and `String` is the least common supertype of `String` and `Null`.
@@ -237,9 +237,9 @@ This is a finger exercise to get you used to the syntax of defining classes.
 ```scala mdoc:silent
 class Cat(val colour: String, val food: String)
 
-val oswald = Cat("Black", "Milk")
+val oswald    = Cat("Black", "Milk")
 val henderson = Cat("Ginger", "Chips")
-val quentin = Cat("Tabby and white", "Curry")
+val quentin   = Cat("Tabby and white", "Curry")
 ```
 
 </div>
@@ -297,14 +297,14 @@ case class Film(name: String, yearOfRelease: Int, imdbRating: Double, director: 
 Copy-and-paste the following demo data into your code and adjust your constructors so that the code works without modification:
 
 ```scala mdoc:silent
-val eastwood          = Director("Clint", "Eastwood", 1930)
-val mcTiernan         = Director("John", "McTiernan", 1951)
-val nolan             = Director("Christopher", "Nolan", 1970)
-val someBody          = Director("Just", "Some Body", 1990)
+val eastwood  = Director("Clint", "Eastwood", 1930)
+val mcTiernan = Director("John", "McTiernan", 1951)
+val nolan     = Director("Christopher", "Nolan", 1970)
+val someBody  = Director("Just", "Some Body", 1990)
 
-val memento           = Film("Memento", 2000, 8.5, nolan)
-val darkKnight        = Film("Dark Knight", 2008, 9.0, nolan)
-val inception         = Film("Inception", 2010, 8.8, nolan)
+val memento    = Film("Memento", 2000, 8.5, nolan)
+val darkKnight = Film("Dark Knight", 2008, 9.0, nolan)
+val inception  = Film("Inception", 2010, 8.8, nolan)
 
 val highPlainsDrifter = Film("High Plains Drifter", 1973, 7.7, eastwood)
 val outlawJoseyWales  = Film("The Outlaw Josey Wales", 1976, 7.9, eastwood)
@@ -334,7 +334,8 @@ case class Director(firstName: String, lastName: String, yearOfBirth: Int):
   def copy(
     firstName: String = this.firstName,
     lastName: String = this.lastName,
-    yearOfBirth: Int = this.yearOfBirth): Director =
+    yearOfBirth: Int = this.yearOfBirth,
+  ): Director =
     Director(firstName, lastName, yearOfBirth)
 
 case class Film(name: String, yearOfRelease: Int, imdbRating: Double, director: Director):
@@ -348,17 +349,18 @@ case class Film(name: String, yearOfRelease: Int, imdbRating: Double, director: 
     name: String = this.name,
     yearOfRelease: Int = this.yearOfRelease,
     imdbRating: Double = this.imdbRating,
-    director: Director = this.director): Film =
+    director: Director = this.director,
+  ): Film =
     Film(name, yearOfRelease, imdbRating, director)
 
-val eastwood          = Director("Clint", "Eastwood", 1930)
-val mcTiernan         = Director("John", "McTiernan", 1951)
-val nolan             = Director("Christopher", "Nolan", 1970)
-val someBody          = Director("Just", "Some Body", 1990)
+val eastwood  = Director("Clint", "Eastwood", 1930)
+val mcTiernan = Director("John", "McTiernan", 1951)
+val nolan     = Director("Christopher", "Nolan", 1970)
+val someBody  = Director("Just", "Some Body", 1990)
 
-val memento           = Film("Memento", 2000, 8.5, nolan)
-val darkKnight        = Film("Dark Knight", 2008, 9.0, nolan)
-val inception         = Film("Inception", 2010, 8.8, nolan)
+val memento    = Film("Memento", 2000, 8.5, nolan)
+val darkKnight = Film("Dark Knight", 2008, 9.0, nolan)
+val inception  = Film("Inception", 2010, 8.8, nolan)
 
 val highPlainsDrifter = Film("High Plains Drifter", 1973, 7.7, eastwood)
 val outlawJoseyWales  = Film("The Outlaw Josey Wales", 1976, 7.9, eastwood)
@@ -374,8 +376,10 @@ val thomasCrownAffair = Film("The Thomas Crown Affair", 1999, 6.8, mcTiernan)
 
 ```scala mdoc
 highPlainsDrifter.copy(name = "L'homme des hautes plaines")
-thomasCrownAffair.copy(yearOfRelease = 1968,
-  director = Director("Norman", "Jewison", 1926))
+thomasCrownAffair.copy(
+  yearOfRelease = 1968,
+  director = Director("Norman", "Jewison", 1926),
+)
 inception.copy().copy().copy()
 ```
 
@@ -386,7 +390,8 @@ This exercise provides some hands on experience writing Scala classes, fields an
 class Director(
   val firstName: String,
   val lastName: String,
-  val yearOfBirth: Int):
+  val yearOfBirth: Int,
+):
 
   def name: String =
     s"$firstName $lastName"
@@ -394,14 +399,16 @@ class Director(
   def copy(
     firstName: String = this.firstName,
     lastName: String = this.lastName,
-    yearOfBirth: Int = this.yearOfBirth): Director =
+    yearOfBirth: Int = this.yearOfBirth,
+  ): Director =
     new Director(firstName, lastName, yearOfBirth)
 
 class Film(
   val name: String,
   val yearOfRelease: Int,
   val imdbRating: Double,
-  val director: Director):
+  val director: Director,
+):
 
   def directorsAge =
     yearOfRelease - director.yearOfBirth
@@ -413,7 +420,8 @@ class Film(
     name: String = this.name,
     yearOfRelease: Int = this.yearOfRelease,
     imdbRating: Double = this.imdbRating,
-    director: Director = this.director): Film =
+    director: Director = this.director,
+  ): Film =
     new Film(name, yearOfRelease, imdbRating, director)
 ```
 </div>
@@ -469,8 +477,8 @@ We can work around this using *method overloading* to recreate our original pare
 
 ```scala mdoc:reset:silent
 class Counter(val count: Int):
-  def dec: Counter = dec()
-  def inc: Counter = inc()
+  def dec: Counter                  = dec()
+  def inc: Counter                  = inc()
   def dec(amount: Int = 1): Counter = Counter(count - amount)
   def inc(amount: Int = 1): Counter = Counter(count + amount)
 ```
@@ -494,8 +502,8 @@ Extend `Counter` to add a method called `adjust`. This method should accept an `
 <div class="solution">
 ```scala mdoc:nest:silent
 class Counter(val count: Int):
-  def dec = Counter(count - 1)
-  def inc = Counter(count + 1)
+  def dec                  = Counter(count - 1)
+  def inc                  = Counter(count + 1)
   def adjust(adder: Adder) =
     Counter(adder.add(count))
 ```

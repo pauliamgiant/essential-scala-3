@@ -291,7 +291,8 @@ object wrapper:
   case object Yellow extends TrafficLight:
     def next: TrafficLight =
       Red
-; import wrapper._
+;
+import wrapper.*
 ```
 
 Now with pattern matching:
@@ -301,14 +302,15 @@ object wrapper:
   sealed trait TrafficLight:
     def next: TrafficLight =
       this match
-        case Red => Green
-        case Green => Yellow
+        case Red    => Green
+        case Green  => Yellow
         case Yellow => Red
 
   case object Red extends TrafficLight
   case object Green extends TrafficLight
   case object Yellow extends TrafficLight
-; import wrapper._
+;
+import wrapper.*
 ```
 
 In this case I think implementing inside the class using pattern matching is best. `Next` doesn't depend on any external data and we probably only want one implementation of it. Pattern matching makes the structure of the state machine clearer than polymorphism.
@@ -366,8 +368,8 @@ To write the remaining bodies of the methods we can no longer rely on the patter
 object Calculator:
   def +(calc: Calculation, operand: Int): Calculation =
     calc match
-        case Success(result) => Success(result + operand)
-        case Failure(reason) => Failure(reason)
+      case Success(result) => Success(result + operand)
+      case Failure(reason) => Failure(reason)
 
   def -(calc: Calculation, operand: Int): Calculation =
     calc match

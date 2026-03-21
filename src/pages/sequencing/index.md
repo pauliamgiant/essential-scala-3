@@ -2,30 +2,34 @@
 
 In this section we're going to look at two more language features, *generics* and *functions*, and see some abstractions we can build using these features: *functors*, and *monads*.
 
-Our starting point is code that we developed in the previous section. We developed `IntList`, a list of integers, and wrote code like the following:
+Now that we have looked at many examples of Algebraic Data Types using sealed traits and case classes, from this chapter onwards we will utilise the Scala 3 enum style Algebraic Data Types. These can always be written in the traditional sealed trait format and you can challenge yourself to do so in the exercises for completeness of understanding.
+
+Our starting point is code that we developed in the previous section. We developed `IntList`, a list of integers, and wrote code like the following.
+
+
 
 ```scala mdoc:silent
 object wrapper:
-  sealed trait IntList:
+  enum IntList:
     def length: Int =
       this match
-        case End => 0
+        case End          => 0
         case Pair(hd, tl) => 1 + tl.length
     def double: IntList =
       this match
-        case End => End
+        case End          => End
         case Pair(hd, tl) => Pair(hd * 2, tl.double)
     def product: Int =
       this match
-        case End => 1
+        case End          => 1
         case Pair(hd, tl) => hd * tl.product
     def sum: Int =
       this match
-        case End => 0
+        case End          => 0
         case Pair(hd, tl) => hd + tl.sum
-  case object End extends IntList
-  final case class Pair(head: Int, tail: IntList) extends IntList
-import wrapper._
+    case End
+    case Pair(head: Int, tail: IntList)
+import wrapper.*
 ```
 
 There are two problems with this code. The first is that our list is restricted to storing `Int`s. The second problem is that here is a lot of repetition. The code has the same general structure, which is unsurprising given we're using our structural recursion pattern, and it would be nice to reduce the amount of duplication.

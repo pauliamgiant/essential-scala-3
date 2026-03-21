@@ -21,7 +21,7 @@ case class Anonymous(id: String, createdAt: Date = new Date())
 case class User(
   id: String,
   email: String,
-  createdAt: Date = new Date()
+  createdAt: Date = new Date(),
 )
 ```
 
@@ -33,7 +33,7 @@ There is obvious duplication here, and it would be nice to not have to write the
 import java.util.Date
 
 trait Visitor:
-  def id: String      // Unique id assigned to each user
+  def id: String // Unique id assigned to each user
   def createdAt: Date // Date this user first visited the site
 
   // How long has this visitor been around?
@@ -41,13 +41,13 @@ trait Visitor:
 
 case class Anonymous(
   id: String,
-  createdAt: Date = Date()
+  createdAt: Date = Date(),
 ) extends Visitor
 
 case class User(
   id: String,
   email: String,
-  createdAt: Date = Date()
+  createdAt: Date = Date(),
 ) extends Visitor
 ```
 
@@ -225,22 +225,22 @@ trait Shape:
   def area: Double
 
 case class Circle(radius: Double) extends Shape:
-  val sides = 1
+  val sides     = 1
   val perimeter = 2 * math.Pi * radius
-  val area = math.Pi * radius * radius
+  val area      = math.Pi * radius * radius
 
 case class Rectangle(
   width: Double,
-  height: Double
+  height: Double,
 ) extends Shape:
-  val sides = 4
+  val sides     = 4
   val perimeter = 2 * width + 2 * height
-  val area = width * height
+  val area      = width * height
 
 case class Square(size: Double) extends Shape:
-  val sides = 4
+  val sides     = 4
   val perimeter = 4 * size
-  val area = size * size
+  val area      = size * size
 ```
 </div>
 

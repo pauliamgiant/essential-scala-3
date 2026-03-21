@@ -183,14 +183,19 @@ Starting with the definition of `nolan`, create a list containing the names of t
 // some definitions from previous section
 case class Film(name: String, yearOfRelease: Int, imdbRating: Double)
 case class Director(firstName: String, lastName: String, yearOfBirth: Int, films: Seq[Film])
-val mcTiernan = new Director("John", "McTiernan", 1951, Seq(
-  Film("Predator", 1987, 7.9),
-  Film("Die Hard", 1988, 8.3),
-  Film("The Hunt for Red October", 1990, 7.6),
-  Film("The Thomas Crown Affair", 1999, 6.8)
-))
-val nolan = new Director("Christopher", "Nolan", 1970, Seq.empty)
-val someBody = new Director("Just", "Some Body", 1990, Seq.empty)
+val mcTiernan = new Director(
+  "John",
+  "McTiernan",
+  1951,
+  Seq(
+    Film("Predator", 1987, 7.9),
+    Film("Die Hard", 1988, 8.3),
+    Film("The Hunt for Red October", 1990, 7.6),
+    Film("The Thomas Crown Affair", 1999, 6.8),
+  ),
+)
+val nolan     = new Director("Christopher", "Nolan", 1970, Seq.empty)
+val someBody  = new Director("Just", "Some Body", 1990, Seq.empty)
 val directors = Seq(mcTiernan, nolan, someBody)
 ```
 
@@ -349,7 +354,7 @@ Once again we follow the same pattern. The types are:
 3. Constructing the operation we want to use requires a bit more thought. The hint is to use `contains`. We can keep a sequence of the unique elements we've seen so far, and use `contains` to test if the sequence contains the current element. If we have seen the element we don't add it, otherwise we do. In code
 
 ```scala mdoc:silent
-def insert(seq: Seq[Int], elt: Int): Seq[Int] = 
+def insert(seq: Seq[Int], elt: Int): Seq[Int] =
   if seq.contains(elt) then
     seq
   else
@@ -361,13 +366,13 @@ With these three pieces we can solve the problem. Looking at the type table we s
 Thus the solution is
 
 ```scala mdoc:nest:silent
-def insert(seq: Seq[Int], elt: Int): Seq[Int] = 
+def insert(seq: Seq[Int], elt: Int): Seq[Int] =
   if seq.contains(elt) then
     seq
   else
     elt +: seq
 
-def unique(seq: Seq[Int]): Seq[Int] = 
+def unique(seq: Seq[Int]): Seq[Int] =
   seq.foldLeft(Seq.empty[Int])(insert(_, _))
 
 unique(Seq(1, 1, 2, 4, 3, 4))
@@ -384,7 +389,7 @@ Write a function that reverses the elements of a sequence. Your output does not 
 In this exercise, and the ones that follow, using the types are particularly important. Start by writing down the type of `reverse`.
 
 ```scala mdoc:silent
-def reverse[A, B](seq: Seq[A], f: A => B): Seq[B] = 
+def reverse[A, B](seq: Seq[A], f: A => B): Seq[B] =
   ???
 ```
 
@@ -405,7 +410,7 @@ For the zero element we know that it must have the same type as the return type 
 So we now we can fill in the answer.
 
 ```scala mdoc:nest:silent
-def reverse[A](seq: Seq[A]): Seq[A] = 
+def reverse[A](seq: Seq[A]): Seq[A] =
   seq.foldLeft(Seq.empty[A])((seq, elt) => elt +: seq)
 ```
 </div>
@@ -425,7 +430,7 @@ def map[A, B](seq: Seq[A], f: A => B): Seq[B] =
 As usual we need to fill in the zero element and the function. The zero element must have type `Seq[B]`, and the function has type `(A, Seq[B]) => Seq[B])`. The zero element is straightforward: `Seq.empty[B]` is the only sequence we can construct of type `Seq[B]`. For the function, we clearly have to convert that `A` to a `B` somehow. There is only one way to do that, which is with the function supplied to `map`. We then need to add that `B` to our `Seq[B]`, for which we can use the `+:` method. This gives us our final result.
 
 ```scala mdoc:nest:silent
-def map[A, B](seq: Seq[A], f: A => B): Seq[B] = 
+def map[A, B](seq: Seq[A], f: A => B): Seq[B] =
   seq.foldRight(Seq.empty[B])((elt, seq) => f(elt) +: seq)
 ```
 </div>
@@ -448,7 +453,7 @@ def foldLeft[A, B](seq: Seq[A], zero: B, f: (B, A) => B): B =
   seq.foreach(???)
 ```
 
-Let's look at what we have need to fill in. `foreach` returns `Unit` but we need to return a `B`. `foreach` takes a function of type `A => Unit` but we only have a `(B, A) => B` available. The `A` can come from `foreach` and by now we know that the `B` is the intermediate result. We have the hint to use mutable state and we know that we need to keep a `B` around and return it, so let's fill that in.
+Let's look at what we need to fill in. `foreach` returns `Unit` but we need to return a `B`. `foreach` takes a function of type `A => Unit` but we only have a `(B, A) => B` available. The `A` can come from `foreach` and by now we know that the `B` is the intermediate result. We have the hint to use mutable state and we know that we need to keep a `B` around and return it, so let's fill that in.
 
 ```scala
 def foldLeft[A, B](seq: Seq[A], zero: B, f: (B, A) => B): B = 
@@ -460,7 +465,7 @@ def foldLeft[A, B](seq: Seq[A], zero: B, f: (B, A) => B): B =
 At this point we can just follow the types. `result` must be initially assigned to the value of `zero` as that is the only `B` we have. The body of the function we pass to `foreach` must call `f` with `result` and `elt`. This returns a `B` which we must store somewhere---the only place we have to store it is in `result`. So the final answer becomes
 
 ```scala mdoc:nest:silent
-def foldLeft[A, B](seq: Seq[A], zero: B, f: (B, A) => B): B = 
+def foldLeft[A, B](seq: Seq[A], zero: B, f: (B, A) => B): B =
   var result = zero
   seq.foreach(elt => result = f(result, elt))
   result

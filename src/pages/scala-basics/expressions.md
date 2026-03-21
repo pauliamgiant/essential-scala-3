@@ -105,7 +105,7 @@ Unit
 
 Literals on their own aren't very interesting. It's only when we combine expressions into larger expressions that useful programs can be created.
 
-You're probably used to simple arthimetic expressions.
+You're probably used to simple arithmetic expressions.
 
 ```scala
 scala> 43 - 3 + 2

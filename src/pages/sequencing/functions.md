@@ -6,31 +6,32 @@ Let's look at three methods we wrote that manipulate `IntList`.
 
 ```scala mdoc:silent
 object wrapper:
-  sealed trait IntList:
+  import IntList.*
+  enum IntList:
     def length: Int =
       this match
-        case End => 0
-        case Pair(hd, tl) => 1 + tl.length
+        case End              => 0
+        case Pair(head, tail) => 1 + tail.length
 
     def double: IntList =
       this match
-        case End => End
-        case Pair(hd, tl) => Pair(hd * 2, tl.double)
+        case End              => End
+        case Pair(head, tail) => Pair(head * 2, tail.double)
 
     def product: Int =
       this match
-        case End => 1
-        case Pair(hd, tl) => hd * tl.product
+        case End              => 1
+        case Pair(head, tail) => head * tail.product
 
     def sum: Int =
       this match
-        case End => 0
-        case Pair(hd, tl) => hd + tl.sum
+        case End              => 0
+        case Pair(head, tail) => head + tail.sum
 
-  case object End extends IntList
-  case class Pair(hd: Int, tl: IntList) extends IntList
+    case End extends IntList
+    case Pair(head: Int, tail: IntList) extends IntList
 
-import wrapper._
+import wrapper.*
 ```
 
 All of these methods have the same general pattern, which is not surprising as they all use structural recursion. It would be nice to be able to remove the duplication.
@@ -42,7 +43,7 @@ We want to write a method like
 def abstraction(end: Int, f: ???): Int =
   this match {
     case End => end
-    case Pair(hd, tl) => f(hd, tl.abstraction(end, f))
+    case Pair(head, tail) => f(head, tail.abstraction(end, f))
   }
 ```
 
@@ -108,7 +109,7 @@ val add1 = (x: Int) => x + 1
 
 add1(10)
 
-val sum = (x: Int, y:Int) => x + y
+val sum = (x: Int, y: Int) => x + y
 
 sum(10, 20)
 ```
@@ -158,18 +159,18 @@ Your `fold` method should look like this:
 
 ```scala mdoc:reset:silent
 object wrapper:
-  sealed trait IntList:
+  enum IntList:
     def fold(end: Int, f: (Int, Int) => Int): Int =
       this match
-        case End => end
+        case End          => end
         case Pair(hd, tl) => f(hd, tl.fold(end, f))
 
     // other methods...
 
-  case object End extends IntList
-  final case class Pair(head: Int, tail: IntList) extends IntList
+    case End extends IntList
+    case Pair(head: Int, tail: IntList) extends IntList
 
-import wrapper._
+import wrapper.*
 ```
 </div>
 
@@ -178,11 +179,11 @@ Now reimplement `sum`, `length`, and `product` in terms of `fold`.
 <div class="solution">
 ```scala mdoc:reset:silent
 object wrapper:
-  sealed trait IntList:
+  enum IntList:
     def fold(end: Int, f: (Int, Int) => Int): Int =
       this match
-        case End => end
-        case Pair(hd, tl) => f(hd, tl.fold(end, f))
+        case End              => end
+        case Pair(head, tail) => f(head, tail.fold(end, f))
 
     def length: Int =
       fold(0, (_, tl) => 1 + tl)
@@ -191,10 +192,10 @@ object wrapper:
     def sum: Int =
       fold(0, (hd, tl) => hd + tl)
 
-  case object End extends IntList
-  final case class Pair(head: Int, tail: IntList) extends IntList
+    case End extends IntList
+    case Pair(head: Int, tail: IntList) extends IntList
 
-import wrapper._
+import wrapper.*
 ```
 </div>
 
@@ -215,13 +216,13 @@ The types tell us it won't work. `fold` returns an `Int` and `double` returns an
 def double: IntList =
   this match {
     case End => End
-    case Pair(hd, tl) => Pair(hd * 2, tl.double)
+    case Pair(head, tail) => Pair(head * 2, tail.double)
   }
 
 def fold(end: Int, f: (Int, Int) => Int): Int =
   this match {
     case End => end
-    case Pair(hd, tl) => f(hd, tl.fold(end, f))
+    case Pair(head, tail) => f(head, tail.fold(end, f))
   }
 ```
 
@@ -247,24 +248,24 @@ where we've used a generic type on the method to capture the changing return typ
 
 ```scala mdoc:reset:silent
 object wrapper:
-  sealed trait IntList:
+  enum IntList:
     def fold[A](end: A, f: (Int, A) => A): A =
       this match
-        case End => end
-        case Pair(hd, tl) => f(hd, tl.fold(end, f))
+        case End              => end
+        case Pair(head, tail) => f(head, tail.fold(end, f))
 
     def length: Int =
-      fold[Int](0, (_, tl) => 1 + tl)
+      fold[Int](0, (_, tail) => 1 + tail)
     def product: Int =
-      fold[Int](1, (hd, tl) => hd * tl)
+      fold[Int](1, (head, tail) => head * tail)
     def sum: Int =
-      fold[Int](0, (hd, tl) => hd + tl)
+      fold[Int](0, (head, tail) => head + tail)
     def double: IntList =
-      fold[IntList](End, (hd, tl) => Pair(hd * 2, tl))
+      fold[IntList](End, (head, tail) => Pair(head * 2, tail))
 
-  case object End extends IntList
-  final case class Pair(head: Int, tail: IntList) extends IntList
+    case End extends IntList
+    case Pair(head: Int, tail: IntList) extends IntList
 
-import wrapper._
+import wrapper.*
 ```
 </div>

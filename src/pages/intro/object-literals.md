@@ -53,7 +53,7 @@ object Test2:
 
 ```
 
-Here we've create a method called `name`. We can call it in the usual way.
+Here we've created a method called `name`. We can call it in the usual way.
 
 ```scala mdoc
 Test2.name
@@ -114,7 +114,7 @@ An object can also contain other objects, called *fields*. We introduce these us
 
 ```scala mdoc:silent
 object Test4:
-  val name = "Noel"
+  val name                         = "Noel"
   def hello(other: String): String =
     name + " says hi to " + other
 ```
@@ -158,13 +158,13 @@ Here's an object that shows the difference:
 
 ```scala mdoc:silent
 object Test7:
-   val simpleField =
-     println("Evaluating simpleField")
-     42
+  val simpleField =
+    println("Evaluating simpleField")
+    42
 
-   def noParameterMethod =
-     println("Evaluating noParameterMethod")
-     42
+  def noParameterMethod =
+    println("Evaluating noParameterMethod")
+    42
 ```
 
 Here we have used a `println` expression to print something to the console, and a block expression (expressions surrounded by `{` and `}`) to group expressions. We'll see more about block expressions in the next section.
@@ -247,15 +247,15 @@ This is just a finger exercise to get you used to the syntax of defining objects
 ```scala mdoc:silent
 object Oswald:
   val colour: String = "Black"
-  val food: String = "Milk"
+  val food: String   = "Milk"
 
 object Henderson:
   val colour: String = "Ginger"
-  val food: String = "Chips"
+  val food: String   = "Chips"
 
 object Quentin:
   val colour: String = "Tabby and white"
-  val food: String = "Curry"
+  val food: String   = "Curry"
 ```
 
 </div>
@@ -271,7 +271,7 @@ Here is the solution. `cube(x)` calls `square(x)` and multiplies its value by `x
 ```scala mdoc:silent
 object calc:
   def square(x: Double) = x * x
-  def cube(x: Double) = x * square(x)
+  def cube(x: Double)   = x * square(x)
 ```
 
 </div>
@@ -286,17 +286,17 @@ Like Java, Scala can't generalize particularly well across `Ints` and `Doubles`.
 ```scala mdoc:silent
 object calc2:
   def square(value: Double) = value * value
-  def cube(value: Double) = value * square(value)
+  def cube(value: Double)   = value * square(value)
 
   def square(value: Int) = value * value
-  def cube(value: Int) = value * square(value)
+  def cube(value: Int)   = value * square(value)
 ```
 
 "Overloaded" methods are ones we have defined several times for different argument types. Whenever we call an overloaded method type, Scala automatically determines which variant we need by looking at the type of the argument.
 
 ```scala mdoc
 calc2.square(1.0) // calls the `Double` version of `square`
-calc2.square(1)   // calls the `Int` version `square`
+calc2.square(1) // calls the `Int` version `square`
 ```
 
 The Scala compiler is able to insert automatic conversions between numeric types wherever you have a lower precision and require a higher precision. For example, if you write `calc.square(2)`, the compiler determines that the only version of `calc.square` takes a `Double` and automatically infers that you really mean `calc.square(2.toDouble)`.
@@ -381,12 +381,12 @@ The full sequence of evaluation is as follows:
   - Calls `argh.b`, which...
     - Retrieves the value `3` from `b`
   - Evaluates the first `+`, determining that it actually refers to string
-    concatentation, and yielding `"3c3"`
+    concatenation, and yielding `"3c3"`
   - Calls `argh.a`, which...
     - Prints `"a"`
     - Returns `1`
   - Evaluates the first `+`, determining that it actually refers to string
-    concatentation, and yielding `"3c31"`
+    concatenation, and yielding `"3c31"`
 ```
 
 Whew! That's a lot for such a simple piece of code.
@@ -403,7 +403,7 @@ What is the type of the `greet` method? Can we use this method to greet other ob
 ```scala mdoc:silent
 object person:
   val firstName = "Roman"
-  val lastName = "Swan"
+  val lastName  = "Swan"
 
 object alien:
   def greet(p: person.type) =

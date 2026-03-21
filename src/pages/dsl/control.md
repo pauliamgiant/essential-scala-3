@@ -8,11 +8,11 @@ if(logger.isDebugEnabled() {
 }
 ```
 
-the reason being that we can't control the order of evaluation---a function's arguments are always evaluated before the function is called. Scala allows us to delay evaluating a functions arguments, a feature known as call-by-name parameters.
+the reason being that we can't control the order of evaluation---a function's arguments are always evaluated before the function is called. Scala allows us to delay evaluating a function's arguments, a feature known as call-by-name parameters.
 
 ### Syntax
 
-We declare a call by name parameter by specifying it's type as `=> Result`. That is, like a function but without a parameter list. For example, here's a simple logger implementation using call-by-name parameters
+We declare a call by name parameter by specifying its type as `=> Result`. That is, like a function but without a parameter list. For example, here's a simple logger implementation using call-by-name parameters
 
 ```scala
 object Logger {
@@ -35,7 +35,7 @@ scala> Logger.debug("This is a debug message")
 
 ```
 
-We can prove that the `msg` parameter is not being evaluated by wrapping a `println` expression in with it.
+We can prove that the `msg` parameter is not being evaluated by wrapping a `println` expression in it.
 
 ```scala
 scala> Logger.debug({ println("Is this thing on?"); "This is a debug message" })
@@ -49,7 +49,7 @@ DEBUG This is a debug message
 
 ```
 
-Note that call-by-name parameters are evaluated every time they are invoked. If you're used to Haskell's call-by-need evaluation, where a parameter is evaluated once and the result stored for later use, this different may be trip you up.
+Note that call-by-name parameters are evaluated every time they are invoked. If you're used to Haskell's call-by-need evaluation, where a parameter is evaluated once and the result stored for later use, this difference may trip you up.
 
 ### Exercises
 

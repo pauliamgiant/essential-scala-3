@@ -8,10 +8,10 @@ There are four components of the type class pattern:
 
 - the actual type class itself;
 - the type class instances;
-- interfaces using implicit parameters; and
-- interfaces using enrichment and implicit parameters.
+- interfaces using using parameters; and
+- interfaces using enrichment and using parameters.
 
-We have already seen type class instances and talked briefly about implicit parameters. Here we will look at defining our own type class, and in the following section we will look at the two styles of interface.
+We have already seen type class instances and talked briefly about using parameters. Here we will look at defining our own type class, and in the following section we will look at the two styles of interface.
 
 ### Creating a Type Class
 
@@ -44,8 +44,8 @@ object HtmlWriter:
   def write(in: Any): String =
     in match
       case Person(name, email) => ???
-      case d: Date => ???
-      case _ => throw new Exception(s"Can't render ${in} to HTML")
+      case d: Date             => ???
+      case _                   => throw new Exception(s"Can't render ${in} to HTML")
 ```
 
 This implementation has its own issues. We have lost type safety because there is no useful supertype that covers just the elements we want to render and no more. We can't have more than one implementation of rendering for a given type. We also have to modify this code whenever we want to render a new type.
@@ -91,7 +91,7 @@ ObfuscatedPersonWriter.write(Person("John", "john@example.com"))
 
 Much safer---it'll take a spam bot more than a few microseconds to decypher that!
 
-You might recognise `PersonWriter`, `DateWriter`, and `ObfuscatedPersonWriter` as following the type class instance pattern (though we haven't made them implicit values at this point). The `HtmlWriter` trait, which the instances implement, is the type class itself.
+You might recognise `PersonWriter`, `DateWriter`, and `ObfuscatedPersonWriter` as following the type class instance pattern (though we haven't made them given values at this point). The `HtmlWriter` trait, which the instances implement, is the type class itself.
 
 <div class="callout callout-info">
 #### Type Class Pattern {-}
@@ -108,7 +108,7 @@ trait ExampleTypeClass[A]:
 ```
 </div>
 
-The next step is to introduce implicit parameters, so we can use type classes with less boilerplate.
+The next step is to introduce using parameters, so we can use type classes with less boilerplate.
 
 ### Take Home Points
 

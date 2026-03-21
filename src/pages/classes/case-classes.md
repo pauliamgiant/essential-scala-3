@@ -109,7 +109,7 @@ A final note. If you find yourself defining a case class with no constructor arg
 case object Citizen:
   def firstName = "John"
   def lastName  = "Doe"
-  def name = firstName + " " + lastName
+  def name      = firstName + " " + lastName
 ```
 
 ```scala mdoc
@@ -169,7 +169,8 @@ case class Film(
   name: String,
   yearOfRelease: Int,
   imdbRating: Double,
-  director: Director):
+  director: Director,
+):
 
   def directorsAge =
     yearOfRelease - director.yearOfBirth
@@ -199,10 +200,9 @@ Reimplement `Counter` as a case class, using `copy` where appropriate. Additiona
 
 <div class="solution">
 ```scala mdoc:silent
-case class Counter(count: Int = 0) {
+case class Counter(count: Int = 0):
   def dec = copy(count = count - 1)
   def inc = copy(count = count + 1)
-}
 ```
 
 This is almost a trick exercise---there are very few differences with the previous implementation However, notice the extra functionality we got for free:
