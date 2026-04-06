@@ -67,7 +67,7 @@ for(i <- 1 to 3) {
 
 ```
 
-The Scala 3 REPL has improved multi-line editing capabilities. You can simply continue typing across multiple lines, and the REPL will intelligently detect when your expression is complete. For example:
+You can simply continue typing across multiple lines, and the REPL will intelligently detect when your expression is complete.
 
 There are two ways we can enter this multi-line expression. First is to use braces to create a block expression:
 
@@ -97,14 +97,25 @@ For example, with a file named `example.scala` containing `1 + 2 + 3` we can use
 
 Let's first create the file.
 
-To create a file very easily, in a separate terminal window outside of the Scala REPL, you can use the `touch` command:
+To create a file very easily, in a separate terminal window outside of the Scala REPL, you can use the `touch` command on Mac or Linux, or the New-Item command in Windows PowerShell
 
+OSX
 ```bash
 touch example.scala
 ```
 
+Powershell
+```powershell
+New-Item example.scala
+
+```
+
 This will create a new file called `example.scala` in the current directory.
-You can then open the file in a text editor and add the code below. You can also run 'nano' or 'vim' from the terminal to edit the file. We'll use 'nano' in this example.
+You can then open the file in any text editor and add the code below. 
+Examples of editors are 'nano' or 'vim' on Mac and Linux or Notepad on windows.
+
+
+We'll use 'nano' on Mac in this example.
 
 ```bash
 nano example.scala

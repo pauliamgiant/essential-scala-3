@@ -28,7 +28,7 @@ given Conversion[A, B] with
   def apply(in: A): B = new B()
 ```
 
-```scala mdoc
+```scala mdoc:warn
 new A().bar
 ```
 
@@ -43,7 +43,8 @@ given Conversion[Int, Boolean] with
   def apply(int: Int): Boolean = int == 0
 ```
 
-```scala mdoc
+```scala mdoc:warn
+
 if 1 then "yes" else "no"
 
 if 0 then "yes" else "no"
@@ -96,7 +97,7 @@ Once the conversion has been brought into scope, we can use `yeah` and `times` a
 import IntImplicits.given
 ```
 
-```scala mdoc
+```scala mdoc:warn
 5.yeah()
 ```
 </div>

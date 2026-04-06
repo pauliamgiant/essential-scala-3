@@ -68,16 +68,16 @@ example.size
 
 As with `Seq`, the default implementation of `Map` is immutable. We add and remove elements by creating new maps as opposed to mutating existing ones.
 
-We can add new elements using the `+` method. Note that, as with Java's `HashMap`, keys are overwritten and order is non-deterministic.
+We can add multiple new elements using the `++` method, which accepts another `Map`. Note that, as with Java's `HashMap`, keys are overwritten and order is non-deterministic.
 
 ```scala mdoc
-example.+("c" -> 10, "d" -> 11, "e" -> 12)
+example ++ Map("c" -> 10, "d" -> 11, "e" -> 12)
 ```
 
-We can remove keys using the `-` method:
+We can remove multiple keys using the `--` method, which accepts a `Set` of keys to remove:
 
 ```scala mdoc
-example.-("b", "c")
+example -- Set("b", "c")
 ```
 
 If we are only specifying a single argument, we can write `+` and `-` as infix operators.
@@ -98,12 +98,12 @@ The `scala.collection.mutable` package contains several mutable implementations 
 val example2 = scala.collection.mutable.Map("x" -> 10, "y" -> 11, "z" -> 12)
 ```
 
-The in-place mutation equivalents of `+` and `-` are `+=` and `-=` respectively.
+The in-place mutation equivalents of `+` and `-` are `+=` and `--=` respectively.
 
 ```scala mdoc
 example2 += ("x" -> 20)
 
-example2 -= ("y", "z")
+example2 --= Set("y", "z")
 ```
 
 Note that, like their immutable cousins, `+=` and `-=` both return a result of type `Map`. In this case, however, the return value is *the same object* that we called the method on. The return value is useful for chaining method calls together, but we can discard it if we see fit.
@@ -182,7 +182,7 @@ Note that the result is a `Map` again. The argument to `flatMap` returns a seque
 for
   (str, num) <- example
   x <- 1 to 3
-yield (x + str) + "=" + (x * num)
+yield s"$x$str=${x * num}"
 ```
 
 #### In summary

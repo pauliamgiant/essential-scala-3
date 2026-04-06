@@ -50,7 +50,7 @@ Note: In Scala 3, the `then` keyword is required, and parentheses around the con
 
 Blocks are expressions that allow us to sequence computations together. In Scala 3, blocks can be written using braces or indentation-based syntax.
 
-```scala mdoc
+```scala mdoc:warn
 { 1; 2; 3 }
 ```
 
@@ -191,16 +191,16 @@ We'll learn more about `Any` in the following sections. Java programmers shouldn
 
 What about this conditional?
 
-```scala mdoc:silent
+```scala mdoc:warn:silent
 if false then "hello"
 ```
 
 <div class="solution">
 The result type and value are `Any` and `()` respectively:
 
-```scala mdoc
+```scala mdoc:warn
 if false then "hello"
 ```
 
-All code being equal, conditionals without `else` expressions only evaluate to a value half of the time. Scala works around this by returning the `Unit` value if the `else` branch should be evaluated. We would usually only use these expressions for their side-effects.
+Conditionals without `else` expressions can only produce a useful value when the condition is `true`. When it is `false`, Scala returns the `Unit` value `()` instead. Because of this, expressions without `else` are typically discouraged and from Scala 3, this code produces the warning `Discarded non-Unit value of type String`, reminding us that the `String` result is silently thrown away when the condition is `false`.
 </div>

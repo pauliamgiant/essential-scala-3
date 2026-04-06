@@ -5,7 +5,7 @@ title: Modelling with Types
 
 In the next sections we will explore some common functional programming patterns building on structural recursion. We will see how we can use the type system to our advantage to ensure our code maintains certain properties.
 
-In section we're going to focus on modelling missing values using the `Maybe` type we introduced in the [Modelling Data](/objects/generics.html) exercises.
+In section we're going to focus on modelling missing values using the `Maybe` type we introduced in the [Modelling Data](#generics) exercises.
 
 ## Making Null Optional
 

@@ -167,7 +167,22 @@ object Test7:
     42
 ```
 
-Here we have used a `println` expression to print something to the console, and a block expression (expressions surrounded by `{` and `}`) to group expressions. We'll see more about block expressions in the next section.
+Here we have used a `println` expression to print something to the console, and a block expression to group multiple expressions together. In Scala 3, a block expression is specified by indentation. In Scala 2, blocks are delimited by curly braces (`{` and `}`). Scala 3 still supports the curly brace syntax for now, so the following is equivalent:
+
+```scala mdoc:silent
+object Test7Braces:
+  val simpleField = {
+    println("Evaluating simpleField")
+    42
+  }
+
+  def noParameterMethod = {
+    println("Evaluating noParameterMethod")
+    42
+  }
+```
+
+We'll see more about block expressions in the next section.
 
 Notice how the console says we've defined an object, but it hasn't run either of our `println` statements? This is due to a quirk of Scala and Java called *lazy loading*.
 
@@ -326,7 +341,7 @@ The fact that string concatenation and numeric addition share the same `+` metho
 
 When entered on the console, what does the following program output, and what is the type and value of the final expression? Think carefully about the types, dependencies, and evaluation behaviour of each field and method.
 
-```scala mdoc:silent
+```scala
 object argh:
   def a =
     println("a")
@@ -349,7 +364,7 @@ argh.c + argh.b + argh.a
 <div class="solution">
 Here is the solution:
 
-```scala mdoc
+```scala
 argh.c + argh.b + argh.a
 ```
 
@@ -390,6 +405,7 @@ The full sequence of evaluation is as follows:
 ```
 
 Whew! That's a lot for such a simple piece of code.
+We will just point out that although `b + "c"` was possible to write and compiles, this concatenation has been deprecated in Scala 3 and the correct way to write it now is `b.toString + "c"` — explicit conversion followed by concatenation.
 </div>
 
 #### Greetings, human

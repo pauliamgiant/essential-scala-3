@@ -44,7 +44,7 @@ Lists and sequences can be captured in several ways:
 
 The `List` and `Seq` companion objects act as patterns that match fixed-length sequences.
 
-```scala mdoc
+```scala mdoc:warn
 List(1, 2, 3) match
   case List(a, b, c) => a + b + c
 ```
@@ -122,7 +122,7 @@ object Uppercase:
     Some(str.toUpperCase)
 ```
 
-```scala mdoc
+```scala mdoc:warn
 Person("Dave", "Gurnell") match
   case Person(f, Uppercase(l)) => s"$f $l"
 ```
@@ -154,7 +154,7 @@ object Words:
 
 There is one final type of pattern that can only be used with variable-length extractors. The *wildcard sequence* pattern, written `_*`, matches zero or more arguments from a variable-length pattern and discards their values. For example:
 
-```scala mdoc
+```scala mdoc:warn
 List(1, 2, 3, 4, 5) match
   case List(a, b, _*) => a + b
   case Nil            => "empty"

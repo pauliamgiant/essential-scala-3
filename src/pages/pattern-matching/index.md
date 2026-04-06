@@ -80,7 +80,7 @@ Person("Dave", "Gurnell") match
 
 The `_` symbol is a pattern that matches any value and simply ignores it. This is useful in two situations: when nested inside other patterns, and when used on its own to provide an "else" clause at the end of a match expression:
 
-```scala mdoc
+```scala mdoc:warn
 Person("Dave", "Gurnell") match
   case Person("Noel", _) => "It's Noel!"
   case Person("Dave", _) => "It's Dave!"

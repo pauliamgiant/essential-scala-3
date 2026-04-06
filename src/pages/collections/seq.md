@@ -240,7 +240,7 @@ Import statements in Scala are very flexible. The main points are nicely describ
 
 `Seq` is Scala's general sequence datatype. It has a number of general subtypes such as `List`, `Stack`, `Vector`, `Queue`, and `Array`, and specific subtypes such as `String`.
 
-*The default sequences in Scala are immutable.* We also have access to mutable sequences, which are covered separately in the [Collections Redux](/collections-redux/index.html) chapter.
+*The default sequences in Scala are immutable.* We also have access to mutable sequences, which are covered separately in the [Collections Redux](#collections-redux) chapter.
 
 We have covered a variety of methods that operate on sequences. Here is a type table of everything we have seen so far:
 
@@ -356,7 +356,7 @@ In most real code appending an `Int` to a `Seq[String]` would be an error. In pr
 
 #### Intranet Movie Database
 
-Let's revisit our films and directors example from the [Classes](/classes) chapter.
+Let's revisit our films and directors example from the [Classes](#objects-and-classes) chapter.
 
 The code below is a partial rewrite of the previous sample code in which `Films` is stored as a field of `Director` instead of the other way around. Copy and paste this into a new Scala worksheet and continue with the exercises below:
 

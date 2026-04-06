@@ -86,7 +86,7 @@ Person("Dave", "Gurnell").firstName
 
 `val` fields are *immutable*---they are initialized once after which we cannot change their values. Scala also provides the `var` keyword for defining *mutable* fields.
 
-Scala programmers tend to prefer to write immutability and side-effect-free code so we can reason about it using the substitution model. In this course we will concentrate almost exclusively on immutable `val` fields.
+Scala programmers tend to prefer to write immutable and side-effect-free code so we can reason about it using the substitution model. In this course we will concentrate almost exclusively on immutable `val` fields.
 
 <div class="callout callout-info">
 
@@ -374,7 +374,7 @@ val huntForRedOctober = Film("The Hunt for Red October", 1990, 7.6, mcTiernan)
 val thomasCrownAffair = Film("The Thomas Crown Affair", 1999, 6.8, mcTiernan)
 ```
 
-```scala mdoc
+```scala mdoc:silent
 highPlainsDrifter.copy(name = "L'homme des hautes plaines")
 thomasCrownAffair.copy(
   yearOfRelease = 1968,

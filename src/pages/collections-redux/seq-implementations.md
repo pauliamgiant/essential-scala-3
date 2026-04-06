@@ -8,53 +8,53 @@ The collections framework distinguishes at the type level two general classes of
 
 ### Immutable Implementations
 
-The main immutable `Seq` implementations are `List`, and `Stream`, and `Vector`.
+The main immutable `Seq` implementations are `List`, `LazyList`, and `Vector`.
 
 #### List
 
 A `List` is a singly linked list. It has constant time access to the first element and remainder of the list (`head`, and `tail`) and is thus a `LinearSeq`. It also has constant time prepending to the front of the list, but linear time appending to the end. `List` is the default `Seq` implementation.
 
-#### Stream
+#### LazyList
 
-A `Stream` is like a list except its elements are computed on demand, and thus it can have infinite size. Like other collections we can create streams by calling the `apply` method on the companion object.
+A `LazyList` is like a list except its elements are computed on demand, and thus it can have infinite size. Unlike the old `Stream` (deprecated since Scala 2.13), `LazyList` is fully lazy---both head and tail are evaluated only when needed. Like other collections we can create lazy lists by calling the `apply` method on the companion object.
 
 ```scala mdoc
-Stream(1, 2, 3)
+LazyList(1, 2, 3)
 ```
 
-Note that only the first element is printed. The others will be computed when we try to access them.
+Note that the elements are not evaluated until we access them.
 
-We can also use the `#::` method to construct a stream from individual elements, starting from `Stream.empty`.
+We can also use the `#::` method to construct a lazy list from individual elements, starting from `LazyList.empty`.
 
 ```scala mdoc
-Stream.empty.#::(3).#::(2).#::(1)
+LazyList.empty.#::(3).#::(2).#::(1)
 ```
 
 We can also use the more natural operator syntax.
 
 ```scala mdoc
-1 #:: 2 #:: 3 #:: Stream.empty
+1 #:: 2 #:: 3 #:: LazyList.empty
 ```
 
-This method allows us to create a infinite stream. Here's an infinite stream of 1s:
+This method allows us to create an infinite lazy list. Here's an infinite lazy list of 1s:
 
 ```scala mdoc:silent
-def streamOnes: Stream[Int] = 1 #:: streamOnes
+def ones: LazyList[Int] = 1 #:: ones
 ```
 
 ```scala mdoc
-streamOnes
+ones
 ```
 
-Because elements are only evaluated as requested, calling `streamOnes` doesn't lead to infinite recursion. When we take the first five elements (and convert them to a `List`, so they'll all print out) we see we have what we want.
+Because elements are only evaluated as requested, calling `ones` doesn't lead to infinite recursion. When we take the first five elements (and convert them to a `List`, so they'll all print out) we see we have what we want.
 
 ```scala mdoc
-streamOnes.take(5).toList
+ones.take(5).toList
 ```
 
 #### Vector
 
-`Vector` is the final immutable sequence we'll consider. Unlike `Stream` and `List` it is an `IndexedSeq`, and thus offers fast random access and updates. It is the default immutable `IndexedSeq`, which we can see if we create one.
+`Vector` is the final immutable sequence we'll consider. Unlike `LazyList` and `List` it is an `IndexedSeq`, and thus offers fast random access and updates. It is the default immutable `IndexedSeq`, which we can see if we create one.
 
 ```scala mdoc
 scala.collection.immutable.IndexedSeq(1, 2, 3)

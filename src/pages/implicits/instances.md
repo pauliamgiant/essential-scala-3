@@ -19,9 +19,9 @@ val minOrdering = Ordering.fromLessThan[Int](_ < _)
 
 val maxOrdering = Ordering.fromLessThan[Int](_ > _)
 
-List(3, 4, 2).sorted(minOrdering)
+List(3, 4, 2).sorted(using minOrdering)
 
-List(3, 4, 2).sorted(maxOrdering)
+List(3, 4, 2).sorted(using maxOrdering)
 ```
 
 Here we define two orderings: `minOrdering`, which sorts from lowest to highest, and `maxOrdering`, which sorts from highest to lowest. When we call `sorted` we pass the `Ordering` we want to use. These implementations of a type class are called *type class instances*.

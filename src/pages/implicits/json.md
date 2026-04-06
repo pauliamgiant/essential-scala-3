@@ -56,7 +56,7 @@ object JsUtil:
 ```
 </div>
 
-Now, let's revisit our data types from the web site visitors example in the [Sealed traits](/traits/sealed-traits.html) section:
+Now, let's revisit our data types from the web site visitors example in the [Sealed traits](#this-or-that-and-nothing-else-sealed-traits) section:
 
 ```scala mdoc:silent
 import java.util.Date

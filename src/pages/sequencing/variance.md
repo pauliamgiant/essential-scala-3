@@ -2,7 +2,7 @@
 
 In this section we cover *variance annotations*, which allow us to control subclass relationships between types with type parameters. To motivate this, let's look again at our invariant generic sum type pattern.
 
-Recall our `Maybe` type from the [Generics](generics.html) section:
+Recall our `Maybe` type from the [Generics](#generics) section:
 
 ```scala mdoc:reset:silent
 enum Maybe[A]:

@@ -78,7 +78,7 @@ enum Result[A]:
   case Failure(reason: String)
 ```
 
-`Success` carries a value of type `A`, while `Failure` carries only a `String` reason and does not use `A`. The `+` (covariance) is needed so `Failure` can serve as a `Result[B]` for any type `B`; we explore variance in the [Variance](variance.html) section.
+`Success` carries a value of type `A`, while `Failure` carries only a `String` reason and does not use `A`. The `+` (covariance) is needed so `Failure` can serve as a `Result[B]` for any type `B`; we explore variance in the [Variance](#variance) section.
 
 <div class="callout callout-info">
 #### Generic Sum Type Pattern {-}

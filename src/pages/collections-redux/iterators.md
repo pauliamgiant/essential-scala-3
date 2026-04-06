@@ -25,14 +25,12 @@ val intermediate2 = intermediate1.map(_ + 4)
 val result        = intermediate2.map(_.toString)
 ```
 
-These intermediate collections are not strictly necessary. We could instead do the full sequence of transformations on an element-by-element basis. Views allows this. We create a view by calling the `view` method on any collection. Any traversals of a view are only applied when the `force` method is called.
+These intermediate collections are not strictly necessary. We could instead do the full sequence of transformations on an element-by-element basis. Views allows this. We create a view by calling the `view` method on any collection. Any traversals of a view are only applied when we convert it back to a collection using `toSeq` or `toList`.
 
 ```scala mdoc
 val view = Seq(1, 2, 3).view.map(_ * 2).map(_ + 4).map(_.toString)
 
-view.force
+view.toSeq
 ```
-
-Note that when a view is forced the original type is retained.
 
 For very large collections of items with many stages of transformations a view can be worthwhile. For modest sizes views are usually slower than creating the intermediate data structures.
