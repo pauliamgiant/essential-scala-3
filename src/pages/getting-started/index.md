@@ -67,7 +67,7 @@ for(i <- 1 to 3) {
 
 ```
 
-The Scala 3 REPL has improved multi-line editing capabilities. You can simply continue typing across multiple lines, and the REPL will intelligently detect when your expression is complete. For example:
+You can simply continue typing across multiple lines, and the REPL will intelligently detect when your expression is complete.
 
 There are two ways we can enter this multi-line expression. First is to use braces to create a block expression:
 
@@ -91,21 +91,37 @@ scala> val result =
 val result: Int = 3
 ```
 
-If you have Scala code in a file, you can use the `:load` command to load the contents of the file into the console. This is much more convenient than re-entering expressions. For example, with a file named `example.scala` containing `1 + 2 + 3` we can use `:load` like so:
+If you have Scala code in a file, you can use the `:load` command to load the contents of the file into the console. This is much more convenient than re-entering expressions. 
 
-```scala
-scala> :load example.scala
-val res0: Int = 6
-```
+For example, with a file named `example.scala` containing `1 + 2 + 3` we can use `:load` to load the file into the console.
 
-To create a file very easily, in a separate terminal window, you can use the `touch` command:
+Let's first create the file.
 
+To create a file very easily, in a separate terminal window outside of the Scala REPL, you can use the `touch` command on Mac or Linux, or the New-Item command in Windows PowerShell
+
+OSX
 ```bash
 touch example.scala
 ```
 
+Powershell
+```powershell
+New-Item example.scala
+
+```
+
 This will create a new file called `example.scala` in the current directory.
-You can then open the file in a text editor and add the code below. You can also run 'nano' or 'vim' from the terminal to edit the file.
+You can then open the file in any text editor and add the code below. 
+Examples of editors are 'nano' or 'vim' on Mac and Linux or Notepad on windows.
+
+
+We'll use 'nano' on Mac in this example.
+
+```bash
+nano example.scala
+```
+
+This will open the file in the nano text editor. You can then paste the code below.
 
 ```scala
 val x = 1
@@ -114,7 +130,9 @@ println("Example file evaluates and prints:")
 println(x + y)
 ```
 
-Then, back in the Scala REPL, you can load the file into the console using the `:load` command:
+to save the file, press `Ctrl+O` and then press `Enter`. To exit the editor, press `Ctrl+X`.
+
+Now, back in the Scala REPL, you can load the file into the console using the `:load` command:
 
 ```scala
 scala> :load example.scala
@@ -178,10 +196,13 @@ sbt new scala/scala3.g8
 5. Open the project folder in VS Code: **File > Open Folder**
 
 When you open the Scala project, Metals will automatically:
+
 - Detect the project
 - Import the build
 - Index your code
 - Enable IDE features like syntax highlighting, code completion, and error checking
+
+If a message pops up saying *"New sbt workspace detected, would you like to import the build?"*, click **Import Build**.
 
 ### Your First Scala Application
 
@@ -240,11 +261,7 @@ To create your first Scala Worksheet:
 3. Select "Worksheet" and enter a name for the worksheet, e.g. "FirstSteps"
 4. VS Code will recognize this as a Scala worksheet and create a new file with the `.worksheet.sc` extension
 
-Metals will automatically evaluate your worksheet. You'll see the results displayed as decorations in the editor, showing the value and type of each expression.
-
-You can also manually evaluate the worksheet by:
-- Clicking on "Evaluate worksheet" in the status bar
-- Or using the command palette (`Ctrl+Shift+P` / `Cmd+Shift+P`) and searching for "Metals: Evaluate worksheet"
+Metals will automatically evaluate your worksheet. Once you save the file, you'll see the results displayed as decorations in the editor, showing the value and type of each expression.
 
 The results will appear inline, showing something like:
 

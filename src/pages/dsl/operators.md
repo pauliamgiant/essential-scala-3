@@ -109,7 +109,7 @@ val $ires1 = NoGetter.balance
                 ^
 ```
 
-Note that whenever we write a `val` under the covers it is implemented use a getter and setter.
+Note that whenever we write a `val` under the covers it is implemented using a getter and setter.
 
 
 ### Unary Methods
@@ -163,4 +163,4 @@ Operator associativity is the final wrinkle in Scala's support for operators. An
 
 ## Final Words
 
-Operator syntax, and particularly symbolic operators, are a powerful way of creating a concise syntax to express domain specific operations. However it can also be a great way to obscure your code. When creating symbolic operators you must consider the costs and benefits. Generally, if an operator has a well known meaning (e.g. the arthimetic operators) or is commonly known within a specific domain *and* dealing with the domain is a major part of the program you're writing then symbolic operators can be a good approach. In other cases caution is advised.
+Operator syntax, and particularly symbolic operators, are a powerful way of creating a concise syntax to express domain specific operations. However it can also be a great way to obscure your code. When creating symbolic operators you must consider the costs and benefits. Generally, if an operator has a well known meaning (e.g. the arithmetic operators) or is commonly known within a specific domain *and* dealing with the domain is a major part of the program you're writing then symbolic operators can be a good approach. In other cases caution is advised.

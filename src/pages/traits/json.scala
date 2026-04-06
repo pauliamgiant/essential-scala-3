@@ -16,14 +16,14 @@ sealed trait Json:
           s"${quote(k)}: ${v.print}"
 
     this match
-      case JsNumber(v) => v.toString
-      case JsString(v) => quote(v)
-      case JsBoolean(v) => v.toString
-      case JsNull => "null"
-      case s @ SeqCell(_, _) => "[" ++ seqToJson(s) ++ "]"
-      case SeqEnd => "[]"
+      case JsNumber(v)             => v.toString
+      case JsString(v)             => quote(v)
+      case JsBoolean(v)            => v.toString
+      case JsNull                  => "null"
+      case s @ SeqCell(_, _)       => "[" ++ seqToJson(s) ++ "]"
+      case SeqEnd                  => "[]"
       case o @ ObjectCell(_, _, _) => "{" ++ objectToJson(o) ++ "}"
-      case ObjectEnd => "{}"
+      case ObjectEnd               => "{}"
 end Json
 
 final case class JsNumber(value: Double) extends Json

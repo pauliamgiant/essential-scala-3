@@ -15,8 +15,8 @@ object Stormtrooper:
   def inspect(person: Person): String =
     person match
       case Person("Luke", "Skywalker") => "Stop, rebel scum!"
-      case Person("Han", "Solo") => "Stop, rebel scum!"
-      case Person(first, last) => s"Move along, $first"
+      case Person("Han", "Solo")       => "Stop, rebel scum!"
+      case Person(first, last)         => s"Move along, $first"
 ```
 
 Notice the syntax for a pattern (`Person("Luke", "Skywalker")`) matches the syntax for constructing the object the pattern matches (`Person("Luke", "Skywalker")`).
@@ -56,7 +56,7 @@ Pattern matching is itself an expression and thus evaluates to a value---the val
 
 Scala has an expressive syntax for writing patterns or guards. For case classes the pattern syntax matches the constructor syntax. Take the data
 
-```scala mdoc
+```scala mdoc:silent
 Person("Noel", "Welsh")
 ```
 
@@ -126,7 +126,7 @@ object ChipShop:
   def willServe(cat: Cat): Boolean =
     cat match
       case Cat(_, _, "Chips") => true
-      case Cat(_, _, _) => false
+      case Cat(_, _, _)       => false
 ```
 </div>
 

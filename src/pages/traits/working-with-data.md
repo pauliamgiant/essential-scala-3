@@ -147,6 +147,14 @@ final case class Panther() extends Feline
 final case class Cat(favouriteFood: String) extends Feline
 ```
 
+Scala 3 equivalent using enum:
+
+```scala
+enum Feline:
+  case Lion, Tiger, Panther
+  case Cat(favouriteFood: String)
+```
+
 Now let's implement a method using both polymorphism and pattern matching. Our method, `dinner`, will return the appropriate food for the feline in question. For a `Cat` their dinner is their `favouriteFood`. For `Lions` it is antelope, for `Tigers` it is tiger food, and for `Panthers` it is licorice.
 
 We could represent food as a `String`, but we can do better and represent it with a type. This avoids, for example, spelling mistakes in our code. So let's define our `Food` type using the now familiar patterns.
@@ -157,6 +165,14 @@ case object Antelope extends Food
 case object TigerFood extends Food
 case object Licorice extends Food
 final case class CatFood(food: String) extends Food
+```
+
+Scala 3 equivalent using enum:
+
+```scala
+enum Food:
+  case Antelope, TigerFood, Licorice
+  case CatFood(food: String)
 ```
 
 Now we can implement `dinner` as a method returning `Food`. First using polymorphism:
@@ -275,7 +291,8 @@ object wrapper:
   case object Yellow extends TrafficLight:
     def next: TrafficLight =
       Red
-; import wrapper._
+;
+import wrapper.*
 ```
 
 Now with pattern matching:
@@ -285,14 +302,15 @@ object wrapper:
   sealed trait TrafficLight:
     def next: TrafficLight =
       this match
-        case Red => Green
-        case Green => Yellow
+        case Red    => Green
+        case Green  => Yellow
         case Yellow => Red
 
   case object Red extends TrafficLight
   case object Green extends TrafficLight
   case object Yellow extends TrafficLight
-; import wrapper._
+;
+import wrapper.*
 ```
 
 In this case I think implementing inside the class using pattern matching is best. `Next` doesn't depend on any external data and we probably only want one implementation of it. Pattern matching makes the structure of the state machine clearer than polymorphism.
@@ -350,8 +368,8 @@ To write the remaining bodies of the methods we can no longer rely on the patter
 object Calculator:
   def +(calc: Calculation, operand: Int): Calculation =
     calc match
-        case Success(result) => Success(result + operand)
-        case Failure(reason) => Failure(reason)
+      case Success(result) => Success(result + operand)
+      case Failure(reason) => Failure(reason)
 
   def -(calc: Calculation, operand: Int): Calculation =
     calc match

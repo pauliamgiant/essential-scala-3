@@ -89,7 +89,7 @@ Note that `a b c d e` is equivalent to `a.b(c).d(e)`, not `a.b(c, d, e)`.
 We can use *infix operator notation* with any method that takes one parameter, regardless of whether it has a symbolic or alphanumeric name.
 Scala 3 does not forbid infix notation for alphanumeric methods, but style guidelines increasingly prefer dot-notation for non-DSL code.
 
-```scala mdoc:silent
+```scala mdoc:warn:silent
 "the quick brown fox" split " "
 // res: Array[String] = Array(the, quick, brown, fox)
 ```
@@ -98,7 +98,7 @@ Infix notation is one of several syntactic shorthands that allow us to write sim
 
 A question poses itself---what precedence rules should we associate with infix operators? Scala uses a set of [precedence rules][link-precedence-rules] derived from the identifiers we use as method names that follow our intuitive understanding from mathematics and logic:
 
-```scala mdoc
+```scala mdoc:warn
 2 * 3 + 4 * 5
 (2 * 3) + (4 * 5)
 2 * (3 + 4) * 5

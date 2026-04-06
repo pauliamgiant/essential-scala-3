@@ -19,10 +19,10 @@ final case class Leaf(elt: Int) extends Tree:
 object TreeOps:
   def sum(tree: Tree): Int =
     tree match
-      case Leaf(elt) => elt
+      case Leaf(elt)  => elt
       case Node(l, r) => sum(l) + sum(r)
-    
+
   def double(tree: Tree): Tree =
     tree match
-      case Leaf(elt) => Leaf(elt * 2)
+      case Leaf(elt)  => Leaf(elt * 2)
       case Node(l, r) => Node(double(l), double(r))

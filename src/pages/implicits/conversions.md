@@ -1,26 +1,22 @@
-## Implicit Conversions
+## Given Conversions
 
-So far we have seen two programming patterns using implicits: *type enrichment*, which we implement using *implicit classes*, and *type classes*, which we implement using *implicit values and parameter lists*.
+So far we have seen two programming patterns using givens: *type enrichment*, which we implement using *extension methods*, and *type classes*, which we implement using *given values and using parameter lists*.
 
-Scala has a third implicit mechanism called *implicit conversions* that we will cover here for completeness. Implicit conversions can be seen as a more general form of implicit classes, and can be used in a wider variety of contexts.
+Scala has a third feature called *given conversions* using the `Conversion` type that we will cover here for completeness. Given conversions can be seen as a more general form of extension methods, and can be used in a wider variety of contexts.
 
 <div class="callout callout-warning">
-#### The Dangers of Implicit Conversions {-}
+#### The Dangers of Given Conversions {-}
 
-As we shall see later in this section, undisciplined use of implicit conversions can cause as many problems as it fixes for the beginning programmer. Scala even requires us to write a special import statement to silence compiler warnings resulting from the use of implicit conversions:
+As we shall see later in this section, undisciplined use of given conversions can cause as many problems as it fixes for the beginning programmer.
 
-```scala mdoc:silent
-import scala.language.implicitConversions
-```
-
-We recommend using implicit classes and implicit values/parameters over implicit conversions wherever possible. By sticking to the type enrichment and type class design patterns you should find very little cause to use implicit conversions in your code.
+We recommend using extension methods and given values/using parameters over given conversions wherever possible. By sticking to the type enrichment and type class design patterns you should find very little cause to use given conversions in your code.
 
 You have been warned!
 </div>
 
-### Implicit conversions
+### Given Conversions
 
-Implicit conversions are a more general form of implicit classes. We can tag any single-argument method with the `implicit` keyword to allow the compiler to implicitly use the method to perform automated conversions from one type to another:
+Given conversions are a more general form of extension methods. We can define a `given Conversion[A, B]` to allow the compiler to automatically convert from type `A` to type `B`:
 
 ```scala mdoc:silent
 class B:
@@ -32,47 +28,48 @@ given Conversion[A, B] with
   def apply(in: A): B = new B()
 ```
 
-```scala mdoc
+```scala mdoc:warn
 new A().bar
 ```
 
-Implicit classes are actually just syntactic sugar for the combination of a regular class and an implicit conversion. With an implicit class we have to define a new type as a target for the conversion; with an implicit method we can convert from any type to any other type as long as an implicit is available in scope.
+Extension methods are actually just a more specialized pattern for conversions. With extension methods we define methods on types; with given conversions we can convert from any type to any other type as long as a conversion is available in scope.
 
-### Designing with Implicit Conversions
+### Designing with Given Conversions
 
-The power of implicit conversions tends to cause problems for newer Scala developers. We can easily define very general type conversions that play strange games with the semantics of our programs:
+The power of given conversions tends to cause problems for newer Scala developers. We can easily define very general type conversions that play strange games with the semantics of our programs:
 
 ```scala mdoc:silent
 given Conversion[Int, Boolean] with
   def apply(int: Int): Boolean = int == 0
 ```
 
-```scala mdoc
+```scala mdoc:warn
+
 if 1 then "yes" else "no"
 
 if 0 then "yes" else "no"
 ```
 
-This example is ridiculous, but it demonstrates the potential problems implicits can cause. `intToBoolean` could be defined in a library in a completely different part of our codebase, so how would we debug the bizarre behaviour of the `if` expressions above?
+This example is ridiculous, but it demonstrates the potential problems conversions can cause. The conversion could be defined in a library in a completely different part of our codebase, so how would we debug the bizarre behaviour of the `if` expressions above?
 
-Here are some tips for designing using implicits that will prevent situations like the one above:
+Here are some tips for designing using given conversions that will prevent situations like the one above:
 
  - Wherever possible, stick to the type enrichment and type class programming patterns.
 
- - Wherever possible, use implicit classes, values, and parameter lists over implicit conversions.
+ - Wherever possible, use extension methods, given values, and using parameters over given conversions.
 
- - Package implicits clearly, and bring them into scope only where you need them. We recommend using the packaging guidelines introduced earlier this chapter.
+ - Package conversions clearly, and bring them into scope only where you need them. We recommend organizing them in appropriate namespaces.
 
- - Avoid creating implicit conversions that convert from one general type to another general type---the more specific your types are, the less likely the implicit is to be applied incorrectly.
+ - Avoid creating given conversions that convert from one general type to another general type---the more specific your types are, the less likely the conversion is to be applied incorrectly.
 
 ### Exercises
 
-#### Implicit Class Conversion
+#### Given Conversion from Class
 
-Any implicit class can be reimplemented as a class paired with an implicit method. Re-implement the `IntOps` class from the *type enrichment* section in this way. Verify that the class still works the same way as it did before.
+Any extension method can be reimplemented as a class paired with a given conversion. Re-implement the `IntOps` class from the *type enrichment* section in this way. Verify that the class still works the same way as it did before.
 
 <div class="solution">
-Here is the solution. The methods `yeah` and `times` are exactly as we implemented them previously. The only differences are the removal of the `implicit` keyword on the `class` and the addition of the `implicit def` to do the job of the implicit constructor:
+Here is the solution. The methods `yeah` and `times` are exactly as we implemented them previously. The only differences are the use of a `given Conversion` to perform the conversion:
 
 ```scala mdoc:silent
 object IntImplicits:
@@ -88,7 +85,7 @@ object IntImplicits:
       new IntOps(value)
 ```
 
-The code still works the same way it did previously. The implicit conversion is not available until we bring it into scope:
+The code still works the same way it did previously. The conversion is not available until we bring it into scope:
 
 ```scala mdoc:fail
 5.yeah()
@@ -100,7 +97,7 @@ Once the conversion has been brought into scope, we can use `yeah` and `times` a
 import IntImplicits.given
 ```
 
-```scala mdoc
+```scala mdoc:warn
 5.yeah()
 ```
 </div>

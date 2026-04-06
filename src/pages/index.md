@@ -31,19 +31,6 @@ object MyApp:
 
 ```
 
-Some lines of program code are too wide to fit on the page. In these cases we use a *continuation character* (curly arrow) to indicate that longer code should all be written on one line. For example, the following code:
-
-```scala
-println("This code should all be written ↩
-  on one line.")
-```
-
-should actually be written as follows:
-
-```scala
-println("This code should all be written on one line.")
-```
-
 ### Callout Boxes #{-}
 
 We use three types of *callout box* to highlight particular content:

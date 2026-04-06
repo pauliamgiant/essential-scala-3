@@ -1,4 +1,4 @@
-## Implicit Parameter and Interfaces
+## Using Parameters and Interfaces
 
 We've seen the basics of the type class pattern. Now let's look at how we can make it easier to use. Recall our starting point is a trait `HtmlWriter` which allows us to implement HTML rendering for classes without requiring access to their source code, and allows us to render the same class in different ways.
 
@@ -10,53 +10,55 @@ case class Person(name: String, email: String)
 trait HtmlWriter[A]:
   def write(in: A): String
 
-object PersonWriter extends HtmlWriter[Person]:
+given personWriter: HtmlWriter[Person] with
   def write(person: Person) = s"<span>${person.name} &lt;${person.email}&gt;</span>"
 ```
 
-This issue with this code is that we need manage a lot of `HtmlWriter` instances when we render any complex data. We have already seen that we can manage this complexity using implicit values and have mentioned *implicit parameters* in passing. In this section we go in depth on implicit parameters.
+This issue with this code is that we need manage a lot of `HtmlWriter` instances when we render any complex data. We have already seen that we can manage this complexity using given values and have mentioned *using parameters* in passing. In this section we go in depth on using parameters.
 
-### Implicit Parameter Lists
+### Using Parameter Lists
 
-Here is an example of an implicit parameter list:
+Here is an example of a using parameter list:
 
 ```scala mdoc:silent
 object HtmlUtil:
-  def htmlify[A](data: A)(implicit writer: HtmlWriter[A]): String =
+  def htmlify[A](data: A)(using writer: HtmlWriter[A]): String =
     writer.write(data)
 ```
 
-The `htmlify` method accepts two arguments: some `data` to convert to HTML and a `writer` to do the conversion. The `writer` is an implicit parameter.
+The `htmlify` method accepts two arguments: some `data` to convert to HTML and a `writer` to do the conversion. The `writer` is a using parameter.
 
-The `implicit` keyword applies to the *whole parameter list*, not just an individual parameter. This makes the parameter list optional---when we call `HtmlUtil.htmlify` we can either specify the list as normal
+The `using` keyword applies to all parameters following it in the *same parameter group*. This makes the parameter list optional---when we call `HtmlUtil.htmlify` we can either specify the list as normal
 
 ```scala mdoc
-HtmlUtil.htmlify(Person("John", "john@example.com"))(PersonWriter)
+HtmlUtil.htmlify(Person("John", "john@example.com"))(using personWriter)
 ```
 
-or we can omit the implicit parameters. If we omit the implicit parameters, the compiler searches for implicit values of the correct type it can use to fill in the missing arguments. We have already learned about implicit values, but let's see a quick example to refresh our memory. First we define an implicit value.
+For a method where we explicitly pass the given, we must use the using keyword as above.
+
+or we can omit the using parameters. If we omit the using parameters, the compiler searches for given values of the correct type it can use to fill in the missing arguments. We have already learned about given values, but let's see a quick example to refresh our memory. First we define a given value.
 
 ```scala mdoc:silent
-implicit object ApproximationWriter extends HtmlWriter[Int]:
+given ApproximationWriter: HtmlWriter[Int] with
   def write(in: Int): String =
     s"It's definitely less than ${((in / 10) + 1) * 10}"
 ```
 
-When we use `HtmlUtil` we don't have to specify the implicit parameter if an implicit value can be found.
+When we use `HtmlUtil` we don't have to specify the using parameter if a given value can be found.
 
 ```scala mdoc:silent
 HtmlUtil.htmlify(2)
 ```
 
-### Interfaces Using Implicit Parameters
+### Interfaces That Use Using Parameters
 
-A complete use of the type class pattern requires an interface using implicit parameters, along with implicit type class instances. We've seen two examples already: the `sorted` method using `Ordering`, and the `htmlify` method above. The best interface depends on the problem being solved, but there is a pattern that occurs frequently enough that it is worth explaining here.
+A complete use of the type class pattern requires an interface using using parameters, along with given type class instances. We've seen two examples already: the `sorted` method using `Ordering`, and the `htmlify` method above. The best interface depends on the problem being solved, but there is a pattern that occurs frequently enough that it is worth explaining here.
 
 In many case the interface defined by the type class is the same interface we want to use. This is the case for `HtmlWriter` -- the only method of interest is `write`. We could write something like
 
 ```scala mdoc:silent
 object HtmlWriter:
-  def write[A](in: A)(implicit writer: HtmlWriter[A]): String =
+  def write[A](in: A)(using writer: HtmlWriter[A]): String =
     writer.write(in)
 ```
 
@@ -64,14 +66,14 @@ We can avoid this indirection (which becomes more painful to write as our interf
 
 ```scala mdoc:nest:silent
 object HtmlWriter:
-  def apply[A](implicit writer: HtmlWriter[A]): HtmlWriter[A] =
+  def apply[A](using writer: HtmlWriter[A]): HtmlWriter[A] =
     writer
 ```
 
 In use it looks like
 
 ```scala mdoc:invisible
-implicit object PersonWriter extends HtmlWriter[Person]:
+given personWriter: HtmlWriter[Person] with
   def write(person: Person) = s"<span>${person.name} &lt;${person.email}&gt;</span>"
 ```
 
@@ -92,26 +94,26 @@ trait TypeClass[A]
 
 ```scala mdoc:silent
 object TypeClass:
-  def apply[A](implicit instance: TypeClass[A]): TypeClass[A] =
+  def apply[A](using instance: TypeClass[A]): TypeClass[A] =
     instance
 ```
 </div>
 
 ### Take Home Points
 
-Implicit parameters make type classes more convenient to use. We can make an entire parameter list with the `implicit` keyword to make it an implicit parameter list.
+Using parameters make type classes more convenient to use. We can make an entire parameter list with the `using` keyword to make it a using parameter list.
 
 ```scala
-def method[A](normalParam1: NormalType, ...)(implicit implicitParam1: ImplicitType[A], ...)
+def method[A](normalParam1: NormalType, ...)(using usingParam1: UsingType[A], ...)
 ```
 
-If we call a method and do not explicitly supply its implicit parameter list, the compiler will search for implicit values of the correct types to complete the parameter list for us.
+If we call a method and do not explicitly supply its using parameter list, the compiler will search for given values of the correct types to complete the parameter list for us.
 
-Using implicit parameters we can make more convenient interfaces using type class instances. If the desired interface to a type class is exactly the methods defined on the type class we can create a convenient interface using the pattern
+Using parameters we can make more convenient interfaces using type class instances. If the desired interface to a type class is exactly the methods defined on the type class we can create a convenient interface using the pattern
 
 ```scala mdoc:nest:silent
 object TypeClass:
-  def apply[A](implicit instance: TypeClass[A]): TypeClass[A] =
+  def apply[A](using instance: TypeClass[A]): TypeClass[A] =
     instance
 ```
 
@@ -127,16 +129,16 @@ case class Person(name: String, email: String)
 trait Equal[A]:
   def equal(v1: A, v2: A): Boolean
 
-object EmailEqual extends Equal[Person]:
+given emailEqual: Equal[Person] with
   def equal(v1: Person, v2: Person): Boolean =
     v1.email == v2.email
 
-object NameEmailEqual extends Equal[Person]:
+given nameEmailEqual: Equal[Person] with
   def equal(v1: Person, v2: Person): Boolean =
     v1.email == v2.email && v1.name == v2.name
 ```
 
-Implement an object called `Eq` with an `apply` method. This method should accept two explicit parameters of type `A` and an implicit `Equal[A]`. It should perform the equality checking using the provided `Equal`. With appropriate implicits in scope, the following code should work
+Implement an object called `Eq` with an `apply` method. This method should accept two explicit parameters of type `A` and a using `Equal[A]`. It should perform the equality checking using the provided `Equal`. With appropriate givens in scope, the following code should work
 
 ```scala
 Eq(Person("Noel", "noel@example.com"), Person("Noel", "noel@example.com"))
@@ -145,32 +147,43 @@ Eq(Person("Noel", "noel@example.com"), Person("Noel", "noel@example.com"))
 <div class="solution">
 ```scala mdoc:silent
 object Eq:
-  def apply[A](v1: A, v2: A)(implicit equal: Equal[A]): Boolean =
+  def apply[A](v1: A, v2: A)(using equal: Equal[A]): Boolean =
     equal.equal(v1, v2)
 ```
 </div>
 
-Package up the different `Equal` implementations as implicit values in their own objects, and show you can control the implicit selection by changing which object is imported.
+Package up the different `Equal` implementations as given values in their own objects, and show you can control the given selection by changing which object is imported.
+
+In Scala 3, to import given instances (not regular values), you must use `import ObjectName.given` syntax. This makes it explicit that you're importing givens rather than regular values, keeping given scope management clear and safe.
 
 <div class="solution">
-```scala mdoc:silent
-object NameAndEmailImplicit:
-  implicit object NameEmailEqual extends Equal[Person]:
+```scala mdoc:reset-object:silent
+trait Equal[A]:
+  def equal(v1: A, v2: A): Boolean
+
+case class Person(name: String, email: String)
+
+object Eq:
+  def apply[A](v1: A, v2: A)(using equal: Equal[A]): Boolean =
+    equal.equal(v1, v2)
+
+object NameAndEmailGiven:
+  given Named: Equal[Person] with
     def equal(v1: Person, v2: Person): Boolean =
       v1.email == v2.email && v1.name == v2.name
 
-object EmailImplicit:
-  implicit object EmailEqual extends Equal[Person]:
+object EmailGiven:
+  given NamedEmail: Equal[Person] with
     def equal(v1: Person, v2: Person): Boolean =
       v1.email == v2.email
 
 object Examples:
   def byNameAndEmail =
-    import NameAndEmailImplicit._
+    import NameAndEmailGiven.given
     Eq(Person("Noel", "noel@example.com"), Person("Noel", "noel@example.com"))
 
   def byEmail =
-    import EmailImplicit._
+    import EmailGiven.given
     Eq(Person("Noel", "noel@example.com"), Person("Dave", "noel@example.com"))
 ```
 </div>
@@ -189,7 +202,7 @@ The following code is what we're looking for:
 
 ```scala mdoc:silent
 object Equal:
-  def apply[A](implicit instance: Equal[A]): Equal[A] =
+  def apply[A](using instance: Equal[A]): Equal[A] =
     instance
 ```
 

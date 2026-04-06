@@ -152,23 +152,20 @@ implicit object OptionMonad extends Monad[Option] {
     Some(a)
 }
 
-implicit class AsMonad[F[_], A](m: F[A]) {
-
-  def flatMap[B](f: A => F[B])(implicit i: Monad[F]): F[B] =
+extension [F[_], A](m: F[A])
+  def flatMap[B](f: A => F[B])(using i: Monad[F]): F[B] =
     i.flatMap(m, f)
 
-  def point[A](a: A)(implicit i: Monad[F]): F[A] =
+  def point[A](a: A)(using i: Monad[F]): F[A] =
     i.point(a)
 
-  def map[B](f: A => B)(implicit i: Monad[F]): F[B] =
+  def map[B](f: A => B)(using i: Monad[F]): F[B] =
     i.map(m, f)
 
-  def foreach(f: A => Unit)(implicit i: Monad[F]): Unit =
+  def foreach(f: A => Unit)(using i: Monad[F]): Unit =
     i.foreach(m, f)
 
-}
-
-def addAllTheThings[F[_]](monad1: F[Int], monad2: F[Int], monad3: F[Int])(implicit i: Monad[F]): F[Int] = {
+def addAllTheThings[F[_]](monad1: F[Int], monad2: F[Int], monad3: F[Int])(using i: Monad[F]): F[Int] = {
   for {
     x <- monad1
     y <- monad2

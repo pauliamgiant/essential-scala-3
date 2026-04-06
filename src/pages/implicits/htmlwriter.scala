@@ -3,17 +3,17 @@ case class Person(name: String, email: String)
 trait HtmlWriter[T]:
   def write(in: T): String
 object HtmlWriter:
-  def apply[A](implicit writer: HtmlWriter[A]): HtmlWriter[A] =
+  def apply[A](using writer: HtmlWriter[A]): HtmlWriter[A] =
     writer
 
-implicit object PersonWriter extends HtmlWriter[Person]:
+given PersonWriter: HtmlWriter[Person] with
   def write(person: Person) = s"<span>${person.name} &lt;${person.email}&gt;</span>"
 
 object HtmlUtil:
-  def htmlify[T](data: T)(implicit writer: HtmlWriter[T]): String =
+  def htmlify[T](data: T)(using writer: HtmlWriter[T]): String =
     writer.write(data)
 
-implicit object ApproximationWriter extends HtmlWriter[Int]:
+given ApproximationWriter: HtmlWriter[Int] with
   def write(in: Int): String =
     s"It's definitely less than ${((in / 10) + 1) * 10}"
 

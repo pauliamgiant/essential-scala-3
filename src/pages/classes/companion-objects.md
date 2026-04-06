@@ -9,7 +9,7 @@ class Timestamp(val seconds: Long)
 
 object Timestamp:
   def apply(hours: Int, minutes: Int, seconds: Int): Timestamp =
-    new Timestamp(hours*60*60 + minutes*60 + seconds)
+    new Timestamp(hours * 60 * 60 + minutes * 60 + seconds)
 ```
 
 Note the use of the `new` keyword in the `apply` method. This is to distinguish the constructor from the `apply` method.
@@ -18,13 +18,6 @@ Note the use of the `new` keyword in the `apply` method. This is to distinguish 
 Timestamp(1, 1, 1).seconds
 ```
 
-<div class="callout callout-info">
-#### Using the Console Effectively {-}
-
-Note our use of the `:paste` command in the transcript above. Companion objects must be defined in the same compilation unit as the classes they support. In a normal codebase this simply means defining the class and object in the same file, but on the REPL we have to enter then in one command using `:paste`.
-
-You can enter `:help` on the REPL to find out more.
-</div>
 
 As we saw earlier, Scala has two namespaces: a space of *type names* and a space of *value names*. This separation allows us to name our class and companion object the same thing without conflict.
 
@@ -113,13 +106,14 @@ Write companion objects for `Director` and `Film` as follows:
 
 <div class="solution">
 
-This exercise is inteded to provide more practice writing code. The model solution, including the class definitions from the previous section, is now:
+This exercise is intended to provide more practice writing code. The model solution, including the class definitions from the previous section, is now:
 
 ```scala mdoc:silent
 class Director(
   val firstName: String,
   val lastName: String,
-  val yearOfBirth: Int):
+  val yearOfBirth: Int,
+):
 
   def name: String =
     s"$firstName $lastName"
@@ -127,7 +121,8 @@ class Director(
   def copy(
     firstName: String = this.firstName,
     lastName: String = this.lastName,
-    yearOfBirth: Int = this.yearOfBirth) =
+    yearOfBirth: Int = this.yearOfBirth,
+  ) =
     new Director(firstName, lastName, yearOfBirth)
 
 object Director:
@@ -141,7 +136,8 @@ class Film(
   val name: String,
   val yearOfRelease: Int,
   val imdbRating: Double,
-  val director: Director):
+  val director: Director,
+):
 
   def directorsAge =
     yearOfRelease - director.yearOfBirth
@@ -153,7 +149,8 @@ class Film(
     name: String = this.name,
     yearOfRelease: Int = this.yearOfRelease,
     imdbRating: Double = this.imdbRating,
-    director: Director = this.director) =
+    director: Director = this.director,
+  ) =
     new Film(name, yearOfRelease, imdbRating, director)
 
 object Film:
@@ -161,7 +158,8 @@ object Film:
     name: String,
     yearOfRelease: Int,
     imdbRating: Double,
-    director: Director): Film =
+    director: Director,
+  ): Film =
     new Film(name, yearOfRelease, imdbRating, director)
 
   def newer(film1: Film, film2: Film): Film =

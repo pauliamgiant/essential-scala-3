@@ -50,7 +50,7 @@ To understand variance, consider what functions can we safely pass to this `map`
 
  - A function from `A` to `B` is clearly ok.
 
- - A function from `A` to a subtype of `B` is ok because it's result type will have all the properties of `B` that we might depend on. This indicates that functions are covariant in their result type.
+ - A function from `A` to a subtype of `B` is ok because its result type will have all the properties of `B` that we might depend on. This indicates that functions are covariant in their result type.
 
  - A function expecting a supertype of `A` is also ok, because the `A` we have in the Box will have all the properties that the function expects.
 
@@ -58,7 +58,7 @@ To understand variance, consider what functions can we safely pass to this `map`
 
 ## Methods on Functions
 
-As functions are instances of a `Function` class we might ask what methods we get from the class apart from the `apply` method we define. The answer is not much that we'll use very often, but there are few that are useful to know about:
+As functions are instances of a `Function` class we might ask what methods we get from the class apart from the `apply` method we define. The answer is not much that we'll use very often, but there are a few that are useful to know about:
 
 - for functions of a single parameters we can compose them together to apply one function to the result of another
 
@@ -83,7 +83,7 @@ As functions are instances of a `Function` class we might ask what methods we ge
 
   val f = ((x: Int, y: Int) => x + y).tupled
 
-  f( (1, 2) )
+  f((1, 2))
   ```
 
 ## Exercises
@@ -91,17 +91,20 @@ As functions are instances of a `Function` class we might ask what methods we ge
 #### Covariance and Contravariance
 
 ```scala mdoc:invisible
-object catExample {
+object catExample:
   trait Animal
-  trait Cat extends Animal { val color: String; val food: String }
-  object Cat { def apply(aColor: String, aFood: String) = new Cat { val color = aColor; val food = aFood } }
+  trait Cat extends Animal:
+    val color: String; val food: String
+  object Cat:
+    def apply(aColor: String, aFood: String) =
+      new Cat:
+        val color = aColor; val food = aFood
   trait Siamese extends Cat
 
   trait Sound
   trait CatSound extends Sound
   trait Purr extends Sound
-}
-import catExample._
+import catExample.*
 ```
 
 Using the notation `A <: B` to indicate `A` is a subtype of `B` and assuming:

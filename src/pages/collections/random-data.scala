@@ -1,6 +1,6 @@
 val subjects = List("Noel", "The cat", "The dog")
-val verbs = List("wrote", "chased", "slept on")
-val objects = List("the book", "the ball", "the bed")
+val verbs    = List("wrote", "chased", "slept on")
+val objects  = List("the book", "the ball", "the bed")
 
 def allSentences: List[(String, String, String)] =
   for
@@ -44,7 +44,7 @@ final case class Distribution[A](events: List[(A, Double)]):
     Distribution(events map { case (a, p) => a -> (p / totalWeight) })
 
   def compact: Distribution[A] =
-    val distinct = (events map { case (a, p) => a }).distinct
+    val distinct           = (events map { case (a, p) => a }).distinct
     def prob(a: A): Double = (events filter { case (x, p) => x == a } map { case (a, p) => p }).sum
 
     Distribution(distinct map { a => a -> prob(a) })
@@ -60,7 +60,7 @@ case object Heads extends Coin
 case object Tails extends Coin
 
 val fairCoin: Distribution[Coin] = Distribution.uniform(List(Heads, Tails))
-val threeFlips =
+val threeFlips                   =
   for
     c1 <- fairCoin
     c2 <- fairCoin

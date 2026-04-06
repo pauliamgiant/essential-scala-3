@@ -21,8 +21,8 @@ Note that `flatMap` has more power than we need for this example. We could use t
 
 ```scala mdoc:reset:silent
 val subjects = List("Noel", "The cat", "The dog")
-val verbs = List("wrote", "chased", "slept on")
-val objects = List("the book", "the ball", "the bed")
+val verbs    = List("wrote", "chased", "slept on")
+val objects  = List("the book", "the ball", "the bed")
 
 def allSentences: List[(String, String, String)] =
   for
@@ -57,15 +57,15 @@ We're now using the full power of `flatMap` and `map` (via our for comprehension
 ```scala mdoc:nest:silent
 def verbsFor(subject: String): List[String] =
   subject match
-    case "Noel" => List("wrote", "chased", "slept on")
+    case "Noel"    => List("wrote", "chased", "slept on")
     case "The cat" => List("meowed at", "chased", "slept on")
     case "The dog" => List("barked at", "chased", "slept on")
 
 def objectsFor(verb: String): List[String] =
   verb match
-    case "wrote" => List("the book", "the letter", "the code")
-    case "chased" => List("the ball", "the dog", "the cat")
-    case "slept on" => List("the bed", "the mat", "the train")
+    case "wrote"     => List("the book", "the letter", "the code")
+    case "chased"    => List("the ball", "the dog", "the cat")
+    case "slept on"  => List("the bed", "the mat", "the train")
     case "meowed at" => List("Noel", "the door", "the food cupboard")
     case "barked at" => List("the postman", "the car", "the cat")
 
@@ -102,7 +102,7 @@ We should create some convenience constructors for `Distribution`. A useful one 
 The convenience constructor looks like this:
 
 ```scala mdoc
-def uniform[A](atoms: List[A]): Distribution[A] = 
+def uniform[A](atoms: List[A]): Distribution[A] =
   val p = 1.0 / atoms.length
   Distribution(atoms.map(a => a -> p))
 ```
@@ -143,12 +143,12 @@ Now implement `flatMap`. To do so you'll need to combine the probability of an e
 
 ```scala mdoc:nest:silent
 final case class Distribution[A](events: List[(A, Double)]):
-  def normalize: Distribution[A] = 
+  def normalize: Distribution[A] =
     val totalWeight = events.map((a, p) => p).sum
     Distribution(events.map((a, p) => a -> (p / totalWeight)))
 
-  def compact: Distribution[A] = 
-    val distinct = events.map((a, p) => a).distinct
+  def compact: Distribution[A] =
+    val distinct           = events.map((a, p) => a).distinct
     def prob(a: A): Double =
       events.filter((x, p) => x == a).map((a, p) => p).sum
 
@@ -165,15 +165,14 @@ final case class Distribution[A](events: List[(A, Double)]):
 
   def flatMap[B](f: A => Distribution[B]): Distribution[B] =
     Distribution(events.flatMap: (a, p1) =>
-      f(a).events.map((b, p2) => b -> (p1 * p2))
-    ).compact.normalize
+      f(a).events.map((b, p2) => b -> (p1 * p2))).compact.normalize
 
-  def normalize: Distribution[A] = 
+  def normalize: Distribution[A] =
     val totalWeight = events.map((a, p) => p).sum
     Distribution(events.map((a, p) => a -> (p / totalWeight)))
 
-  def compact: Distribution[A] = 
-    val distinct = events.map((a, p) => a).distinct
+  def compact: Distribution[A] =
+    val distinct           = events.map((a, p) => a).distinct
     def prob(a: A): Double =
       events.filter((x, p) => x == a).map((a, p) => p).sum
 
@@ -199,7 +198,7 @@ case object Tails extends Coin
 ```
 
 ```scala mdoc:nest:invisible
-def uniform[A](atoms: List[A]): Distribution[A] = 
+def uniform[A](atoms: List[A]): Distribution[A] =
   val p = 1.0 / atoms.length
   Distribution(atoms.map(a => a -> p))
 
@@ -230,13 +229,13 @@ Implement this model and answer the question: if the cat comes to harass me what
 I found it useful to add this constructor to the companion object of `Distribution`:
 
 ```scala mdoc:silent
-def discrete[A](events: List[(A,Double)]): Distribution[A] =
+def discrete[A](events: List[(A, Double)]): Distribution[A] =
   Distribution(events).compact.normalize
 ```
 
 ```scala mdoc:nest:invisible
 object Distribution:
-  def discrete[A](events: List[(A,Double)]): Distribution[A] =
+  def discrete[A](events: List[(A, Double)]): Distribution[A] =
     new Distribution(events).compact.normalize
 ```
 
@@ -260,7 +259,7 @@ case object Harassing extends Cat
 def cat(food: Food): Distribution[Cat] =
   food match
     case Cooked => Distribution.discrete(List(Harassing -> 0.8, Asleep -> 0.2))
-    case Raw => Distribution.discrete(List(Harassing -> 0.4, Asleep -> 0.6))
+    case Raw    => Distribution.discrete(List(Harassing -> 0.4, Asleep -> 0.6))
 
 val foodModel: Distribution[(Food, Cat)] =
   for
@@ -276,7 +275,7 @@ From `foodModel` we could read off the probabilities of interest, but it's more 
 val pHarassing: Double =
   foodModel.events.filter:
     case ((_, Harassing), _) => true
-    case ((_, Asleep), _) => false
+    case ((_, Asleep), _)    => false
   .map((a, p) => p).sum
 
 // Probability the food is cooked given the cat is harassing me

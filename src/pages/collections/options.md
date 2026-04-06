@@ -36,7 +36,7 @@ Here is a typical example of code for generating an option---reading an integer 
 
 ```scala mdoc:nest:silent
 def readInt(str: String): Option[Int] =
-  if str matches "-?\\d+" then Some(str.toInt) else None
+  if str.matches("-?\\d+") then Some(str.toInt) else None
 ```
 
 The `toInt` method of `String` throws a `NumberFormatException` if the string isn't a valid series of digits, so we guard its use with a regular expression. If the number is correctly formatted we return `Some` of the `Int` result. Otherwise we return `None`. Example usage:
@@ -93,7 +93,7 @@ sealed trait Option[+A]:
 // clear all the previously defined Option types so we're using the normal Scala lib Option from now on.
 // Also redefine readInt as we still need it.
 def readInt(str: String): Option[Int] =
-  if(str matches "\\d+") Some(str.toInt) else None
+  if str.matches("\\d+") then Some(str.toInt) else None
 ```
 
 Because of the limited size of `0` or `1`, there is a bit of redundancy here: `filter` and `find` effectively do the same thing, and `foldLeft` and `foldRight` only differ in the order of their arguments. However, these methods give us a lot flexibility for manipulating optional values. For example, we can use `map` and `flatMap` to define optional versions of common operations:
@@ -143,7 +143,7 @@ Because `Option` supports `map` and `flatMap`, it also works with for comprehens
 val optionA = readInt("123")
 val optionB = readInt("234")
 
-for   
+for
   a <- optionA
   b <- optionB
 yield a + b
@@ -176,10 +176,10 @@ We can reuse code from the text above for this:
 
 ```scala mdoc:silent
 def addOptions(opt1: Option[Int], opt2: Option[Int]) =
-  for {
+  for
     a <- opt1
     b <- opt2
-  } yield a + b
+  yield a + b
 ```
 </div>
 
@@ -281,16 +281,17 @@ The trick to this one is realising that each clause in the *for* comprehension c
 
 ```scala mdoc:nest:silent
 def calculator(operand1: String, operator: String, operand2: String): Unit =
-  val result = for
-    a   <- readInt(operand1)
-    b   <- readInt(operand2)
-    ans <- operator match
-             case "+" => Some(a + b)
-             case "-" => Some(a - b)
-             case "*" => Some(a * b)
-             case "/" => divide(a, b)
-             case _   => None
-  yield ans
+  val result =
+    for
+      a <- readInt(operand1)
+      b <- readInt(operand2)
+      ans <- operator match
+               case "+" => Some(a + b)
+               case "-" => Some(a - b)
+               case "*" => Some(a * b)
+               case "/" => divide(a, b)
+               case _   => None
+    yield ans
 
   result match
     case Some(number) => println(s"The answer is $number!")
@@ -309,11 +310,12 @@ def calculator(operand1: String, operator: String, operand2: String): Unit =
       case "/" => divide(a, b)
       case _   => None
 
-  val result = for
-    a   <- readInt(operand1)
-    b   <- readInt(operand2)
-    ans <- calcInternal(a, b)
-  yield ans
+  val result =
+    for
+      a <- readInt(operand1)
+      b <- readInt(operand2)
+      ans <- calcInternal(a, b)
+    yield ans
 
   result match
     case Some(number) => println(s"The answer is $number!")

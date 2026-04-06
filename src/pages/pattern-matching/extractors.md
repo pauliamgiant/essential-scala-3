@@ -44,7 +44,7 @@ Lists and sequences can be captured in several ways:
 
 The `List` and `Seq` companion objects act as patterns that match fixed-length sequences.
 
-```scala mdoc
+```scala mdoc:warn
 List(1, 2, 3) match
   case List(a, b, c) => a + b + c
 ```
@@ -54,7 +54,7 @@ List(1, 2, 3) match
 ```scala mdoc
 Nil match
   case List(a) => "length 1"
-  case Nil => "length 0"
+  case Nil     => "length 0"
 ```
 
 There is also a singleton object `::` that matches the head and tail of a list.
@@ -62,7 +62,7 @@ There is also a singleton object `::` that matches the head and tail of a list.
 ```scala mdoc
 List(1, 2, 3) match
   case ::(head, tail) => s"head $head tail $tail"
-  case Nil => "empty"
+  case Nil            => "empty"
 ```
 
 This perhaps makes more sense when you realise that binary extractor patterns can also be written infix.
@@ -70,16 +70,16 @@ This perhaps makes more sense when you realise that binary extractor patterns ca
 ```scala mdoc
 List(1, 2, 3) match
   case head :: tail => s"head $head tail $tail"
-  case Nil => "empty"
+  case Nil          => "empty"
 ```
 
 Combined use of `::`, `Nil`, and `_` allow us to match the first elements of any length of list.
 
 ```scala mdoc
 List(1, 2, 3) match
-  case Nil => "length 0"
-  case a :: Nil => s"length 1 starting $a"
-  case a :: b :: Nil => s"length 2 starting $a $b"
+  case Nil              => "length 0"
+  case a :: Nil         => s"length 1 starting $a"
+  case a :: b :: Nil    => s"length 2 starting $a $b"
   case a :: b :: c :: _ => s"length 3+ starting $a $b $c"
 ```
 
@@ -111,7 +111,7 @@ object Email:
 
 "dave" match
   case Email(user, domain) => List(user, domain)
-  case _ => Nil
+  case _                   => Nil
 ```
 
 This simpler pattern matches any string and uppercases it:
@@ -122,7 +122,7 @@ object Uppercase:
     Some(str.toUpperCase)
 ```
 
-```scala mdoc
+```scala mdoc:warn
 Person("Dave", "Gurnell") match
   case Person(f, Uppercase(l)) => s"$f $l"
 ```
@@ -154,9 +154,10 @@ object Words:
 
 There is one final type of pattern that can only be used with variable-length extractors. The *wildcard sequence* pattern, written `_*`, matches zero or more arguments from a variable-length pattern and discards their values. For example:
 
-```scala mdoc
+```scala mdoc:warn
 List(1, 2, 3, 4, 5) match
   case List(a, b, _*) => a + b
+  case Nil            => "empty"
 
 "the quick brown fox" match
   case Words(a, b, _*) => a + b
@@ -166,7 +167,7 @@ We can combine wildcard patterns with the `@` operator to capture the remaining 
 
 ```scala mdoc
 "the quick brown fox" match
-  case Words(a, b, rest @ _*) => rest
+  case Words(a, b, rest*) => rest
 ```
 
 ### Exercises
@@ -181,17 +182,15 @@ Create an extractor `Positive` that matches any positive integer. Some test case
 assert(
   "No" ==
     (0 match
-       case Positive(_) => "Yes"
-       case _ => "No"
-    )
+      case Positive(_) => "Yes"
+      case _           => "No"),
 )
 
 assert(
   "Yes" ==
     (42 match
-       case Positive(_) => "Yes"
-       case _ => "No"
-    )
+      case Positive(_) => "Yes"
+      case _           => "No"),
 )
 ```
 
@@ -213,8 +212,7 @@ Extractors can also transform their input. In this exercise we'll write an extra
 assert(
   "Sir Lord Doctor David Gurnell" ==
     ("sir lord doctor david gurnell" match
-       case Titlecase(str) => str
-    )
+      case Titlecase(str) => str),
 )
 ```
 
@@ -235,7 +233,7 @@ The model solution splits the string into a list of words and maps over the list
 object Titlecase:
   def unapply(str: String) =
     Some(str.split(" ").toList.map:
-      case "" => ""
+      case ""   => ""
       case word => word.substring(0, 1).toUpperCase + word.substring(1)
     .mkString(" "))
 ```

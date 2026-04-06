@@ -38,10 +38,8 @@ mdocOut := target.value / "pages"
 ThisBuild / scalaVersion := "3.7.0"
 
 scalacOptions ++= Seq(
-  "-deprecation",
   "-encoding",
   "UTF-8",
-  "-unchecked",
   "-feature"
 )
 

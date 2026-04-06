@@ -44,8 +44,9 @@ We declare generic types with a list of type names within square brackets like `
 Generic types can be declared in a class or trait declaration in which case they are visible throughout the rest of the declaration.
 
 ```scala
-case class Name[A](...){ ... }
-trait Name[A]{ ... }
+case class Name[A](...): ... 
+trait Name[A]: ... 
+enum Name[A]: ...
 ```
 
 Alternatively they may be declared in a method declaration, in which case they are only visible within the method.
@@ -62,32 +63,32 @@ We described type parameters as analogous to method parameters, and this analogy
 In previous sections we've seen sum types like the following:
 
 ```scala mdoc:reset:silent
-sealed trait Calculation
-final case class Success(result: Double) extends Calculation
-final case class Failure(reason: String) extends Calculation
+enum Calculation:
+  case Success(result: Double)
+  case Failure(reason: String)
 ```
 
 Let's generalise this so that our result is not restricted to a `Double` but can be some generic type. In doing so let's change the name from `Calculation` to `Result` as we're not restricted to numeric calculations anymore. Now our data definition becomes:
 
-A `Result` of type `A` is either a `Success` of type `A` or a `Failure` with a `String` reason. This translates to the following code
+A `Result` of type `A` is either a `Success` of type `A` or a `Failure` with a `String` reason. This translates to the following code:
 
 ```scala mdoc:reset:silent
-sealed trait Result[A]
-case class Success[A](result: A) extends Result[A]
-case class Failure[A](reason: String) extends Result[A]
+enum Result[A]:
+  case Success(result: A)
+  case Failure(reason: String)
 ```
 
-Notice that both `Success` and `Failure` introduce a type parameter `A` which is passed to `Result` when it is extended. `Success` also has a value of type `A`, but `Failure` only introduces `A` so it can pass it onward to `Result`. In a later section we'll introduce *variance*, giving us a cleaner way to implement this, but for now this is the pattern we'll use.
+`Success` carries a value of type `A`, while `Failure` carries only a `String` reason and does not use `A`. The `+` (covariance) is needed so `Failure` can serve as a `Result[B]` for any type `B`; we explore variance in the [Variance](#variance) section.
 
 <div class="callout callout-info">
-#### Invariant Generic Sum Type Pattern {-}
+#### Generic Sum Type Pattern {-}
 
 If `A` of type `T` is a `B` or `C` write
 
 ```scala mdoc:reset:silent
-sealed trait A[T]
-final case class B[T]() extends A[T]
-final case class C[T]() extends A[T]
+enum A[T]:
+  case B()
+  case C()
 ```
 </div>
 
@@ -102,9 +103,9 @@ final case class C[T]() extends A[T]
 Our `IntList` type was defined as
 
 ```scala mdoc:reset:silent
-sealed trait IntList
-case object End extends IntList
-final case class Pair(head: Int, tail: IntList) extends IntList
+enum IntList:
+  case End
+  case Pair(head: Int, tail: IntList)
 ```
 
 Change the name to `LinkedList` and make it generic in the type of data stored in the list.
@@ -114,9 +115,9 @@ Change the name to `LinkedList` and make it generic in the type of data stored i
 This is an application of the generic sum type pattern.
 
 ```scala mdoc:reset:silent
-sealed trait LinkedList[A]
-final case class Pair[A](head: A, tail: LinkedList[A]) extends LinkedList[A]
-final case class End[A]() extends LinkedList[A]
+enum LinkedList[A]:
+  case Empty()
+  case Pair(head: A, tail: LinkedList[A])
 ```
 </div>
 
@@ -127,10 +128,10 @@ There isn't much we can do with our `LinkedList` type. Remember that types defin
 However, we can still do some useful things with our `LinkedList`! Implement `length`, returning the length of the `LinkedList`. Some test cases are below.
 
 ```scala
-val example = Pair(1, Pair(2, Pair(3, End())))
+val example = Pair(1, Pair(2, Pair(3, Empty())))
 assert(example.length == 3)
 assert(example.tail.length == 2)
-assert(End().length == 0)
+assert(Empty().length == 0)
 ```
 
 <div class="solution">
@@ -138,49 +139,48 @@ This code is largely unchanged from the implementation of `length` on `IntList`.
 
 ```scala mdoc:reset:silent
 object wrapper:
-  sealed trait LinkedList[A]:
+  enum LinkedList[A]:
+    case Empty()
+    case Pair(head: A, tail: LinkedList[A])
     def length: Int =
       this match
         case Pair(hd, tl) => 1 + tl.length
-        case End() => 0
+        case Empty()      => 0
 
-  final case class Pair[A](head: A, tail: LinkedList[A]) extends LinkedList[A]
-  final case class End[A]() extends LinkedList[A]
-
-import wrapper._
+import wrapper.*
+import wrapper.LinkedList.*
 ```
 </div>
 
 On the JVM we can compare all values for equality. Implement a method `contains` that determines whether or not a given item is in the list. Ensure your code works with the following test cases:
 
 ```scala
-val example = Pair(1, Pair(2, Pair(3, End())))
+val example = Pair(1, Pair(2, Pair(3, Empty())))
 assert(example.contains(3) == true)
 assert(example.contains(4) == false)
-assert(End().contains(0) == false)
+assert(Empty().contains(0) == false)
 // This should not compile
 // example.contains("not an Int")
 ```
 
 <div class="solution">
-This is another example of the standard structural recursion pattern. The important point is `contains` takes a parameter of type `A`.
+This is another example of the standard structural recursion pattern.
 
 ```scala mdoc:reset:silent
 object wrapper:
-  sealed trait LinkedList[A]:
+  enum LinkedList[A]:
+    case Empty()
+    case Pair(head: A, tail: LinkedList[A])
     def contains(item: A): Boolean =
       this match
         case Pair(hd, tl) =>
-          if hd == item then
-            true
-          else
-            tl.contains(item)
-        case End() => false
+          if hd == item
+          then true
+          else tl.contains(item)
+        case Empty() => false
 
-  final case class Pair[A](head: A, tail: LinkedList[A]) extends LinkedList[A]
-  final case class End[A]() extends LinkedList[A]
-
-import wrapper._
+import wrapper.*
+import wrapper.LinkedList.*
 ```
 </div>
 
@@ -195,7 +195,7 @@ throw Exception("Bad things happened")
 Ensure your solution works with the following test cases:
 
 ```scala
-val example = Pair(1, Pair(2, Pair(3, End())))
+val example = Pair(1, Pair(2, Pair(3, Empty())))
 assert(example(0) == 1)
 assert(example(1) == 2)
 assert(example(2) == 3)
@@ -216,30 +216,29 @@ Finally we get to the actual structural recursion, which is perhaps the trickies
 
 ```scala mdoc:reset:silent
 object wrapper:
-  sealed trait LinkedList[A]:
+  enum LinkedList[A]:
+    case Empty()
+    case Pair(head: A, tail: LinkedList[A])
     def apply(index: Int): A =
       this match
         case Pair(hd, tl) =>
-          if index == 0 then
-            hd
-          else
-            tl(index - 1)
-        case End() =>
+          if index == 0
+          then hd
+          else tl(index - 1)
+        case Empty() =>
           throw Exception("Attempted to get element from an Empty list")
 
-  final case class Pair[A](head: A, tail: LinkedList[A]) extends LinkedList[A]
-  final case class End[A]() extends LinkedList[A]
-
-import wrapper._
+import wrapper.*
+import wrapper.LinkedList.*
 ```
 </div>
 
 Throwing an exception isn't cool. Whenever we throw an exception we lose type safety as there is nothing in the type system that will remind us to deal with the error. It would be much better to return some kind of result that encodes we can succeed or failure. We introduced such a type in this very section.
 
 ```scala mdoc:reset:silent
-sealed trait Result[A]
-case class Success[A](result: A) extends Result[A]
-case class Failure[A](reason: String) extends Result[A]
+enum Result[A]:
+  case Success(result: A)
+  case Failure(reason: String)
 ```
 
 Change `apply` so it returns a `Result`, with a failure case indicating what went wrong. Here are some test cases to help you:
@@ -254,11 +253,13 @@ assert(example(3) == Failure("Index out of bounds"))
 <div class="solution">
 ```scala
 object wrapper:
-  sealed trait Result[A]
-  case class Success[A](result: A) extends Result[A]
-  case class Failure[A](reason: String) extends Result[A]
+  enum Result[A]:
+    case Success(result: A)
+    case Failure(reason: String)
 
-  sealed trait LinkedList[A]:
+  enum LinkedList[A]:
+    case Empty()
+    case Pair(head: A, tail: LinkedList[A])
     def apply(index: Int): Result[A] =
       this match
         case Pair(hd, tl) =>
@@ -266,12 +267,11 @@ object wrapper:
             Success(hd)
           else
             tl(index - 1)
-        case End() =>
+        case Empty() =>
           Failure("Index out of bounds")
 
-  final case class Pair[A](head: A, tail: LinkedList[A]) extends LinkedList[A]
-  final case class End[A]() extends LinkedList[A]
-
 import wrapper._
+import wrapper.LinkedList._
+import wrapper.Result._
 ```
 </div>

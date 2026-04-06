@@ -7,7 +7,7 @@ Earlier we looked at the fundamentals of for comprehensions. In this section we'
 It's quite common to only process selected elements. We can do this with comprehensions by adding an `if` clause after the generator expression. So to process only the positive elements of sequence we could write
 
 ```scala mdoc
-for(x <- Seq(-2, -1, 0, 1, 2) if x > 0) yield x
+for x <- Seq(-2, -1, 0, 1, 2) if x > 0 yield x
 ```
 
 The code is converted to a `withFilter` call, or if that doesn't exist to `filter`.
@@ -36,13 +36,14 @@ Seq(1, 2, 3).zip(Seq(4, 5, 6))
 With this we can easily compute the result we wanted
 
 ```scala mdoc
-for(x <- Seq(1, 2, 3).zip(Seq(4, 5, 6))) yield { val (a, b) = x; a + b }
+for x <- Seq(1, 2, 3).zip(Seq(4, 5, 6)) yield
+  val (a, b) = x; a + b
 ```
 
 Sometimes you want to iterate over the values in a sequence and their indices. For this case the `zipWithIndex` method is provided.
 
 ```scala mdoc
-for(x <- Seq(1, 2, 3).zipWithIndex) yield x
+for x <- Seq(1, 2, 3).zipWithIndex yield x
 ```
 
 Finally note that `zip` and `zipWithIndex` are available on all collection classes, including `Map` and `Set`.
@@ -52,13 +53,14 @@ Finally note that `zip` and `zipWithIndex` are available on all collection class
 The pattern on the left hand side of a generator is not named accidentally. We can include any pattern there and only process results matching the pattern. This provides another way of filtering results. So instead of:
 
 ```scala mdoc
-for(x <- Seq(1, 2, 3).zip(Seq(4, 5, 6))) yield { val (a, b) = x; a + b }
+for x <- Seq(1, 2, 3).zip(Seq(4, 5, 6)) yield
+  val (a, b) = x; a + b
 ```
 
 we can write:
 
 ```scala mdoc
-for((a, b) <- Seq(1, 2, 3).zip(Seq(4, 5, 6))) yield a + b
+for (a, b) <- Seq(1, 2, 3).zip(Seq(4, 5, 6)) yield a + b
 ```
 
 ### Intermediate Results
@@ -67,8 +69,8 @@ It is often useful to create an intermediate result within a sequence of generat
 
 ```scala mdoc
 for
-  x     <- Seq(1, 2, 3)
+  x <- Seq(1, 2, 3)
   square = x * x
-  y     <- Seq(4, 5, 6)
+  y <- Seq(4, 5, 6)
 yield square * y
 ```

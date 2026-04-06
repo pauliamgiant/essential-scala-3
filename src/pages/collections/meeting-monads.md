@@ -17,15 +17,15 @@ Broadly speaking, a monad is a generic type that allows us to sequence computati
 To demonstrate the generality of this principle, here are some examples. This first example calculates the sum of two numbers that may or may not be there:
 
 ```scala mdoc:invisible
-def getFirstNumber: Option[Int] = Some(2)
+def getFirstNumber: Option[Int]  = Some(2)
 def getSecondNumber: Option[Int] = Some(5)
-def getFirstNumbers: Seq[Int] = Seq(2, 3)
-def getSecondNumbers: Seq[Int] = Seq(5, 6)
+def getFirstNumbers: Seq[Int]    = Seq(2, 3)
+def getSecondNumbers: Seq[Int]   = Seq(5, 6)
 ```
 
 ```scala mdoc:silent
 for
-  a <- getFirstNumber  // getFirstNumber  returns Option[Int]
+  a <- getFirstNumber // getFirstNumber  returns Option[Int]
   b <- getSecondNumber // getSecondNumber returns Option[Int]
 yield a + b
 
@@ -37,7 +37,7 @@ This second example calculate the sums of all possible pairs of numbers from two
 
 ```scala mdoc:silent
 for
-  a <- getFirstNumbers  // getFirstNumbers  returns Seq[Int]
+  a <- getFirstNumbers // getFirstNumbers  returns Seq[Int]
   b <- getSecondNumbers // getSecondNumbers returns Seq[Int]
 yield a + b
 
@@ -49,8 +49,8 @@ This third example asynchronously calculates the sum of two numbers that can onl
 
 ```scala mdoc:silent
 for
-  a <- getFirstNumber   // getFirstNumber  returns Future[Int]
-  b <- getSecondNumber  // getSecondNumber returns Future[Int]
+  a <- getFirstNumber // getFirstNumber  returns Future[Int]
+  b <- getSecondNumber // getSecondNumber returns Future[Int]
 yield a + b
 
 // The final result is a Future[Int]---a data structure

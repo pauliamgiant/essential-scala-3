@@ -3,7 +3,7 @@
 We have had a very brief introduction to the fundamentals of Scala:
 
 * expressions, which evaluate to values; and
-* declarations, which gives names to values.
+* declarations, which give names to values.
 
 We've seen how we can write literals for many objects, and use method calls and compound expressions to create new objects from existing ones.
 
